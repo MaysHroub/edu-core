@@ -11,5 +11,5 @@ import lombok.Setter;
 @Setter
 
 public class Teacher extends Person {
-    String phone_number;
+    private String phone_number;
 }
