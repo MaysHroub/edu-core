@@ -12,5 +12,5 @@ import lombok.Setter;
 @Setter
 public class Student {
     private int id,age;
-    private String name,email,class_id;
+    private String name,email,class_id,dateOfBirth;
 }
