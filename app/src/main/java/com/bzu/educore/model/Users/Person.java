@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class Teacher extends Person {
-    String phone_number;
+public class Person {
+    private int id,age;
+    private String name,email,dateOfBirth;
 }
