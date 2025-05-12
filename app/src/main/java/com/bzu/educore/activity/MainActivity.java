@@ -14,7 +14,6 @@ import com.bzu.educore.model.Users.Student;
 import java.time.LocalDate;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
