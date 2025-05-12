@@ -19,4 +19,12 @@ public class Assignment extends Assessment implements Serializable {
     private String pdfFile;
     private LocalDate deadline;
     private Integer assessmentId;
+    public Assignment(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type,
+                      String pdfFile, LocalDate deadline, Integer assessmentId) {
+        super(id, subjectId, sectionId, date, teacherId, type);
+        this.pdfFile = pdfFile;
+        this.deadline = deadline;
+        this.assessmentId = assessmentId;
+    }
+
 }
