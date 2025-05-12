@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 
-class Person {
+abstract class Person {
     private Integer id,age;
     private String name,email;
     private LocalDate dateOfBirth;
