@@ -1,4 +1,15 @@
 package com.bzu.educore.model.Users;
 
-public class Teacher {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+
+public class Teacher extends Person {
+    private String phone_number;
 }

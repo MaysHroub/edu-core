@@ -1,15 +1,21 @@
 package com.bzu.educore.model.Users;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 
-public class Student extends Person{
-    private String grade_number,class_id;
+abstract class Person {
+    private Integer id,age;
+    private String name,email;
+    private LocalDate dateOfBirth;
 }
