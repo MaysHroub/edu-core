@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 
 class Person {
-    private int id,age;
+    private Integer id,age;
     private String name,email;
     private LocalDate dateOfBirth;
 }
