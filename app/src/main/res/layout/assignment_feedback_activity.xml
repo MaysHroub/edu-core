@@ -19,14 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:prompt="@string/select_assignment" />
+        android:prompt="select_assignment" />
 
     <Spinner
         android:id="@+id/studentSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:prompt="@string/select_student" />
+        android:prompt="select_student" />
 
     <TextView
         android:id="@+id/studentSolutionTextView"
