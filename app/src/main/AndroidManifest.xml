@@ -21,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.teacher.AnnounceExamActivity"/>
+        <activity android:name=".activity.teacher.AssignAssignmentsActivity"/>
+        <activity android:name=".activity.teacher.AssignmentFeedBackActivity"/>
+        <activity android:name=".activity.teacher.PublishMarksActivity"/>
     </application>
 
 </manifest>

@@ -10,13 +10,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bzu.educore.R;
 
-public class AssignAssignmentsActivity extends AppCompatActivity {
+public class AssignmentFeedBackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.assign_assignments_activity);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main2), (v, insets) -> {
+        setContentView(R.layout.assignment_feedback_activity);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main3), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
