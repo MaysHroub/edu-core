@@ -12,7 +12,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class Assessment implements Serializable {
@@ -22,6 +21,14 @@ public class Assessment implements Serializable {
     private LocalDate date;
     private Integer teacherId;
     private String type;
+    public Assessment(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type) {
+        this.id = id;
+        this.subjectId = subjectId;
+        this.sectionId = sectionId;
+        this.date = date;
+        this.teacherId = teacherId;
+        this.type = type;
+    }
 }
 @NoArgsConstructor
 @AllArgsConstructor
