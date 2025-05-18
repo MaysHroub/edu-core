@@ -15,7 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Assignment extends Assessment implements Serializable {
+public class Assignment extends Task implements Serializable {
     private String pdfFile;
     private LocalDate deadline;
     private Integer assessmentId;
