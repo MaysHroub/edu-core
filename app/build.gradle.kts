@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.bzu.educore"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -32,17 +32,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.lombok)
     implementation(libs.support.annotations)
-    implementation(libs.lombok)
-    implementation(libs.lombok)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.lombok)
-    implementation(libs.lombok)
-    implementation(libs.lombok)
     implementation(libs.lombok)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
