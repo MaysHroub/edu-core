@@ -14,14 +14,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Assessment implements Serializable {
+public class Task implements Serializable {
     private Integer id;
     private Integer subjectId;
     private Integer sectionId;
     private LocalDate date;
     private Integer teacherId;
     private String type;
-    public Assessment(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type) {
+    public Task(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type) {
         this.id = id;
         this.subjectId = subjectId;
         this.sectionId = sectionId;
@@ -34,6 +34,6 @@ public class Assessment implements Serializable {
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-class AssessmentType implements Serializable {
+class taskType implements Serializable {
     private String title;
 }
