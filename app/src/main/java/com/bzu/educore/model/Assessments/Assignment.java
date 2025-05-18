@@ -20,8 +20,8 @@ public class Assignment extends Task implements Serializable {
     private LocalDate deadline;
     private Integer assessmentId;
     public Assignment(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type,
-                      String pdfFile, LocalDate deadline, Integer assessmentId) {
-        super(id, subjectId, sectionId, date, teacherId, type);
+                      String pdfFile, LocalDate deadline, Integer assessmentId,Integer maxScore) {
+        super(id, subjectId, sectionId, date, teacherId, type,maxScore);
         this.pdfFile = pdfFile;
         this.deadline = deadline;
         this.assessmentId = assessmentId;
