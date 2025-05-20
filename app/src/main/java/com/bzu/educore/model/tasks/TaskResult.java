@@ -1,4 +1,4 @@
-package com.bzu.educore.model.School;
+package com.bzu.educore.model.tasks;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +14,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class ClassGrade implements Serializable {
-    private Integer gradeNumber;
+public class TaskResult implements Serializable {
+    private Integer assessmentId;
+    private Integer studentId;
+    private Double mark;
+    private String feedBack;
 }
+

@@ -1,7 +1,5 @@
-package com.bzu.educore.model.Users;
-
+package com.bzu.educore.model.school;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -16,10 +14,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Absence implements Serializable {
-    private Integer id;
-    private Integer studentId;
-    private LocalDate date;
-    private String status;
+public class ClassGrade implements Serializable {
+    private Integer gradeNumber;
 }
-

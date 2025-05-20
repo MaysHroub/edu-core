@@ -1,4 +1,4 @@
-package com.bzu.educore.model.Assessments;
+package com.bzu.educore.model.tasks;
 
 import java.io.Serializable;
 import java.time.LocalDate;

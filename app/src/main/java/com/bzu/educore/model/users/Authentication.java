@@ -1,4 +1,4 @@
-package com.bzu.educore.model.Assessments;
+package com.bzu.educore.model.users;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -14,10 +14,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class TaskResult implements Serializable {
-    private Integer assessmentId;
-    private Integer studentId;
-    private Double mark;
-    private String feedBack;
+public class Authentication implements Serializable {
+    private String email;
+    private String password;
+    private String userType;
 }
-
