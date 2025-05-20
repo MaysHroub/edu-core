@@ -14,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class AssessmentResult implements Serializable {
+public class TaskResult implements Serializable {
     private Integer assessmentId;
     private Integer studentId;
     private Double mark;
