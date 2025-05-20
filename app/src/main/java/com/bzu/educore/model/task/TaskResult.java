@@ -1,4 +1,4 @@
-package com.bzu.educore.model.tasks;
+package com.bzu.educore.model.task;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
