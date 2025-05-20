@@ -1,5 +1,7 @@
-package com.bzu.educore.model.Assessments;
+package com.bzu.educore.model.user;
+
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,9 +16,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class AssessmentResult implements Serializable {
-    private Integer assessmentId;
+public class Absence implements Serializable {
+    private Integer id;
     private Integer studentId;
-    private Double mark;
+    private LocalDate date;
+    private String status;
 }
 

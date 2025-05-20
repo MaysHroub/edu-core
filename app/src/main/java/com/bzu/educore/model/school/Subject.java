@@ -1,4 +1,5 @@
-package com.bzu.educore.model.School;
+package com.bzu.educore.model.school;
+
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +15,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class ClassGrade implements Serializable {
+public class Subject implements Serializable {
+    private Integer id;
+    private String title;
     private Integer gradeNumber;
+    private Integer semesterNumber;
 }

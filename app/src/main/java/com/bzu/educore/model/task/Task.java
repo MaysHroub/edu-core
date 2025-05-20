@@ -1,4 +1,4 @@
-package com.bzu.educore.model.Assessments;
+package com.bzu.educore.model.task;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -21,19 +21,21 @@ public class Task implements Serializable {
     private LocalDate date;
     private Integer teacherId;
     private String type;
-    public Task(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type) {
+    private Integer maxScore;
+    public Task(Integer id, Integer subjectId, Integer sectionId, LocalDate date, Integer teacherId, String type,Integer maxScore) {
         this.id = id;
         this.subjectId = subjectId;
         this.sectionId = sectionId;
         this.date = date;
         this.teacherId = teacherId;
         this.type = type;
+        this.maxScore=maxScore;
     }
 }
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-class taskType implements Serializable {
+class TaskType implements Serializable {
     private String title;
 }

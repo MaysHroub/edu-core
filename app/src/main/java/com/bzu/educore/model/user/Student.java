@@ -1,4 +1,4 @@
-package com.bzu.educore.model.Users;
+package com.bzu.educore.model.user;
 
 import java.time.LocalDate;
 

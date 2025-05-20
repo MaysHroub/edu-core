@@ -1,5 +1,4 @@
-package com.bzu.educore.model.Users;
-
+package com.bzu.educore.model.school;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -15,11 +14,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class TimeTable implements Serializable {
-    private Integer teacherId;
-    private Integer subjectId;
-    private Integer classId;
-    private String startTime;
-    private String day;
+public class ClassGrade implements Serializable {
+    private Integer gradeNumber;
 }
-

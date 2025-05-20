@@ -1,5 +1,4 @@
-package com.bzu.educore.model.School;
-
+package com.bzu.educore.model.user;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -15,9 +14,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Subject implements Serializable {
-    private Integer id;
-    private String title;
-    private Integer gradeNumber;
-    private Integer semesterNumber;
+public class Authentication implements Serializable {
+    private String email;
+    private String password;
+    private String userType;
 }

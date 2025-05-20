@@ -1,4 +1,4 @@
-package com.bzu.educore.model.School;
+package com.bzu.educore.model.school;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
