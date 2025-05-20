@@ -36,6 +36,6 @@ public class Task implements Serializable {
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-class taskType implements Serializable {
+class TaskType implements Serializable {
     private String title;
 }

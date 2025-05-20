@@ -20,5 +20,6 @@ public class Absence implements Serializable {
     private Integer id;
     private Integer studentId;
     private LocalDate date;
+    private String status;
 }
 

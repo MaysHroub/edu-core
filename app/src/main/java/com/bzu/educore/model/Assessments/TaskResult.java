@@ -18,5 +18,6 @@ public class TaskResult implements Serializable {
     private Integer assessmentId;
     private Integer studentId;
     private Double mark;
+    private String feedBack;
 }
 
