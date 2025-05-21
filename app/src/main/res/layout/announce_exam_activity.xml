@@ -18,22 +18,21 @@
         android:id="@+id/subjectSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:prompt="select_subject" />
+        android:layout_marginTop="16dp"/>
 
     <Spinner
         android:id="@+id/gradeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:prompt="elect_grade" />
+        />
 
     <EditText
         android:id="@+id/examTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Exam Title" />
+         />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
