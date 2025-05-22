@@ -31,7 +31,7 @@
 
 
 
-        <activity android:name=".activity.teacher.AssignmentFeedBackActivity"/>
+        <activity android:name=".activity.teacher.SubmittingGradesActivity"/>
         <activity android:name=".activity.teacher.PublishMarksActivity"/>
     </application>
 
