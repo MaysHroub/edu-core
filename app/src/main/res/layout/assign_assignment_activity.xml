@@ -1,83 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainAssignment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Section Selection -->
+    <!-- Section Spinner -->
     <Spinner
         android:id="@+id/spinnerSectionAssign"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="select_section"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:prompt="Select section" />
 
-    <!-- Title & Description -->
+    <!-- Assignment Title -->
     <EditText
         android:id="@+id/etAssignmentTitle"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="assignment_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinnerSectionAssign" />
+        android:hint="Assignment Title"
+        android:layout_marginTop="16dp" />
 
+    <!-- Assignment Description -->
     <EditText
         android:id="@+id/etAssignmentDesc"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="assignment_description"
+        android:hint="Assignment Description"
         android:inputType="textMultiLine"
         android:minLines="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etAssignmentTitle" />
+        android:layout_marginTop="16dp" />
 
-    <!-- Deadline Picker -->
-    <TextView
-        android:id="@+id/tvDeadlineLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="deadline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etAssignmentDesc" />
+    <!-- Scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp">
 
-    <Button
-        android:id="@+id/btnPickDeadline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="select_date"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvDeadlineLabel"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <!-- File Upload -->
-    <Button
-        android:id="@+id/btnUploadQuestion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="upload file"
-        app:layout_constraintBottom_toTopOf="@+id/btnPublishAssignment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDeadlineLabel" />
+            <!-- Deadline Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deadline" />
 
-    <!-- Publish -->
-    <Button
-        android:id="@+id/btnPublishAssignment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
-        android:text="publish assignment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+            <!-- Visible DatePicker (calendar) -->
+            <DatePicker
+                android:id="@+id/datepickerDeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="true"
+                android:spinnersShown="false"
+                android:layout_marginTop="8dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Upload File Button -->
+            <Button
+                android:id="@+id/btnUploadQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload File"
+                android:layout_marginTop="16dp" />
+
+            <!-- Publish Button -->
+            <Button
+                android:id="@+id/btnPublishAssignment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Publish Assignment"
+                android:layout_marginTop="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

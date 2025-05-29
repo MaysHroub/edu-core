@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main1"
     android:layout_width="match_parent"
@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,61 +15,73 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <!-- Subject Spinner -->
     <Spinner
         android:id="@+id/subjectSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
+    <!-- Grade Spinner -->
     <Spinner
         android:id="@+id/gradeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        />
+        android:layout_marginTop="8dp" />
 
+    <!-- Exam Title -->
     <EditText
         android:id="@+id/examTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-         />
+        android:hint="Exam Title"
+        android:layout_marginTop="16dp" />
+
+    <!-- Scrollable content -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Exam Date" />
-    <DatePicker
-        android:id="@+id/examDatePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/examDescriptionEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Additional Information"
-        android:inputType="textMultiLine"
-        android:minLines="3" />
+            <!-- Exam Date Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Exam Date" />
 
+            <!-- Exam Date Picker -->
+            <DatePicker
+                android:id="@+id/examDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/publishAnnouncementButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Publish Announcement" />
-    </LinearLayout>
+            <!-- Exam Description -->
+            <EditText
+                android:id="@+id/examDescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Additional Information"
+                android:inputType="textMultiLine"
+                android:minLines="3" />
+
+            <!-- Publish Button -->
+            <Button
+                android:id="@+id/publishAnnouncementButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Publish Announcement" />
+
+        </LinearLayout>
     </ScrollView>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

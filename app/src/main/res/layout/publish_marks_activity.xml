@@ -1,50 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 1. Updated publish_marks.xml using RecyclerView -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:id="@+id/main4">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Publish Exam Marks"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject:"
+        android:layout_marginTop="16dp"/>
     <Spinner
         android:id="@+id/subjectSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Select Subject"/>
+        android:prompt="Select Subject" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Grade:"
+        android:layout_marginTop="16dp"/>
     <Spinner
         android:id="@+id/gradeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Select Grade"/>
+        android:prompt="Select Grade" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exam:"
+        android:layout_marginTop="16dp"/>
     <Spinner
         android:id="@+id/examSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Select Exam"/>
+        android:prompt="Select Exam" />
 
-    <ListView
-        android:id="@+id/studentsListView"
+    <!-- RecyclerView replaces ListView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/studentsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/publishButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Publish Marks"/>
+        android:text="Publish Marks" />
+
 </LinearLayout>
+
+
