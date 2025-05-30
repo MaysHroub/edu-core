@@ -1,6 +1,5 @@
 package com.bzu.educore.activity.teacher;
 
-import android.media.MediaCodec;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,117 +9,153 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.bzu.educore.R;
-import com.bzu.educore.model.user.TimeTable;
 
-import org.json.JSONException;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.bzu.educore.R;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AnnounceExamActivity extends AppCompatActivity {
 
-    Spinner subjectSpinner, gradeSpinner;
-    EditText examTitleEditText, examDescriptionEditText;
-    DatePicker examDatePicker;
-    Button publishAnnouncementButton;
+    private RequestQueue requestQueue;
+    private Spinner subjectSpinner, gradeSpinner;
+    private EditText examTitleEditText, examDescriptionEditText;
+    private DatePicker examDatePicker;
+
+    private List<Integer> subjectIds = new ArrayList<>();
+    private List<Integer> classIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.announce_exam_activity);
 
+        requestQueue = Volley.newRequestQueue(this);
+
         subjectSpinner = findViewById(R.id.subjectSpinner);
         gradeSpinner = findViewById(R.id.gradeSpinner);
         examTitleEditText = findViewById(R.id.examTitleEditText);
         examDescriptionEditText = findViewById(R.id.examDescriptionEditText);
         examDatePicker = findViewById(R.id.examDatePicker);
-        publishAnnouncementButton = findViewById(R.id.publishAnnouncementButton);
+        Button publishButton = findViewById(R.id.publishAnnouncementButton);
 
-        int teacherId = 1;  // Hardcoded for testing
+        loadTimetable();
+        publishButton.setOnClickListener(v -> publishExam());
+    }
 
-        ApiHelper.getInstance(this).getTeacherTimeTable(teacherId, new ApiHelper.ApiCallback<List<TimeTable>>() {
-            @Override
-            public void onSuccess(List<TimeTable> timeTableList) {
-                // Extract unique subjects and grades
-                Set<String> subjects = new HashSet<>();
-                Set<String> grades = new HashSet<>();
-                for (TimeTable t : timeTableList) {
-                    subjects.add(String.valueOf(t.getSubjectId()));
-                    grades.add(String.valueOf(t.getClassId()));
-                }
+    private void loadTimetable() {
+        String url = "http://10.0.2.2/android/timetable.php?teacher_id=1";
 
-                runOnUiThread(() -> {
-                    subjectSpinner.setAdapter(new ArrayAdapter<>(AnnounceExamActivity.this,
-                            android.R.layout.simple_spinner_item, new ArrayList<>(subjects)));
-                    gradeSpinner.setAdapter(new ArrayAdapter<>(AnnounceExamActivity.this,
-                            android.R.layout.simple_spinner_item, new ArrayList<>(grades)));
-                });
-            }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        setupSpinners(response);
+                        Toast.makeText(this, "Timetable loaded!", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        showFallbackData();
+                    }
+                },
+                error -> showFallbackData()
+        );
 
-            @Override
-            public void onError(String error) {
-                Toast.makeText(AnnounceExamActivity.this, "Failed to load timetable: " + error, Toast.LENGTH_LONG).show();
+        requestQueue.add(request);
+    }
 
-                // Optional fallback: hardcode some default values
-                runOnUiThread(() -> {
-                    subjectSpinner.setAdapter(new ArrayAdapter<>(AnnounceExamActivity.this,
-                            android.R.layout.simple_spinner_item, new String[]{"Math", "Science"}));
-                    gradeSpinner.setAdapter(new ArrayAdapter<>(AnnounceExamActivity.this,
-                            android.R.layout.simple_spinner_item, new String[]{"Grade 1", "Grade 2"}));
-                });
-            }
-        });
+    private void setupSpinners(JSONObject response) throws Exception {
+        JSONArray subjects = response.getJSONArray("subjects");
+        JSONArray classes = response.getJSONArray("classes");
 
-        publishAnnouncementButton.setOnClickListener(v -> publishExam());
+        List<String> subjectTitles = new ArrayList<>();
+        List<String> gradeNumbers = new ArrayList<>();
+
+        subjectIds.clear();
+        classIds.clear();
+
+        for (int i = 0; i < subjects.length(); i++) {
+            JSONObject subject = subjects.getJSONObject(i);
+            subjectTitles.add(subject.getString("title"));
+            subjectIds.add(subject.getInt("id"));
+        }
+
+        for (int i = 0; i < classes.length(); i++) {
+            JSONObject cls = classes.getJSONObject(i);
+            gradeNumbers.add("Grade " + cls.getInt("grade_number"));
+            classIds.add(cls.getInt("id"));
+        }
+
+        subjectSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjectTitles));
+        gradeSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, gradeNumbers));
+    }
+
+    private void showFallbackData() {
+        List<String> subjects = List.of("Math", "Science");
+        List<String> grades = List.of("Grade 1", "Grade 2");
+
+        subjectIds.clear();
+        subjectIds.addAll(List.of(1, 2));
+        classIds.clear();
+        classIds.addAll(List.of(101, 102));
+
+        subjectSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subjects));
+        gradeSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, grades));
+
+        Toast.makeText(this, "Using fallback data", Toast.LENGTH_SHORT).show();
     }
 
     private void publishExam() {
-        String subject = subjectSpinner.getSelectedItem().toString();
-        String grade = gradeSpinner.getSelectedItem().toString();
         String title = examTitleEditText.getText().toString().trim();
         String description = examDescriptionEditText.getText().toString().trim();
 
-        int day = examDatePicker.getDayOfMonth();
-        int month = examDatePicker.getMonth() + 1;
-        int year = examDatePicker.getYear();
-        String date = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
-
         if (title.isEmpty()) {
-            examTitleEditText.setError("Title is required");
+            examTitleEditText.setError("Title required");
             return;
         }
 
-        JSONObject postData = new JSONObject();
+        int subjectPos = subjectSpinner.getSelectedItemPosition();
+        int gradePos = gradeSpinner.getSelectedItemPosition();
+
+        if (subjectPos < 0 || gradePos < 0) {
+            Toast.makeText(this, "Please select subject and grade", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int subjectId = subjectIds.get(subjectPos);
+        int classId = classIds.get(gradePos);
+
+        String date = String.format("%04d-%02d-%02d",
+                examDatePicker.getYear(),
+                examDatePicker.getMonth() + 1,
+                examDatePicker.getDayOfMonth());
+
         try {
-            postData.put("subject", subject);
-            postData.put("grade", grade);
-            postData.put("title", title);
-            postData.put("date", date);
-            postData.put("description", description);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Failed to create request data", Toast.LENGTH_SHORT).show();
-            return;
+            JSONObject data = new JSONObject();
+            data.put("title", title);
+            data.put("description", description);
+            data.put("subject_id", subjectId);
+            data.put("class_id", classId);
+            data.put("teacher_id", 1);
+            data.put("max_score", 100);
+            data.put("exam_date", date);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    "http://10.0.2.2/android/exam.php",
+                    data,
+                    response -> Toast.makeText(this, "Exam announced successfully!", Toast.LENGTH_SHORT).show(),
+                    error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+            );
+
+            requestQueue.add(request);
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to create request", Toast.LENGTH_SHORT).show();
         }
-
-        ApiHelper.getInstance(this).announceExam(postData, new ApiHelper.ApiCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                runOnUiThread(() ->
-                        Toast.makeText(AnnounceExamActivity.this, "Exam announced successfully!", Toast.LENGTH_SHORT).show()
-                );
-            }
-
-            @Override
-            public void onError(String error) {
-                runOnUiThread(() ->
-                        Toast.makeText(AnnounceExamActivity.this, "Error: " + error, Toast.LENGTH_LONG).show()
-                );
-            }
-        });
     }
 }
