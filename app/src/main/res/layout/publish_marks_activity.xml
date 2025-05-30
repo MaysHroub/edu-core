@@ -1,67 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 1. Updated publish_marks.xml using RecyclerView -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main4"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Publish Exam Marks"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subject:"
-        android:layout_marginTop="16dp"/>
-    <Spinner
-        android:id="@+id/subjectSpinner"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
+        android:layout_height="match_parent"
+        android:elevation="8dp"
+        android:layout_gravity="center"
+        android:padding="16dp"
+        app:cardCornerRadius="12dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Grade:"
-        android:layout_marginTop="16dp"/>
-    <Spinner
-        android:id="@+id/gradeSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
+        <LinearLayout
+            android:id="@+id/main4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:fitsSystemWindows="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exam:"
-        android:layout_marginTop="16dp"/>
-    <Spinner
-        android:id="@+id/examSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Publish Exam Marks"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
 
-    <!-- RecyclerView replaces ListView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/studentsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subject:"
+                android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/publishButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Publish Marks" />
+            <Spinner
+                android:id="@+id/subjectSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grade:"
+                android:layout_marginTop="8dp" />
 
+            <Spinner
+                android:id="@+id/gradeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exam:"
+                android:layout_marginTop="8dp" />
+
+            <Spinner
+                android:id="@+id/examSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/studentsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="12dp" />
+
+            <Button
+                android:id="@+id/publishButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:text="Publish Marks" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

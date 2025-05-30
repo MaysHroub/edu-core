@@ -26,13 +26,13 @@ import java.util.List;
 public class PublishMarksActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
-    private Spinner subjectSpinner, gradeSpinner, examSpinner;
+    private Spinner subjectSpinner, gradeSpinner, taskSpinner; // Changed from examSpinner to taskSpinner
     private RecyclerView studentsRecyclerView;
     private Button publishButton;
 
     private List<Integer> subjectIds = new ArrayList<>();
     private List<Integer> classIds = new ArrayList<>();
-    private List<Integer> examIds = new ArrayList<>();
+    private List<Integer> taskIds = new ArrayList<>(); // Changed from examIds to taskIds
     private StudentMarksAdapter adapter;
 
     @Override
@@ -44,7 +44,7 @@ public class PublishMarksActivity extends AppCompatActivity {
 
         subjectSpinner = findViewById(R.id.subjectSpinner);
         gradeSpinner = findViewById(R.id.gradeSpinner);
-        examSpinner = findViewById(R.id.examSpinner);
+        taskSpinner = findViewById(R.id.examSpinner); // Keep the same ID for layout compatibility
         studentsRecyclerView = findViewById(R.id.studentsRecyclerView);
         publishButton = findViewById(R.id.publishButton);
 
@@ -52,11 +52,11 @@ public class PublishMarksActivity extends AppCompatActivity {
 
         loadTimetable();
 
-        // Load exams when subject/grade changes
+        // Load tasks when subject/grade changes
         subjectSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
-                loadExams();
+                loadTasks(); // Changed from loadExams to loadTasks
             }
             @Override
             public void onNothingSelected(android.widget.AdapterView<?> parent) {}
@@ -65,7 +65,7 @@ public class PublishMarksActivity extends AppCompatActivity {
         gradeSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
-                loadExams();
+                loadTasks(); // Changed from loadExams to loadTasks
                 loadStudents();
             }
             @Override
@@ -131,51 +131,64 @@ public class PublishMarksActivity extends AppCompatActivity {
         gradeSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, grades));
     }
 
-    private void loadExams() {
+    private void loadTasks() { // Renamed from loadExams
         int subjectPos = subjectSpinner.getSelectedItemPosition();
         int gradePos = gradeSpinner.getSelectedItemPosition();
 
-        if (subjectPos < 0 || gradePos < 0) return;
+        if (subjectPos < 0 || gradePos < 0 ||
+                subjectPos >= subjectIds.size() || gradePos >= classIds.size()) {
+            return;
+        }
 
         int subjectId = subjectIds.get(subjectPos);
         int classId = classIds.get(gradePos);
 
-        String url = "http://10.0.2.2/android/exams.php?subject_id=" + subjectId + "&class_id=" + classId;
+        // Changed URL from exams.php to tasks.php
+        String url = "http://10.0.2.2/android/tasks.php?subject_id=" + subjectId + "&class_id=" + classId;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        List<String> examTitles = new ArrayList<>();
-                        examIds.clear();
+                        List<String> taskTitles = new ArrayList<>();
+                        taskIds.clear();
 
                         for (int i = 0; i < response.length(); i++) {
-                            JSONObject exam = response.getJSONObject(i);
-                            examTitles.add(exam.getString("title"));
-                            examIds.add(exam.getInt("id"));
+                            JSONObject task = response.getJSONObject(i);
+                            taskTitles.add(task.getString("title"));
+                            taskIds.add(task.getInt("id"));
                         }
 
-                        examSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, examTitles));
+                        if (taskTitles.isEmpty()) {
+                            taskTitles.add("No tasks available");
+                            taskIds.add(-1); // Invalid ID to prevent selection
+                        }
+
+                        taskSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, taskTitles));
                     } catch (Exception e) {
-                        showFallbackExams();
+                        e.printStackTrace();
+                        showFallbackTasks();
                     }
                 },
-                error -> showFallbackExams()
+                error -> {
+                    error.printStackTrace();
+                    showFallbackTasks();
+                }
         );
 
         requestQueue.add(request);
     }
 
-    private void showFallbackExams() {
-        List<String> exams = List.of("Midterm Exam", "Final Exam");
-        examIds.clear();
-        examIds.addAll(List.of(1, 2));
+    private void showFallbackTasks() { // Renamed from showFallbackExams
+        List<String> tasks = List.of("Midterm Exam", "Final Exam", "Assignment 1");
+        taskIds.clear();
+        taskIds.addAll(List.of(1, 2, 3));
 
-        examSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, exams));
+        taskSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tasks));
     }
 
     private void loadStudents() {
         int gradePos = gradeSpinner.getSelectedItemPosition();
-        if (gradePos < 0) return;
+        if (gradePos < 0 || gradePos >= classIds.size()) return;
 
         int classId = classIds.get(gradePos);
         String url = "http://10.0.2.2/android/students.php?class_id=" + classId;
@@ -196,10 +209,14 @@ public class PublishMarksActivity extends AppCompatActivity {
                         adapter = new StudentMarksAdapter(students);
                         studentsRecyclerView.setAdapter(adapter);
                     } catch (Exception e) {
+                        e.printStackTrace();
                         showFallbackStudents();
                     }
                 },
-                error -> showFallbackStudents()
+                error -> {
+                    error.printStackTrace();
+                    showFallbackStudents();
+                }
         );
 
         requestQueue.add(request);
@@ -222,20 +239,25 @@ public class PublishMarksActivity extends AppCompatActivity {
             return;
         }
 
-        int examPos = examSpinner.getSelectedItemPosition();
-        if (examPos < 0) {
-            Toast.makeText(this, "Please select an exam", Toast.LENGTH_SHORT).show();
+        int taskPos = taskSpinner.getSelectedItemPosition(); // Changed from examPos
+        if (taskPos < 0 || taskPos >= taskIds.size()) {
+            Toast.makeText(this, "Please select a task", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int examId = examIds.get(examPos);
+        int taskId = taskIds.get(taskPos);
+
+        if (taskId == -1) {
+            Toast.makeText(this, "No valid task selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         try {
             JSONArray marksArray = new JSONArray();
 
             for (StudentMarksAdapter.Student student : adapter.getStudents()) {
                 JSONObject markData = new JSONObject();
-                markData.put("task_id", examId);
+                markData.put("task_id", taskId); // Using taskId instead of examId
                 markData.put("student_id", student.id);
                 markData.put("mark", student.mark);
                 marksArray.put(markData);
@@ -249,12 +271,16 @@ public class PublishMarksActivity extends AppCompatActivity {
                     "http://10.0.2.2/android/publish_marks.php",
                     data,
                     response -> Toast.makeText(this, "Marks published successfully!", Toast.LENGTH_SHORT).show(),
-                    error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+                    error -> {
+                        error.printStackTrace();
+                        Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
             );
 
             requestQueue.add(request);
 
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(this, "Failed to create request", Toast.LENGTH_SHORT).show();
         }
     }

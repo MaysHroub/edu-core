@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:elevation="2dp"
+    android:radius="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Profile Picture -->
+        <ImageView
+            android:id="@+id/imgStudentPfp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/student_icon"
+            android:contentDescription="Student Profile" />
+
+        <!-- Student Info Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Student Name -->
+            <TextView
+                android:id="@+id/tvStudentName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Student Name"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Submission Status -->
+            <TextView
+                android:id="@+id/tvSubmissionStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submitted"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:layout_marginTop="2dp" />
+
+            <!-- Submission Date -->
+            <TextView
+                android:id="@+id/tvSubmissionDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submitted: 2024-12-25"
+                android:textSize="11sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="2dp"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <!-- Mark Display -->
+        <TextView
+            android:id="@+id/tvMark"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="85.0"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginEnd="8dp"
+            android:visibility="visible" />
+
+        <!-- View Submission Button -->
+        <Button
+            android:id="@+id/btnViewSubmission"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="View Submission"
+            android:textSize="12sp"
+            android:paddingHorizontal="12dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
