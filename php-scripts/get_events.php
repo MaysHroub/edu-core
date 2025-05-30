@@ -4,7 +4,6 @@ require_once("../includes/connection.php");
 
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];
-
     // finding the class the student belongs to
     $stmt = $pdo->prepare("SELECT class_id FROM Student WHERE id = ?"); 
     $stmt->execute([$studentId]);

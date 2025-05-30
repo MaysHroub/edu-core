@@ -23,7 +23,7 @@
         android:id="@+id/subjectSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="Select Subject" />
+         />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
         android:id="@+id/gradeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="Select Grade" />
+         />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:id="@+id/examSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="Select Exam" />
+         />
 
     <!-- RecyclerView replaces ListView -->
     <androidx.recyclerview.widget.RecyclerView

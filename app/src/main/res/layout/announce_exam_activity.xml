@@ -61,7 +61,8 @@
                 android:id="@+id/examDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                android:calendarViewShown="false"
+                android:contentDescription="Pick exam date" />
 
             <!-- Exam Description -->
             <EditText
