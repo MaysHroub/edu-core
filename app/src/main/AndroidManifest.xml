@@ -41,6 +41,7 @@
         </activity>
 
 
+        <activity android:name=".activity.teacher.AssignmentSubmissionsActivity"/>
 
 
         <activity android:name=".activity.teacher.PublishMarksActivity"/>

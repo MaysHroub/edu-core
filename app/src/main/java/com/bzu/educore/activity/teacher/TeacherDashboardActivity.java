@@ -12,6 +12,8 @@ public class TeacherDashboardActivity extends AppCompatActivity {
     private CardView cardCreateAssignment;
     private CardView cardAnnounceExam;
     private CardView cardPublishMarks;
+    private CardView cardSubmissions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         cardCreateAssignment = findViewById(R.id.cardCreateAssignment);
         cardAnnounceExam     = findViewById(R.id.cardAnnounceExam);
         cardPublishMarks     = findViewById(R.id.cardPublishMarks);
+        cardSubmissions = findViewById(R.id.cardViewSubmissions);
 
         // 2. Set up click listeners
         cardCreateAssignment.setOnClickListener(v -> {
@@ -36,6 +39,10 @@ public class TeacherDashboardActivity extends AppCompatActivity {
 
         cardPublishMarks.setOnClickListener(v -> {
             Intent intent = new Intent(TeacherDashboardActivity.this, PublishMarksActivity.class);
+            startActivity(intent);
+        });
+        cardSubmissions.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, AssignmentSubmissionsActivity.class);
             startActivity(intent);
         });
     }
