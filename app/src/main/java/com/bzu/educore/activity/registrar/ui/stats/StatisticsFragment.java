@@ -12,12 +12,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bzu.educore.databinding.FragmentStatisticsBinding;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 public class StatisticsFragment extends Fragment {
 
     private FragmentStatisticsBinding binding;
-    private TextView txtNumOfStds, txtNumOfTeachers, txtNumOfSections, txtClassGrades;
-    private PieChart pieChartGenderDist, pieChartStdClassDist;
+    private TextView txtNumOfStds, txtNumOfTeachers, txtNumOfClassrooms, txtNumOfSubjects;
+    private PieChart pieChartTeacherSubjectDist, pieChartStdGradeDist;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -28,15 +31,34 @@ public class StatisticsFragment extends Fragment {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        TextView txtNumOfStds = binding.txtNumOfStds;
-        TextView txtNumOfTeachers = binding.txtNumOfTeachers;
-        TextView txtNumOfSections = binding.txtNumOfSections;
-        TextView txtClassGrades = binding.txtClassGrades;
+        txtNumOfStds = binding.txtNumOfStds;
+        txtNumOfTeachers = binding.txtNumOfTeachers;
+        txtNumOfClassrooms = binding.txtNumOfSections;
+        txtNumOfSubjects = binding.txtNumOfSubjects;
+        pieChartTeacherSubjectDist = binding.pieChartTeacherSubjectDist;
+        pieChartStdGradeDist = binding.pieChartStdGradeDist;
 
-        PieChart pieChartGenderDist = binding.pieChartGenderDist;
-        PieChart pieChartStdClassDist = binding.pieChartStdClassDist;
+        statisticsViewModel.getNumOfStudents().observe(getViewLifecycleOwner(), txtNumOfStds::setText);
+        statisticsViewModel.getNumOfTeachers().observe(getViewLifecycleOwner(), txtNumOfTeachers::setText);
+        statisticsViewModel.getNumOfClassrooms().observe(getViewLifecycleOwner(), txtNumOfClassrooms::setText);
+        statisticsViewModel.getNumOfSubjects().observe(getViewLifecycleOwner(), txtNumOfSubjects::setText);
 
-        // statisticsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        statisticsViewModel.getTeachersPerSubjectEntries().observe(getViewLifecycleOwner(), entries -> {
+            PieDataSet dataSet = new PieDataSet(entries, "Teachers per Subject");
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            PieData pieData = new PieData(dataSet);
+            pieChartTeacherSubjectDist.setData(pieData);
+            pieChartTeacherSubjectDist.invalidate(); // refresh chart
+        });
+
+        statisticsViewModel.getStudentsPerGradeEntries().observe(getViewLifecycleOwner(), entries -> {
+            PieDataSet dataSet = new PieDataSet(entries, "Students per Grade");
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            PieData pieData = new PieData(dataSet);
+            pieChartStdGradeDist.setData(pieData);
+            pieChartStdGradeDist.invalidate();
+        });
+
         return root;
     }
 

@@ -16,4 +16,6 @@
     <string name="number_of_schedules_created">Number of schedules created:</string>
     <string name="number_of_sections">Number of sections:</string>
     <string name="class_grades_in_school">Class grades in school:</string>
+    <string name="number_of_classrooms">Number of classrooms:</string>
+    <string name="number_of_subjects_added">Number of subjects added:</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.bzu.educore.dao;
+package com.bzu.educore.repository;
 
 public class DummyDao {
 }
