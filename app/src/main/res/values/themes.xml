@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.EduCore" parent="Base.Theme.EduCore" />
+
+    <style name="Theme.EduCore.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.EduCore.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.EduCore.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

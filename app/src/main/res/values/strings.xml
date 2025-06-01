@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">EduCore</string>
+    <string name="title_activity_registrar_main">RegistrarMainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="number_of_students_registered">Number of students registered:</string>
+    <string name="number_of_teachers_registered">Number of teachers registered:</string>
+    <string name="number_of_schedules_created">Number of schedules created:</string>
+    <string name="number_of_sections">Number of sections:</string>
+    <string name="class_grades_in_school">Class grades in school:</string>
+    <string name="number_of_classrooms">Number of classrooms:</string>
+    <string name="number_of_subjects_added">Number of subjects added:</string>
 </resources>
