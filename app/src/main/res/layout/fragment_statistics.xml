@@ -7,23 +7,14 @@
     android:layout_margin="20dp"
     tools:context=".activity.registrar.ui.stats.StatisticsFragment">
 
-        <TextView
-            android:id="@+id/txt_greeting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hello, <name>!"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/number_of_students_registered"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_greeting" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/number_of_students_registered"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txt_num_of_stds"
