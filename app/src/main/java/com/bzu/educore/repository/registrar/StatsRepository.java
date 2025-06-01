@@ -1,4 +1,4 @@
-package com.bzu.educore.dao.registrar;
+package com.bzu.educore.repository.registrar;
 
 import android.content.Context;
 
@@ -11,15 +11,15 @@ import com.bzu.educore.util.VolleySingleton;
 
 import org.json.JSONArray;
 
-public class RegistrarStatsDao {
+public class StatsRepository {
 
     private final Context context;
 
-    public RegistrarStatsDao(Context context) {
+    public StatsRepository(Context context) {
         this.context = context;
     }
 
-    public void getSectionCount(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public void getSubjectCount(Response.Listener<String> listener, Response.ErrorListener errorListener) {
         StringRequest request = new StringRequest(Request.Method.GET, UrlManager.URL_GET_SUBJECT_COUNT, listener, errorListener);
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
@@ -34,11 +34,16 @@ public class RegistrarStatsDao {
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void getClassroomCount(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        StringRequest request = new StringRequest(Request.Method.GET, UrlManager.URL_GET_CLASSROOM_COUNT, listener, errorListener);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
     public void getTeachersPerSubject(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
                 UrlManager.URL_GET_TEACHER_PER_SUBJECT,
-                null, // no request body
+                null,
                 listener,
                 errorListener
         );
@@ -49,7 +54,7 @@ public class RegistrarStatsDao {
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
                 UrlManager.URL_GET_STUDENT_PER_GRADE,
-                null, // no request body
+                null,
                 listener,
                 errorListener
         );
