@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.home;
+package com.bzu.educore.activity.registrar.ui.stats;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bzu.educore.databinding.FragmentHomeBinding;
+import com.bzu.educore.databinding.FragmentStatisticsBinding;
 
-public class HomeFragment extends Fragment {
+public class StatisticsFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    private FragmentStatisticsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        StatisticsViewModel statisticsViewModel =
+                new ViewModelProvider(this).get(StatisticsViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentStatisticsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        statisticsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
