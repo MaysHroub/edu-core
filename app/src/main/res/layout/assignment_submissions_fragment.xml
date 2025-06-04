@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Assignment Info Header -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +48,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Submissions List Header -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,11 +56,17 @@
         android:textStyle="bold"
         android:layout_marginBottom="12dp" />
 
-    <!-- Submissions RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/submissionsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/saveMarksButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Save Marks" />
 
 </LinearLayout>

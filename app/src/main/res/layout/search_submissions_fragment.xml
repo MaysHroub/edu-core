@@ -15,7 +15,6 @@
         app:cardCornerRadius="12dp">
 
         <LinearLayout
-            android:id="@+id/main4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -24,58 +23,49 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Publish Exam Marks"
+                android:text="Find Assignments to Mark"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subject:"
+                android:text="Filter by Subject:"
                 android:layout_marginTop="8dp" />
 
             <Spinner
-                android:id="@+id/subjectSpinner"
+                android:id="@+id/subjectFilterSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Grade:"
+                android:text="Filter by Grade:"
                 android:layout_marginTop="8dp" />
 
             <Spinner
-                android:id="@+id/gradeSpinner"
+                android:id="@+id/gradeFilterSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exam:"
-                android:layout_marginTop="8dp" />
-
-            <Spinner
-                android:id="@+id/examSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:text="Matching Assignments:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/studentsRecyclerView"
+                android:id="@+id/assignmentsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginTop="12dp" />
-
-            <Button
-                android:id="@+id/publishButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp"
-                android:text="Publish Marks" />
+                android:scrollbars="vertical"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

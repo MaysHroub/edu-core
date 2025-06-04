@@ -1,78 +1,77 @@
-package com.bzu.educore.activity.teacher;
+package com.bzu.educore.activity.teacher.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bzu.educore.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignAssignmentActivity extends AppCompatActivity {
+public class AssignAssignmentFragment extends BaseFragment {
 
     private static final int FILE_PICKER_REQUEST = 100;
 
-    private RequestQueue requestQueue;
     private Spinner sectionSpinner;
     private EditText titleEditText, descEditText;
     private DatePicker deadlinePicker;
     private Button uploadButton, publishButton;
-
-    private List<Integer> classIds = new ArrayList<>();
     private String uploadedFileUrl = "";
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.assign_assignment_activity);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.assign_assignment_fragment, container, false);
 
-        requestQueue = Volley.newRequestQueue(this);
-
-        sectionSpinner = findViewById(R.id.spinnerSectionAssign);
-        titleEditText = findViewById(R.id.etAssignmentTitle);
-        descEditText = findViewById(R.id.etAssignmentDesc);
-        deadlinePicker = findViewById(R.id.datepickerDeadline);
-        uploadButton = findViewById(R.id.btnUploadQuestion);
-        publishButton = findViewById(R.id.btnPublishAssignment);
-
+        initializeViews(view);
         loadSections();
+
+        return view;
+    }
+
+    private void initializeViews(View view) {
+        sectionSpinner = view.findViewById(R.id.spinnerSectionAssign);
+        titleEditText = view.findViewById(R.id.etAssignmentTitle);
+        descEditText = view.findViewById(R.id.etAssignmentDesc);
+        deadlinePicker = view.findViewById(R.id.datepickerDeadline);
+        uploadButton = view.findViewById(R.id.btnUploadQuestion);
+        publishButton = view.findViewById(R.id.btnPublishAssignment);
 
         uploadButton.setOnClickListener(v -> openFilePicker());
         publishButton.setOnClickListener(v -> publishAssignment());
     }
 
     private void loadSections() {
-        String url = "http://10.0.2.2/android/timetable.php?teacher_id=1";
+        loadTimetable(new TimetableCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    setupSectionSpinner(response);
+                } catch (Exception e) {
+                    showFallbackSections();
+                }
+            }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        setupSectionSpinner(response);
-                    } catch (Exception e) {
-                        showFallbackSections();
-                    }
-                },
-                error -> showFallbackSections()
-        );
-
-        requestQueue.add(request);
+            @Override
+            public void onError(String error) {
+                showFallbackSections();
+            }
+        });
     }
 
     private void setupSectionSpinner(JSONObject response) throws Exception {
@@ -87,7 +86,7 @@ public class AssignAssignmentActivity extends AppCompatActivity {
             classIds.add(cls.getInt("id"));
         }
 
-        sectionSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sectionNames));
+        sectionSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, sectionNames));
     }
 
     private void showFallbackSections() {
@@ -95,7 +94,7 @@ public class AssignAssignmentActivity extends AppCompatActivity {
         classIds.clear();
         classIds.addAll(List.of(101, 102));
 
-        sectionSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sections));
+        sectionSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, sections));
     }
 
     private void openFilePicker() {
@@ -106,14 +105,14 @@ public class AssignAssignmentActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == FILE_PICKER_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             Uri fileUri = data.getData();
-            uploadedFileUrl = fileUri.toString(); // In real app, upload to server and get URL
+            uploadedFileUrl = fileUri.toString();
             uploadButton.setText("File Selected ✓");
-            Toast.makeText(this, "File selected", Toast.LENGTH_SHORT).show();
+            showToast("File selected");
         }
     }
 
@@ -127,13 +126,13 @@ public class AssignAssignmentActivity extends AppCompatActivity {
         }
 
         if (uploadedFileUrl.isEmpty()) {
-            Toast.makeText(this, "Please select a file", Toast.LENGTH_SHORT).show();
+            showToast("Please select a file");
             return;
         }
 
         int sectionPos = sectionSpinner.getSelectedItemPosition();
         if (sectionPos < 0) {
-            Toast.makeText(this, "Please select a section", Toast.LENGTH_SHORT).show();
+            showToast("Please select a section");
             return;
         }
 
@@ -148,7 +147,7 @@ public class AssignAssignmentActivity extends AppCompatActivity {
             JSONObject data = new JSONObject();
             data.put("title", title);
             data.put("description", description);
-            data.put("subject_id", 1); // You may want to add subject selection
+            data.put("subject_id", 1);
             data.put("class_id", classId);
             data.put("teacher_id", 1);
             data.put("max_score", 100);
@@ -160,16 +159,16 @@ public class AssignAssignmentActivity extends AppCompatActivity {
                     "http://10.0.2.2/android/assignment.php",
                     data,
                     response -> {
-                        Toast.makeText(this, "Assignment published successfully!", Toast.LENGTH_SHORT).show();
-                        finish();
+                        showToast("Assignment published successfully!");
+                        requireActivity().getSupportFragmentManager().popBackStack();
                     },
-                    error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
+                    error -> showErrorToast("Error: " + error.getMessage())
             );
 
             requestQueue.add(request);
 
         } catch (Exception e) {
-            Toast.makeText(this, "Failed to create request", Toast.LENGTH_SHORT).show();
+            showErrorToast("Failed to create request");
         }
     }
 }

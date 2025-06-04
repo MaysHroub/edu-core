@@ -23,15 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.teacher.AssignAssignmentActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".activity.teacher.AnnounceExamActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".activity.teacher.TeacherDashboardActivity"
+            android:name=".activity.teacher.TeacherMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,10 +33,6 @@
         </activity>
 
 
-        <activity android:name=".activity.teacher.AssignmentSubmissionsActivity"/>
-
-
-        <activity android:name=".activity.teacher.PublishMarksActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 
