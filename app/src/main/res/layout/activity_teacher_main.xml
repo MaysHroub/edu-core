@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:title="EduCore Teacher"
+            android:title="@string/educore_teacher"
             android:titleTextColor="@android:color/white"
             android:elevation="4dp" />
 

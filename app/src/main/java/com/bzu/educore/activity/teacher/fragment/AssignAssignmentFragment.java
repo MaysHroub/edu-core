@@ -1,4 +1,3 @@
-// AssignAssignmentFragment.java
 package com.bzu.educore.activity.teacher.fragment;
 
 import android.app.Activity;
@@ -31,7 +30,7 @@ public class AssignAssignmentFragment extends BaseFragment {
 
     private static final int FILE_PICKER_REQUEST = 100;
 
-    private EditText titleEditText, descEditText;
+    private EditText titleEditText, descEditText, maxScoreEditText;
     private TextView subjectTextView, classGradeTextView;
     private DatePicker deadlinePicker;
     private Button uploadButton, publishButton;
@@ -59,6 +58,7 @@ public class AssignAssignmentFragment extends BaseFragment {
         classGradeTextView = view.findViewById(R.id.tvClassGradeName);
         titleEditText = view.findViewById(R.id.etAssignmentTitle);
         descEditText = view.findViewById(R.id.etAssignmentDesc);
+        maxScoreEditText = view.findViewById(R.id.etMaxScore);
         deadlinePicker = view.findViewById(R.id.datepickerDeadline);
         uploadButton = view.findViewById(R.id.btnUploadQuestion);
         publishButton = view.findViewById(R.id.btnPublishAssignment);
@@ -107,9 +107,30 @@ public class AssignAssignmentFragment extends BaseFragment {
     private void publishAssignment() {
         String title = titleEditText.getText().toString().trim();
         String description = descEditText.getText().toString().trim();
+        String maxScoreStr = maxScoreEditText.getText().toString().trim();
 
         if (title.isEmpty()) {
             titleEditText.setError("Title required");
+            return;
+        }
+        if (description.isEmpty()) {
+            descEditText.setError("Description required");
+            return;
+        }
+        if (maxScoreStr.isEmpty()) {
+            maxScoreEditText.setError("Max score required");
+            return;
+        }
+
+        double maxScore;
+        try {
+            maxScore = Double.parseDouble(maxScoreStr);
+            if (maxScore <= 0) {
+                maxScoreEditText.setError("Must be > 0");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            maxScoreEditText.setError("Invalid number");
             return;
         }
 
@@ -118,6 +139,7 @@ public class AssignAssignmentFragment extends BaseFragment {
             return;
         }
 
+        // Build deadline date
         LocalDate deadlineDate = LocalDate.of(
                 deadlinePicker.getYear(),
                 deadlinePicker.getMonth() + 1,
@@ -126,16 +148,16 @@ public class AssignAssignmentFragment extends BaseFragment {
 
         // Build Assignment POJO
         Assignment assignment = new Assignment(
-                null,                  // id
+                null,                  // id (server generated)
                 subjectId,             // subjectId
                 classGradeId,          // sectionId
-                null,                  // date (not used/inherited here, if needed fill it)
+                null,                  // date (server sets current date)
                 teacherId,             // teacherId
-                "assignment",          // type (adjust if your API expects a specific type)
+                "assignment",          // type
                 uploadedFileUrl,       // pdfFile (question_file_url)
                 deadlineDate,          // deadline
                 null,                  // assessmentId (if needed)
-                100                    // maxScore (hardcoded or dynamic)
+                maxScore               // maxScore from user input
         );
 
         try {
@@ -152,14 +174,14 @@ public class AssignAssignmentFragment extends BaseFragment {
                         showToast("Assignment published successfully!");
                         requireActivity().getSupportFragmentManager().popBackStack();
                     },
-                    error -> showErrorToast("Error: " + error.getMessage())
+                    error -> showErrorToast("Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
             );
 
             VolleySingleton.getInstance(requireContext())
                     .addToRequestQueue(request);
 
         } catch (JSONException e) {
-            showErrorToast("Failed to create request");
+            showErrorToast("Failed to create request: " + e.getMessage());
         }
     }
 }

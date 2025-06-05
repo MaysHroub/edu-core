@@ -31,7 +31,7 @@ public class Task implements Serializable {
     private LocalDate date;        // a LocalDate if you want to store creation date as a LocalDate
     private Integer teacherId;     // foreign key to Teacher
     private String type;           // “assignment” or “exam”
-    private Integer maxScore;
+    private Double maxScore;
 
     //
     // ─── BUT WE ALSO NEED EXTRA FIELDS FOR DISPLAY ──────────────────────────────────────────
@@ -55,7 +55,7 @@ public class Task implements Serializable {
             LocalDate date,
             Integer teacherId,
             String type,
-            Integer maxScore
+            Double maxScore
     ) {
         this.id = id;
         this.subjectId = subjectId;
@@ -103,7 +103,7 @@ public class Task implements Serializable {
         this.subjectTitle    = subjectTitle;
         this.gradeNumber     = gradeNumber;
         this.teacherName     = teacherName;
-        this.maxScore        = (maxScore == null) ? null : maxScore.intValue();
+        this.maxScore        = (maxScore == null) ? null : maxScore.doubleValue();
         this.deadline        = deadline;
         this.questionFileUrl = questionFileUrl;
         this.type            = type;

@@ -34,7 +34,7 @@ public class Assignment extends Task implements Serializable {
             String pdfFile,
             LocalDate deadline,
             Integer assessmentId,
-            Integer maxScore
+            Double maxScore
     ) {
         super(id, subjectId, sectionId, date, teacherId, type, maxScore);
         this.pdfFile = pdfFile;
@@ -60,7 +60,7 @@ public class Assignment extends Task implements Serializable {
                 LocalDate.parse(date),
                 0,
                 "assignment",
-                (int) maxScore
+                (Double) maxScore
         );
         this.subjectTitle = subjectTitle;
         this.teacherName = teacherName;
