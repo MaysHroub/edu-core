@@ -16,11 +16,9 @@ import java.util.List;
 
 public abstract class BaseFragment extends Fragment {
 
-    protected RequestQueue requestQueue;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestQueue = Volley.newRequestQueue(requireContext());
     }
 
     protected void showToast(String message) {
@@ -38,8 +36,5 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (requestQueue != null) {
-            requestQueue.cancelAll(this);
-        }
     }
 }
