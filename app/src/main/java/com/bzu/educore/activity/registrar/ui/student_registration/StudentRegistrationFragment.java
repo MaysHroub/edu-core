@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.gallery;
+package com.bzu.educore.activity.registrar.ui.student_registration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bzu.educore.databinding.FragmentGalleryBinding;
+import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
 
-public class GalleryFragment extends Fragment {
+public class StudentRegistrationFragment extends Fragment {
 
-    private FragmentGalleryBinding binding;
+    private FragmentStudentRegistrationBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        StudentRegistrationViewModel studentRegistrationViewModel =
+                new ViewModelProvider(this).get(StudentRegistrationViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentStudentRegistrationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        studentRegistrationViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
