@@ -4,18 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:background="#F8F9FA">
 
-    <!-- Header -->
-
-    <!-- Filter Section -->
+    <!-- Header with Search Bar -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        android:layout_margin="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,46 +20,102 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Filters"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#333333"
-                android:layout_marginBottom="12dp" />
 
-            <!-- Subject Filter -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Subject:"
-                android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="4dp" />
-
-            <Spinner
-                android:id="@+id/spinner_subject"
+            <!-- Search Bar -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="16dp"
-                />
-
-            <!-- Grade Filter -->
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Grade:"
-                android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="4dp" />
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:layout_marginBottom="16dp">
 
-            <Spinner
-                android:id="@+id/spinner_grade"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/search_icon"
+                   />
+
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Search assignments..."
+                    android:textSize="14sp"
+                    android:textColorHint="#999999"
+                    android:textColor="#333333"
+                    android:background="@android:color/transparent"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:maxLines="1" />
+
+                <ImageButton
+                    android:id="@+id/btn_clear_search"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <!-- Compact Filters Row -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="16dp"
-                />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <!-- Subject Filter -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Subject"
+                        android:textSize="12sp"
+                        android:textColor="#666666"
+                        android:layout_marginBottom="4dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_subject"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"/>
+                </LinearLayout>
+
+                <!-- Grade Filter -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Grade"
+                        android:textSize="12sp"
+                        android:textColor="#666666"
+                        android:layout_marginBottom="4dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_grade"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <!-- Action Buttons -->
             <LinearLayout
@@ -74,19 +127,25 @@
                 <Button
                     android:id="@+id/btn_clear_filters"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="32dp"
                     android:text="Clear"
+                    android:textSize="12sp"
                     android:textColor="#666666"
                     android:layout_marginEnd="8dp"
-                    android:minWidth="80dp" />
+                    android:minWidth="60dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
 
                 <Button
                     android:id="@+id/btn_search"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search"
+                    android:layout_height="32dp"
+                    android:text="Filter"
+                    android:textSize="12sp"
                     android:textColor="#FFFFFF"
-                    android:minWidth="80dp" />
+                    android:minWidth="60dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
 
             </LinearLayout>
 
@@ -94,24 +153,80 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Results Section -->
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Results Header with Count -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Results"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#333333"
-        android:layout_marginBottom="8dp" />
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Results"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A" />
+
+        <TextView
+            android:id="@+id/tv_result_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 assignments"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp" />
+
+    </LinearLayout>
+
+    <!-- Results RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_assignments"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#FFFFFF"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
+        android:paddingTop="4dp"
         android:paddingBottom="8dp" />
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/layout_empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No assignments found"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try adjusting your search or filters"
+            android:textSize="12sp"
+            android:textColor="#999999" />
+
+    </LinearLayout>
 
 </LinearLayout>
