@@ -23,11 +23,17 @@ import java.util.List;
 
 public class StudentRegistrationViewModel extends AndroidViewModel {
 
+    private final MutableLiveData<Integer> numOfStudentsForCurrentYear;
     private final StudentRepository studentRepo;
 
     public StudentRegistrationViewModel(Application application) {
         super(application);
+        numOfStudentsForCurrentYear = new MutableLiveData<>();
         studentRepo = new StudentRepository(application);
+    }
+
+    public LiveData<Integer> getNumOfStudentsForCurrentYear() {
+        return numOfStudentsForCurrentYear;
     }
 
     public void registerStudent(DummyStudent student) {
@@ -39,6 +45,23 @@ public class StudentRegistrationViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
                 },
                 student
+        );
+    }
+
+    public void fetchNumOfStudentsForCurrentYear() {
+        studentRepo.getStudentCountForCurrentYear(
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        int count = jsonObject.getInt("count");
+                        numOfStudentsForCurrentYear.postValue(count);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
         );
     }
 

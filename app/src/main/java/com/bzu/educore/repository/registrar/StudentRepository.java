@@ -44,4 +44,9 @@ public class StudentRepository {
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void getStudentCountForCurrentYear(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        StringRequest request = new StringRequest(Request.Method.GET, UrlManager.URL_GET_STUDENT_COUNT_FOR_CURRENT_YEAR, listener, errorListener);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
 }
