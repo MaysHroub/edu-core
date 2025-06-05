@@ -1,11 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="#fff">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -31,10 +33,10 @@
             android:textSize="14sp"
             android:paddingStart="8dp"
             android:textColor="#555" />
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- Subject and Class TextViews -->
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -64,7 +66,7 @@
             android:layout_marginStart="8dp"
             android:elevation="2dp" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- Exam Title -->
     <TextView
@@ -107,14 +109,6 @@
     <!-- Exam Date -->
     <!-- Deadline DatePicker Label -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deadline:"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:paddingTop="12dp"
-        android:paddingBottom="4dp" />
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Max Score:"
@@ -132,10 +126,17 @@
         android:padding="10dp"
         android:background="@android:drawable/edit_text"
         android:textSize="15sp" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deadline:"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="4dp" />
 
     <!-- Centered DatePicker -->
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
@@ -147,7 +148,7 @@
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:layout_marginTop="4dp" />
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- Publish Button -->
     <Button
@@ -160,4 +161,4 @@
         android:textColor="#fff"
         android:padding="12dp" />
 
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -258,9 +258,6 @@ public class StudentListActivity extends AppCompatActivity
                 break;
             }
         }
-
-        // Optional: Show feedback to user
-        // Toast.makeText(this, "Mark updated for student " + studentId + ": " + newMark, Toast.LENGTH_SHORT).show();
     }
 
     private void fetchStudentList() {
@@ -309,7 +306,6 @@ public class StudentListActivity extends AppCompatActivity
                             examAdapter.notifyDataSetChanged();
                         }
 
-                        // Update publish button state
                         updatePublishButtonState();
                     } catch (JSONException e) {
                         Toast.makeText(this, "Error parsing student data: " + e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -15,12 +15,10 @@ public class TeacherMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_main);
 
-        // Load dashboard WITHOUT adding it to back stack
         if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.fragment_container, new TeacherDashboardFragment());
-            // do NOT call ft.addToBackStack(...) here
             ft.commit();
         }
     }
