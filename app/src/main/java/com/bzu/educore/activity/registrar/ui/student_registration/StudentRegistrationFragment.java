@@ -14,6 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
 import com.bzu.educore.model.user.Student;
 import com.bzu.educore.util.InputValidator;
+import com.bzu.educore.util.StudentCredentialsGenerator;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -34,16 +38,19 @@ public class StudentRegistrationFragment extends Fragment {
         binding = FragmentStudentRegistrationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        populateFields();
+        studentRegistrationViewModel.getNumOfStudentsForCurrentYear().observe(getViewLifecycleOwner(), numOfStds -> {
+            generatedId = StudentCredentialsGenerator.generateId(numOfStds);
+            generatedEmail = StudentCredentialsGenerator.generateEmail(generatedId);
+            binding.edttxtStdId.setText(generatedId+"");
+            binding.edttxtStdEmail.setText(generatedEmail);
+        });
+
+        studentRegistrationViewModel.fetchNumOfStudentsForCurrentYear();
 
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
         binding.btnStdRegister.setOnClickListener(v -> addStudentToDB(studentRegistrationViewModel));
 
         return root;
-    }
-
-    private void populateFields() {
-
     }
 
     private void addStudentToDB(StudentRegistrationViewModel studentRegistrationViewModel) {
