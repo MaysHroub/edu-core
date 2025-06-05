@@ -23,7 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.AssignmentAdapter;
-import com.bzu.educore.model.Assignment;
+import com.bzu.educore.model.task.Assignment;
 import com.bzu.educore.util.VolleySingleton;
 import org.json.JSONException;
 import org.json.JSONObject;

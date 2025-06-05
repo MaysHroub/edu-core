@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.fragment.AssignmentSubmissionsFragment;
-import com.bzu.educore.model.Assignment;
+import com.bzu.educore.model.task.Assignment;
 
 import java.util.List;
 
