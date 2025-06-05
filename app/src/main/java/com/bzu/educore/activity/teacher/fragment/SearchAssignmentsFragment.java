@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,7 +39,7 @@ import java.util.List;
 public class SearchAssignmentsFragment extends Fragment {
 
     private EditText etSearch;
-    private ImageButton btnClearSearch;
+    private Button btnClearSearch;
     private Spinner spinnerSubject, spinnerGrade;
     private Button btnSearch, btnClearFilters;
     private RecyclerView recyclerViewAssignments;
@@ -310,6 +309,7 @@ public class SearchAssignmentsFragment extends Fragment {
         etSearch.setText("");
         spinnerSubject.setSelection(0);
         spinnerGrade.setSelection(0);
+        btnClearSearch.setVisibility(View.GONE);
         assignmentList.clear();
         allAssignmentsList.clear();
         assignmentAdapter.notifyDataSetChanged();
