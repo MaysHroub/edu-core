@@ -1,19 +1,45 @@
 package com.bzu.educore.activity.registrar.ui.student_registration;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
+import android.app.Application;
+import android.widget.Toast;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class StudentRegistrationViewModel extends ViewModel {
+import com.android.volley.VolleyError;
+import com.bzu.educore.model.user.Student;
+import com.bzu.educore.repository.registrar.StudentRepository;
+import com.github.mikephil.charting.data.PieEntry;
 
-    private final MutableLiveData<String> mText;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    public StudentRegistrationViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentRegistrationViewModel extends AndroidViewModel {
+
+    private final StudentRepository studentRepo;
+
+    public StudentRegistrationViewModel(Application application) {
+        super(application);
+        studentRepo = new StudentRepository(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void registerStudent(DummyStudent student) {
+        studentRepo.addStudent(
+                response -> {
+                    Toast.makeText(getApplication(), "Student is added successfully!", LENGTH_SHORT).show();
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                },
+                student
+        );
     }
+
 }

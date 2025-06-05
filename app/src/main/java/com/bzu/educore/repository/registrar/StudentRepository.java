@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bzu.educore.activity.registrar.ui.student_registration.DummyStudent;
 import com.bzu.educore.model.user.Student;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
@@ -25,7 +26,7 @@ public class StudentRepository {
         this.context = context;
     }
 
-    public void addStudent(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Student student) {
+    public void addStudent(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, DummyStudent student) {
         Gson gson = new Gson();
         String stdJson = gson.toJson(student);
         JSONObject jsonObject = null;
