@@ -84,7 +84,7 @@ public class SearchAssignmentsFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        assignmentAdapter = new AssignmentAdapter(assignmentList);
+        assignmentAdapter = new AssignmentAdapter(assignmentList, getActivity());
         recyclerViewAssignments.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewAssignments.setAdapter(assignmentAdapter);
     }
@@ -103,7 +103,6 @@ public class SearchAssignmentsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Perform search with delay to avoid too many calls
                 performSearch();
             }
         });
@@ -197,31 +196,30 @@ public class SearchAssignmentsFragment extends Fragment {
         String searchQuery = etSearch.getText().toString().trim();
 
         if (searchQuery.isEmpty()) {
-            // If search is empty, show filtered results based on spinners
             searchAssignments();
         } else {
-            // Search with text query
             searchAssignmentsWithText(searchQuery);
         }
     }
 
     private void searchAssignmentsWithText(String searchQuery) {
-        String selectedSubject = spinnerSubject.getSelectedItem().toString();
-        String selectedGrade = spinnerGrade.getSelectedItem().toString();
+        Object selectedSubjectObj = spinnerSubject.getSelectedItem();
+        String selectedSubject = (selectedSubjectObj != null) ? selectedSubjectObj.toString() : "";
+
+        Object selectedGradeObj = spinnerGrade.getSelectedItem();
+        String selectedGrade = (selectedGradeObj != null) ? selectedGradeObj.toString() : "";
 
         String url = BASE_URL + "search_assignments.php";
 
-        // Build query parameters
         StringBuilder urlBuilder = new StringBuilder(url + "?");
 
-        // Add search query
         urlBuilder.append("search=").append(searchQuery).append("&");
 
-        if (!selectedSubject.equals("All Subjects")) {
+        if (!selectedSubject.equals("All Subjects") && !selectedSubject.isEmpty()) {
             urlBuilder.append("subject=").append(selectedSubject).append("&");
         }
 
-        if (!selectedGrade.equals("All Grades")) {
+        if (!selectedGrade.equals("All Grades") && !selectedGrade.isEmpty()) {
             String gradeNumber = selectedGrade.replace("Grade ", "");
             urlBuilder.append("grade=").append(gradeNumber).append("&");
         }
@@ -235,24 +233,27 @@ public class SearchAssignmentsFragment extends Fragment {
     }
 
     private void searchAssignments() {
-        String selectedSubject = spinnerSubject.getSelectedItem().toString();
-        String selectedGrade = spinnerGrade.getSelectedItem().toString();
+        Object selectedSubjectObj = spinnerSubject.getSelectedItem();
+        String selectedSubject = (selectedSubjectObj != null) ? selectedSubjectObj.toString() : "";
+
+        Object selectedGradeObj = spinnerGrade.getSelectedItem();
+        String selectedGrade = (selectedGradeObj != null) ? selectedGradeObj.toString() : "";
+
         String searchQuery = etSearch.getText().toString().trim();
 
         String url = BASE_URL + "search_assignments.php";
 
-        // Build query parameters
         StringBuilder urlBuilder = new StringBuilder(url + "?");
 
         if (!searchQuery.isEmpty()) {
             urlBuilder.append("search=").append(searchQuery).append("&");
         }
 
-        if (!selectedSubject.equals("All Subjects")) {
+        if (!selectedSubject.equals("All Subjects") && !selectedSubject.isEmpty()) {
             urlBuilder.append("subject=").append(selectedSubject).append("&");
         }
 
-        if (!selectedGrade.equals("All Grades")) {
+        if (!selectedGrade.equals("All Grades") && !selectedGrade.isEmpty()) {
             String gradeNumber = selectedGrade.replace("Grade ", "");
             urlBuilder.append("grade=").append(gradeNumber).append("&");
         }
@@ -327,6 +328,7 @@ public class SearchAssignmentsFragment extends Fragment {
         boolean isEmpty = assignmentList.isEmpty();
         layoutEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerViewAssignments.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        tvResultCount.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 
     private void showToast(String message) {
