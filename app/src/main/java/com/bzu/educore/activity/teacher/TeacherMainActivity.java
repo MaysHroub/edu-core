@@ -13,26 +13,42 @@ public class TeacherMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_teacher_main);
 
+        // Load dashboard WITHOUT adding it to back stack
         if (savedInstanceState == null) {
-            loadFragment(new TeacherDashboardFragment());
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment_container, new TeacherDashboardFragment());
+            // do NOT call ft.addToBackStack(...) here
+            ft.commit();
         }
     }
 
-    public void loadFragment(Fragment fragment) {
+    /**
+     * “addToStack” flag controls whether we push this new fragment
+     * onto the back stack. Dashboard itself was loaded with addToStack=false.
+     */
+    public void loadFragment(Fragment fragment, boolean addToStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
-        ft.addToBackStack(null);
+
+        if (addToStack) {
+            ft.addToBackStack(null);
+        }
         ft.commit();
     }
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            getSupportFragmentManager().popBackStack();
+        FragmentManager fm = getSupportFragmentManager();
+
+        // If there is more than zero entries, pop one. Otherwise, finish.
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
         } else {
+            // No fragments left to pop (we’re at dashboard), so finish the activity:
             super.onBackPressed();
         }
     }

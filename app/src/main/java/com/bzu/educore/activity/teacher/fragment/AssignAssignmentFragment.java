@@ -1,3 +1,4 @@
+// AssignAssignmentFragment.java
 package com.bzu.educore.activity.teacher.fragment;
 
 import android.app.Activity;
@@ -18,8 +19,13 @@ import androidx.annotation.Nullable;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
+import com.bzu.educore.model.task.Assignment;
+import com.bzu.educore.util.VolleySingleton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.time.LocalDate;
 
 public class AssignAssignmentFragment extends BaseFragment {
 
@@ -36,7 +42,9 @@ public class AssignAssignmentFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.assign_assignment_fragment, container, false);
 
         initializeViews(view);
@@ -62,9 +70,9 @@ public class AssignAssignmentFragment extends BaseFragment {
     private void getArgumentsData() {
         Bundle args = getArguments();
         if (args != null) {
-            subjectId = args.getInt("subject_id");
-            classGradeId = args.getInt("class_grade_id");
-            teacherId = args.getInt("teacher_id");
+            subjectId = args.getInt("subject_id", -1);
+            classGradeId = args.getInt("class_grade_id", -1);
+            teacherId = args.getInt("teacher_id", -1);
             subjectName = args.getString("subject_name", "Unknown Subject");
             classGradeName = args.getString("class_grade_name", "Unknown Class");
         }
@@ -86,7 +94,9 @@ public class AssignAssignmentFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == FILE_PICKER_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == FILE_PICKER_REQUEST
+                && resultCode == Activity.RESULT_OK
+                && data != null) {
             Uri fileUri = data.getData();
             uploadedFileUrl = fileUri.toString();
             uploadButton.setText("File Selected ✓");
@@ -108,21 +118,31 @@ public class AssignAssignmentFragment extends BaseFragment {
             return;
         }
 
-        String deadline = String.format("%04d-%02d-%02d",
+        LocalDate deadlineDate = LocalDate.of(
                 deadlinePicker.getYear(),
                 deadlinePicker.getMonth() + 1,
-                deadlinePicker.getDayOfMonth());
+                deadlinePicker.getDayOfMonth()
+        );
+
+        // Build Assignment POJO
+        Assignment assignment = new Assignment(
+                null,                  // id
+                subjectId,             // subjectId
+                classGradeId,          // sectionId
+                null,                  // date (not used/inherited here, if needed fill it)
+                teacherId,             // teacherId
+                "assignment",          // type (adjust if your API expects a specific type)
+                uploadedFileUrl,       // pdfFile (question_file_url)
+                deadlineDate,          // deadline
+                null,                  // assessmentId (if needed)
+                100                    // maxScore (hardcoded or dynamic)
+        );
 
         try {
-            JSONObject data = new JSONObject();
+            JSONObject data = assignment.toJson();
+            // Add title & description separately if not in Assignment model
             data.put("title", title);
             data.put("description", description);
-            data.put("subject_id", subjectId);
-            data.put("class_id", classGradeId);
-            data.put("teacher_id", teacherId);
-            data.put("max_score", 100);  // Optional: Make dynamic if needed
-            data.put("deadline", deadline);
-            data.put("question_file_url", uploadedFileUrl);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
@@ -135,9 +155,10 @@ public class AssignAssignmentFragment extends BaseFragment {
                     error -> showErrorToast("Error: " + error.getMessage())
             );
 
-            requestQueue.add(request);
+            VolleySingleton.getInstance(requireContext())
+                    .addToRequestQueue(request);
 
-        } catch (Exception e) {
+        } catch (JSONException e) {
             showErrorToast("Failed to create request");
         }
     }

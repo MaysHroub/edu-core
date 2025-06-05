@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.adapter;
+package com.bzu.educore.adapter.teacher;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;

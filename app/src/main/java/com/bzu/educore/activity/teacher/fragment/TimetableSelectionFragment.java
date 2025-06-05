@@ -6,16 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
-import com.bzu.educore.activity.teacher.adapter.TimetableSelectionAdapter;
+import com.bzu.educore.adapter.teacher.TimetableSelectionAdapter;
+import com.bzu.educore.util.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,11 +35,14 @@ public class TimetableSelectionFragment extends Fragment {
 
     public TimetableSelectionFragment() {}
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable_selection, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewTimetable);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         if (getArguments() != null) {
             mode = getArguments().getString("mode", "");
@@ -53,9 +58,14 @@ public class TimetableSelectionFragment extends Fragment {
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put("teacher_id", teacherId);
-        } catch (JSONException e) { e.printStackTrace(); }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody,
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                requestBody,
                 response -> {
                     try {
                         JSONArray timetable = response.getJSONArray("timetable");
@@ -64,26 +74,29 @@ public class TimetableSelectionFragment extends Fragment {
                             timetableList.add(timetable.getJSONObject(i));
                         }
 
-                        TimetableSelectionAdapter adapter = new TimetableSelectionAdapter(timetableList, item -> {
-                            if ("assignment".equals(mode)) {
-                                openFragment(new AssignAssignmentFragment(), item);
-                            } else if ("exam".equals(mode)) {
-                                openFragment(new AnnounceExamFragment(), item);
-                            } else {
-                                Toast.makeText(getContext(), "Unknown mode", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        TimetableSelectionAdapter adapter = new TimetableSelectionAdapter(
+                                timetableList,
+                                item -> {
+                                    if ("assignment".equals(mode)) {
+                                        openFragment(new AssignAssignmentFragment(), item);
+                                    } else if ("exam".equals(mode)) {
+                                        openFragment(new AnnounceExamFragment(), item);
+                                    } else {
+                                        Toast.makeText(requireContext(), "Unknown mode", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                        );
 
                         recyclerView.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(requireContext(), "Parsing error", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> {
-                    Toast.makeText(getContext(), "Failed to load timetable", Toast.LENGTH_SHORT).show();
-                });
+                error -> Toast.makeText(requireContext(), "Failed to load timetable", Toast.LENGTH_SHORT).show()
+        );
 
-        Volley.newRequestQueue(getContext()).add(request);
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
 
     private void openFragment(Fragment targetFragment, JSONObject item) {
@@ -97,8 +110,9 @@ public class TimetableSelectionFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         targetFragment.setArguments(bundle);
-        ((TeacherMainActivity) requireActivity()).loadFragment(targetFragment);
+
+        // Now using loadFragment(fragment, true) to match updated TeacherMainActivity
+        ((TeacherMainActivity) requireActivity()).loadFragment(targetFragment, true);
     }
 }

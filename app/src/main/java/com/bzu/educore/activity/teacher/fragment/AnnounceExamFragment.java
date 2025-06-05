@@ -15,8 +15,12 @@ import androidx.annotation.Nullable;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
+import com.bzu.educore.model.task.Task;
+import com.bzu.educore.util.VolleySingleton;
 
 import org.json.JSONObject;
+
+import java.time.LocalDate;
 
 public class AnnounceExamFragment extends BaseFragment {
 
@@ -29,7 +33,8 @@ public class AnnounceExamFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.announce_exam_fragment, container, false);
 
         initializeViews(view);
@@ -53,9 +58,9 @@ public class AnnounceExamFragment extends BaseFragment {
     private void getArgumentsData() {
         Bundle args = getArguments();
         if (args != null) {
-            subjectId = args.getInt("subject_id");
-            classGradeId = args.getInt("class_grade_id");
-            teacherId = args.getInt("teacher_id");
+            subjectId = args.getInt("subject_id", -1);
+            classGradeId = args.getInt("class_grade_id", -1);
+            teacherId = args.getInt("teacher_id", -1);
             subjectName = args.getString("subject_name", "Unknown Subject");
             classGradeName = args.getString("class_grade_name", "Unknown Class");
         }
@@ -67,29 +72,35 @@ public class AnnounceExamFragment extends BaseFragment {
     }
 
     private void publishExam() {
-        String title = examTitleEditText.getText().toString().trim();
-        String description = examDescriptionEditText.getText().toString().trim();
+        // 1. Read UI values
+        String titleStr = examTitleEditText.getText().toString().trim();
+        String descStr = examDescriptionEditText.getText().toString().trim();
 
-        if (title.isEmpty()) {
+        if (titleStr.isEmpty()) {
             examTitleEditText.setError("Title required");
             return;
         }
 
-        String date = String.format("%04d-%02d-%02d",
+        LocalDate selectedDate = LocalDate.of(
                 examDatePicker.getYear(),
                 examDatePicker.getMonth() + 1,
-                examDatePicker.getDayOfMonth());
+                examDatePicker.getDayOfMonth()
+        );
 
+        // 2. Build Task POJO (ID is null because this is a new record)
+        Task newTask = new Task(
+                null,               // id
+                subjectId,          // subjectId
+                classGradeId,       // sectionId
+                selectedDate,       // date
+                teacherId,          // teacherId
+                "exam",
+                100                 // maxScore
+        );
         try {
-            JSONObject data = new JSONObject();
-            data.put("title", title);
-            data.put("description", description);
-            data.put("subject_id", subjectId);
-            data.put("class_id", classGradeId);
-            data.put("teacher_id", teacherId);
-            data.put("max_score", 100);
-            data.put("exam_date", date);
-
+            JSONObject data = newTask.toJson();
+            data.put("title", titleStr);
+            data.put("description", descStr);
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
                     "http://10.0.2.2/android/exam.php",
@@ -101,7 +112,8 @@ public class AnnounceExamFragment extends BaseFragment {
                     error -> showErrorToast("Error: " + error.getMessage())
             );
 
-            requestQueue.add(request);
+            VolleySingleton.getInstance(requireContext())
+                    .addToRequestQueue(request);
 
         } catch (Exception e) {
             showErrorToast("Failed to create request");

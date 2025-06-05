@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.adapter.SubmissionsAdapter;
+import com.bzu.educore.adapter.teacher.SubmissionsAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
