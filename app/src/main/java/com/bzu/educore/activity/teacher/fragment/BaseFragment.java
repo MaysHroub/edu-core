@@ -27,30 +27,6 @@ public abstract class BaseFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(requireContext());
     }
 
-    protected void loadTimetable(TimetableCallback callback) {
-        String url = BASE_URL + "timetable.php?teacher_id=1&detailed=false";
-
-        JsonObjectRequest request = new JsonObjectRequest(
-            Request.Method.GET, 
-            url, 
-            null,
-            response -> {
-                try {
-                    callback.onSuccess(response);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    callback.onError("Failed to parse timetable data: " + e.getMessage());
-                }
-            },
-            error -> {
-                error.printStackTrace();
-                callback.onError("Network error: " + error.getMessage());
-            }
-        );
-
-        requestQueue.add(request);
-    }
-
     protected void setupSpinners(JSONObject response, Spinner subjectSpinner, Spinner gradeSpinner) throws Exception {
         JSONArray subjects = response.getJSONArray("subjects");
         JSONArray classes = response.getJSONArray("classes");
@@ -80,16 +56,16 @@ public abstract class BaseFragment extends Fragment {
         }
 
         ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(
-            requireContext(), 
-            android.R.layout.simple_spinner_item, 
+            requireContext(),
+            android.R.layout.simple_spinner_item,
             subjectTitles
         );
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subjectSpinner.setAdapter(subjectAdapter);
 
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
-            requireContext(), 
-            android.R.layout.simple_spinner_item, 
+            requireContext(),
+            android.R.layout.simple_spinner_item,
             gradeNumbers
         );
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -116,16 +92,16 @@ public abstract class BaseFragment extends Fragment {
         classIds.addAll(List.of(0, 101, 102));
 
         ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(
-            requireContext(), 
-            android.R.layout.simple_spinner_item, 
+            requireContext(),
+            android.R.layout.simple_spinner_item,
             subjects
         );
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subjectSpinner.setAdapter(subjectAdapter);
 
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
-            requireContext(), 
-            android.R.layout.simple_spinner_item, 
+            requireContext(),
+            android.R.layout.simple_spinner_item,
             grades
         );
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

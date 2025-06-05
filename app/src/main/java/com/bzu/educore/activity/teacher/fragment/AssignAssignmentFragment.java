@@ -7,31 +7,32 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AssignAssignmentFragment extends BaseFragment {
 
     private static final int FILE_PICKER_REQUEST = 100;
 
-    private Spinner sectionSpinner;
     private EditText titleEditText, descEditText;
+    private TextView subjectTextView, classGradeTextView;
     private DatePicker deadlinePicker;
     private Button uploadButton, publishButton;
     private String uploadedFileUrl = "";
+
+    private int subjectId, classGradeId, teacherId;
+    private String subjectName, classGradeName;
 
     @Nullable
     @Override
@@ -39,13 +40,15 @@ public class AssignAssignmentFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.assign_assignment_fragment, container, false);
 
         initializeViews(view);
-        loadSections();
+        getArgumentsData();
+        updateUI();
 
         return view;
     }
 
     private void initializeViews(View view) {
-        sectionSpinner = view.findViewById(R.id.spinnerSectionAssign);
+        subjectTextView = view.findViewById(R.id.tvSubjectName);
+        classGradeTextView = view.findViewById(R.id.tvClassGradeName);
         titleEditText = view.findViewById(R.id.etAssignmentTitle);
         descEditText = view.findViewById(R.id.etAssignmentDesc);
         deadlinePicker = view.findViewById(R.id.datepickerDeadline);
@@ -56,45 +59,20 @@ public class AssignAssignmentFragment extends BaseFragment {
         publishButton.setOnClickListener(v -> publishAssignment());
     }
 
-    private void loadSections() {
-        loadTimetable(new TimetableCallback() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                try {
-                    setupSectionSpinner(response);
-                } catch (Exception e) {
-                    showFallbackSections();
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                showFallbackSections();
-            }
-        });
-    }
-
-    private void setupSectionSpinner(JSONObject response) throws Exception {
-        JSONArray classes = response.getJSONArray("classes");
-
-        List<String> sectionNames = new ArrayList<>();
-        classIds.clear();
-
-        for (int i = 0; i < classes.length(); i++) {
-            JSONObject cls = classes.getJSONObject(i);
-            sectionNames.add("Grade " + cls.getInt("grade_number") + " - Class " + cls.getInt("id"));
-            classIds.add(cls.getInt("id"));
+    private void getArgumentsData() {
+        Bundle args = getArguments();
+        if (args != null) {
+            subjectId = args.getInt("subject_id");
+            classGradeId = args.getInt("class_grade_id");
+            teacherId = args.getInt("teacher_id");
+            subjectName = args.getString("subject_name", "Unknown Subject");
+            classGradeName = args.getString("class_grade_name", "Unknown Class");
         }
-
-        sectionSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, sectionNames));
     }
 
-    private void showFallbackSections() {
-        List<String> sections = List.of("Grade 1 - Class 101", "Grade 2 - Class 102");
-        classIds.clear();
-        classIds.addAll(List.of(101, 102));
-
-        sectionSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, sections));
+    private void updateUI() {
+        subjectTextView.setText("Subject: " + subjectName);
+        classGradeTextView.setText("Class: " + classGradeName);
     }
 
     private void openFilePicker() {
@@ -130,14 +108,6 @@ public class AssignAssignmentFragment extends BaseFragment {
             return;
         }
 
-        int sectionPos = sectionSpinner.getSelectedItemPosition();
-        if (sectionPos < 0) {
-            showToast("Please select a section");
-            return;
-        }
-
-        int classId = classIds.get(sectionPos);
-
         String deadline = String.format("%04d-%02d-%02d",
                 deadlinePicker.getYear(),
                 deadlinePicker.getMonth() + 1,
@@ -147,10 +117,10 @@ public class AssignAssignmentFragment extends BaseFragment {
             JSONObject data = new JSONObject();
             data.put("title", title);
             data.put("description", description);
-            data.put("subject_id", 1);
-            data.put("class_id", classId);
-            data.put("teacher_id", 1);
-            data.put("max_score", 100);
+            data.put("subject_id", subjectId);
+            data.put("class_id", classGradeId);
+            data.put("teacher_id", teacherId);
+            data.put("max_score", 100);  // Optional: Make dynamic if needed
             data.put("deadline", deadline);
             data.put("question_file_url", uploadedFileUrl);
 

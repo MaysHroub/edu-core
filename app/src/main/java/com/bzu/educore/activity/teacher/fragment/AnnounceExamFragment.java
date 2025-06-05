@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
@@ -18,9 +20,12 @@ import org.json.JSONObject;
 
 public class AnnounceExamFragment extends BaseFragment {
 
-    private Spinner subjectSpinner, gradeSpinner;
     private EditText examTitleEditText, examDescriptionEditText;
     private DatePicker examDatePicker;
+    private TextView subjectTextView, classGradeTextView;
+
+    private int subjectId, classGradeId, teacherId;
+    private String subjectName, classGradeName;
 
     @Nullable
     @Override
@@ -28,36 +33,37 @@ public class AnnounceExamFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.announce_exam_fragment, container, false);
 
         initializeViews(view);
-        loadTimetable(new TimetableCallback() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                try {
-                    setupSpinners(response, subjectSpinner, gradeSpinner);
-                    showToast("Timetable loaded!");
-                } catch (Exception e) {
-                    showFallbackSpinners(subjectSpinner, gradeSpinner);
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                showFallbackSpinners(subjectSpinner, gradeSpinner);
-                showToast("Using fallback data");
-            }
-        });
+        getArgumentsData();
+        updateUI();
 
         return view;
     }
 
     private void initializeViews(View view) {
-        subjectSpinner = view.findViewById(R.id.subjectSpinner);
-        gradeSpinner = view.findViewById(R.id.gradeSpinner);
+        subjectTextView = view.findViewById(R.id.tvSubjectName);
+        classGradeTextView = view.findViewById(R.id.tvClassGradeName);
         examTitleEditText = view.findViewById(R.id.examTitleEditText);
         examDescriptionEditText = view.findViewById(R.id.examDescriptionEditText);
         examDatePicker = view.findViewById(R.id.examDatePicker);
         Button publishButton = view.findViewById(R.id.publishAnnouncementButton);
 
         publishButton.setOnClickListener(v -> publishExam());
+    }
+
+    private void getArgumentsData() {
+        Bundle args = getArguments();
+        if (args != null) {
+            subjectId = args.getInt("subject_id");
+            classGradeId = args.getInt("class_grade_id");
+            teacherId = args.getInt("teacher_id");
+            subjectName = args.getString("subject_name", "Unknown Subject");
+            classGradeName = args.getString("class_grade_name", "Unknown Class");
+        }
+    }
+
+    private void updateUI() {
+        subjectTextView.setText("Subject: " + subjectName);
+        classGradeTextView.setText("Class: " + classGradeName);
     }
 
     private void publishExam() {
@@ -69,17 +75,6 @@ public class AnnounceExamFragment extends BaseFragment {
             return;
         }
 
-        int subjectPos = subjectSpinner.getSelectedItemPosition();
-        int gradePos = gradeSpinner.getSelectedItemPosition();
-
-        if (subjectPos < 0 || gradePos < 0) {
-            showToast("Please select subject and grade");
-            return;
-        }
-
-        int subjectId = subjectIds.get(subjectPos);
-        int classId = classIds.get(gradePos);
-
         String date = String.format("%04d-%02d-%02d",
                 examDatePicker.getYear(),
                 examDatePicker.getMonth() + 1,
@@ -90,8 +85,8 @@ public class AnnounceExamFragment extends BaseFragment {
             data.put("title", title);
             data.put("description", description);
             data.put("subject_id", subjectId);
-            data.put("class_id", classId);
-            data.put("teacher_id", 1);
+            data.put("class_id", classGradeId);
+            data.put("teacher_id", teacherId);
             data.put("max_score", 100);
             data.put("exam_date", date);
 

@@ -209,7 +209,7 @@ public class AssignmentSubmissionsFragment extends BaseFragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    "http://10.0.2.2/android/save_marks.php",
+                    "http://10.0.2.2/android/marks.php",
                     data,
                     response -> {
                         if (response.optBoolean("success", false)) {

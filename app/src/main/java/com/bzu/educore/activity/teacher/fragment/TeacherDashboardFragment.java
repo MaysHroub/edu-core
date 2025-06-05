@@ -27,11 +27,25 @@ public class TeacherDashboardFragment extends BaseFragment {
         CardView cardAnnounceExam = view.findViewById(R.id.cardAnnounceExam);
         CardView cardSubmissions = view.findViewById(R.id.cardViewSubmissions);
 
-        cardCreateAssignment.setOnClickListener(v ->
-                ((TeacherMainActivity) requireActivity()).loadFragment(new AssignAssignmentFragment()));
+        cardCreateAssignment.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("mode", "assignment");
 
-        cardAnnounceExam.setOnClickListener(v ->
-                ((TeacherMainActivity) requireActivity()).loadFragment(new AnnounceExamFragment()));
+            TimetableSelectionFragment fragment = new TimetableSelectionFragment();
+            fragment.setArguments(bundle);
+
+            ((TeacherMainActivity) requireActivity()).loadFragment(fragment);
+        });
+
+        cardAnnounceExam.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("mode", "exam");
+
+            TimetableSelectionFragment fragment = new TimetableSelectionFragment();
+            fragment.setArguments(bundle);
+
+            ((TeacherMainActivity) requireActivity()).loadFragment(fragment);
+        });
 
         cardSubmissions.setOnClickListener(v ->
                 ((TeacherMainActivity) requireActivity()).loadFragment(new SearchAssignmentsFragment()));

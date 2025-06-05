@@ -1,97 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
+    <TextView
+        android:id="@+id/tvSubjectName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="8dp"
-        android:layout_gravity="center"
-        android:padding="16dp"
-        app:cardCornerRadius="12dp">
+        android:layout_height="wrap_content"
+        android:text="Subject: "
+        android:textStyle="bold"
+        android:textSize="16sp" />
 
-        <LinearLayout
-            android:id="@+id/mainAssignment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:fitsSystemWindows="true">
+    <TextView
+        android:id="@+id/tvClassGradeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Class: "
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
 
-            <!-- Section Spinner -->
-            <Spinner
-                android:id="@+id/spinnerSectionAssign"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/etAssignmentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Assignment Title" />
 
-            <!-- Assignment Title -->
-            <EditText
-                android:id="@+id/etAssignmentTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Assignment Title"
-                android:layout_marginTop="16dp" />
+    <EditText
+        android:id="@+id/etAssignmentDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:minLines="3"
+        android:gravity="top"
+        android:layout_marginTop="8dp" />
 
-            <!-- Assignment Description -->
-            <EditText
-                android:id="@+id/etAssignmentDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Assignment Description"
-                android:inputType="textMultiLine"
-                android:minLines="3"
-                android:layout_marginTop="16dp" />
+    <DatePicker
+        android:id="@+id/datepickerDeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
 
-            <!-- Scrollable content -->
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="16dp">
+    <Button
+        android:id="@+id/btnUploadQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload File"
+        android:layout_marginTop="8dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+    <Button
+        android:id="@+id/btnPublishAssignment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Publish Assignment"
+        android:layout_marginTop="12dp" />
 
-                    <!-- Deadline Label -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Deadline" />
-
-                    <!-- Visible DatePicker (calendar) -->
-                    <DatePicker
-                        android:id="@+id/datepickerDeadline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:calendarViewShown="true"
-                        android:spinnersShown="false"
-                        android:layout_marginTop="8dp" />
-
-                    <!-- Upload File Button -->
-                    <Button
-                        android:id="@+id/btnUploadQuestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Upload File"
-                        android:layout_marginTop="16dp" />
-
-                    <!-- Publish Button -->
-                    <Button
-                        android:id="@+id/btnPublishAssignment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Publish Assignment"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="24dp" />
-
-                </LinearLayout>
-            </ScrollView>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</FrameLayout>
+</LinearLayout>

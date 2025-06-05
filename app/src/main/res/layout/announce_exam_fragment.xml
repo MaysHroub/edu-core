@@ -1,106 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
+    <TextView
+        android:id="@+id/tvSubjectName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="8dp"
-        android:layout_gravity="center"
-        android:padding="16dp"
-        app:cardCornerRadius="12dp">
+        android:layout_height="wrap_content"
+        android:text="Subject:"
+        android:textStyle="bold"
+        android:textSize="16sp" />
 
-        <LinearLayout
-            android:id="@+id/main1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:fitsSystemWindows="true">
+    <TextView
+        android:id="@+id/tvClassGradeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Class:"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
 
-            <!-- Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Exam Announcement"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
+    <EditText
+        android:id="@+id/examTitleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Exam Title" />
 
-            <!-- Subject Spinner -->
-            <Spinner
-                android:id="@+id/subjectSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+    <EditText
+        android:id="@+id/examDescriptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Exam Description"
+        android:minLines="3"
+        android:gravity="top"
+        android:layout_marginTop="8dp" />
 
-            <!-- Grade Spinner -->
-            <Spinner
-                android:id="@+id/gradeSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+    <DatePicker
+        android:id="@+id/examDatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
 
-            <!-- Exam Title -->
-            <EditText
-                android:id="@+id/examTitleEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Exam Title"
-                android:layout_marginTop="16dp" />
+    <Button
+        android:id="@+id/publishAnnouncementButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Announce Exam"
+        android:layout_marginTop="12dp" />
 
-            <!-- Scrollable content -->
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Exam Date Label -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Exam Date" />
-
-                    <!-- Exam Date Picker -->
-                    <DatePicker
-                        android:id="@+id/examDatePicker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:calendarViewShown="false"
-                        android:contentDescription="Pick exam date" />
-
-                    <!-- Exam Description -->
-                    <EditText
-                        android:id="@+id/examDescriptionEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="Additional Information"
-                        android:inputType="textMultiLine"
-                        android:minLines="3" />
-
-                    <!-- Publish Button -->
-                    <Button
-                        android:id="@+id/publishAnnouncementButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="24dp"
-                        android:text="Publish Announcement" />
-
-                </LinearLayout>
-            </ScrollView>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</FrameLayout>
+</LinearLayout>
