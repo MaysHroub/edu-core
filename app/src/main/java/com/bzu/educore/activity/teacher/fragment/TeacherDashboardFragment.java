@@ -34,6 +34,6 @@ public class TeacherDashboardFragment extends BaseFragment {
                 ((TeacherMainActivity) requireActivity()).loadFragment(new AnnounceExamFragment()));
 
         cardSubmissions.setOnClickListener(v ->
-                ((TeacherMainActivity) requireActivity()).loadFragment(new AssignmentSearchFragment()));
+                ((TeacherMainActivity) requireActivity()).loadFragment(new SearchAssignmentsFragment()));
     }
 }

@@ -19,6 +19,7 @@ public abstract class BaseFragment extends Fragment {
     protected RequestQueue requestQueue;
     protected List<Integer> subjectIds = new ArrayList<>();
     protected List<Integer> classIds = new ArrayList<>();
+    protected static final String BASE_URL = "http://10.0.2.2/android/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,17 +28,24 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void loadTimetable(TimetableCallback callback) {
-        String url = "http://10.0.2.2/android/timetable.php?teacher_id=1";
+        String url = BASE_URL + "timetable.php?teacher_id=1&detailed=false";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        callback.onSuccess(response);
-                    } catch (Exception e) {
-                        callback.onError("Failed to parse timetable data");
-                    }
-                },
-                error -> callback.onError("Failed to load timetable")
+        JsonObjectRequest request = new JsonObjectRequest(
+            Request.Method.GET, 
+            url, 
+            null,
+            response -> {
+                try {
+                    callback.onSuccess(response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.onError("Failed to parse timetable data: " + e.getMessage());
+                }
+            },
+            error -> {
+                error.printStackTrace();
+                callback.onError("Network error: " + error.getMessage());
+            }
         );
 
         requestQueue.add(request);
@@ -53,6 +61,12 @@ public abstract class BaseFragment extends Fragment {
         subjectIds.clear();
         classIds.clear();
 
+        // Add "All" options
+        subjectTitles.add("All Subjects");
+        gradeNumbers.add("All Classes");
+        subjectIds.add(0);
+        classIds.add(0);
+
         for (int i = 0; i < subjects.length(); i++) {
             JSONObject subject = subjects.getJSONObject(i);
             subjectTitles.add(subject.getString("title"));
@@ -61,37 +75,85 @@ public abstract class BaseFragment extends Fragment {
 
         for (int i = 0; i < classes.length(); i++) {
             JSONObject cls = classes.getJSONObject(i);
-            gradeNumbers.add("Grade " + cls.getInt("grade_number"));
+            gradeNumbers.add("Grade " + cls.getInt("grade_number") + " - Class " + cls.getInt("id"));
             classIds.add(cls.getInt("id"));
         }
 
-        subjectSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, subjectTitles));
-        gradeSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, gradeNumbers));
+        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(
+            requireContext(), 
+            android.R.layout.simple_spinner_item, 
+            subjectTitles
+        );
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(subjectAdapter);
+
+        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
+            requireContext(), 
+            android.R.layout.simple_spinner_item, 
+            gradeNumbers
+        );
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeSpinner.setAdapter(gradeAdapter);
     }
 
     protected void showFallbackSpinners(Spinner subjectSpinner, Spinner gradeSpinner) {
-        List<String> subjects = List.of("Math", "Science");
-        List<String> grades = List.of("Grade 1", "Grade 2");
+        List<String> subjects = new ArrayList<>();
+        List<String> grades = new ArrayList<>();
+
+        // Add "All" options
+        subjects.add("All Subjects");
+        grades.add("All Classes");
+
+        // Add fallback data
+        subjects.add("Math");
+        subjects.add("Science");
+        grades.add("Grade 10 - Class 101");
+        grades.add("Grade 11 - Class 102");
 
         subjectIds.clear();
-        subjectIds.addAll(List.of(1, 2));
+        subjectIds.addAll(List.of(0, 1, 2));
         classIds.clear();
-        classIds.addAll(List.of(101, 102));
+        classIds.addAll(List.of(0, 101, 102));
 
-        subjectSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, subjects));
-        gradeSpinner.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, grades));
+        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(
+            requireContext(), 
+            android.R.layout.simple_spinner_item, 
+            subjects
+        );
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(subjectAdapter);
+
+        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
+            requireContext(), 
+            android.R.layout.simple_spinner_item, 
+            grades
+        );
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeSpinner.setAdapter(gradeAdapter);
     }
 
     protected void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        if (getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void showErrorToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+        if (getContext() != null) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
     interface TimetableCallback {
         void onSuccess(JSONObject response);
         void onError(String error);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this);
+        }
     }
 }

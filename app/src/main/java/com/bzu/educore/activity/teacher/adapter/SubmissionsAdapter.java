@@ -1,5 +1,6 @@
 package com.bzu.educore.activity.teacher.adapter;
 
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -38,9 +39,15 @@ public class SubmissionsAdapter extends RecyclerView.Adapter<SubmissionsAdapter.
     @Override
     public void onBindViewHolder(@NonNull SubmissionViewHolder holder, int position) {
         StudentSubmission submission = submissions.get(position);
-        holder.tvStudentName.setText(submission.studentName);
-        holder.tvSubmissionStatus.setText(submission.status);
 
+        // Set student name
+        holder.tvStudentName.setText(submission.studentName);
+
+        // Set status with color coding
+        holder.tvSubmissionStatus.setText(formatStatus(submission.status));
+        setStatusColor(holder.tvSubmissionStatus, submission.status);
+
+        // Handle submission date
         if (submission.submissionDate != null && !submission.submissionDate.isEmpty() && !"null".equals(submission.submissionDate)) {
             holder.tvSubmissionDate.setText("Submitted: " + submission.submissionDate);
             holder.tvSubmissionDate.setVisibility(View.VISIBLE);
@@ -48,17 +55,24 @@ public class SubmissionsAdapter extends RecyclerView.Adapter<SubmissionsAdapter.
             holder.tvSubmissionDate.setVisibility(View.GONE);
         }
 
+        // Handle mark input
         if (holder.markTextWatcher != null) {
             holder.etStudentMarkInput.removeTextChangedListener(holder.markTextWatcher);
         }
 
+        // Show/hide mark input based on submission status
+        boolean canMark = "submitted".equals(submission.status);
+        holder.etStudentMarkInput.setEnabled(canMark);
+        holder.etStudentMarkInput.setAlpha(canMark ? 1.0f : 0.5f);
+
         if (submission.mark != null) {
-            holder.etStudentMarkInput.setText(String.valueOf(submission.mark));
+            holder.etStudentMarkInput.setText(String.format("%.2f", submission.mark));
         } else {
             holder.etStudentMarkInput.setText("");
-            holder.etStudentMarkInput.setHint("Mark");
+            holder.etStudentMarkInput.setHint(canMark ? "Mark" : "N/A");
         }
 
+        // Setup mark change listener
         holder.markTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -68,7 +82,10 @@ public class SubmissionsAdapter extends RecyclerView.Adapter<SubmissionsAdapter.
                 try {
                     Double newMark = null;
                     if (s != null && s.length() > 0) {
-                        newMark = Double.parseDouble(s.toString());
+                        double value = Double.parseDouble(s.toString());
+                        if (value >= 0 && value <= 100) { // Assuming max mark is 100
+                            newMark = value;
+                        }
                     }
                     submission.mark = newMark;
                     if (markChangedListener != null) {
@@ -87,12 +104,49 @@ public class SubmissionsAdapter extends RecyclerView.Adapter<SubmissionsAdapter.
         };
         holder.etStudentMarkInput.addTextChangedListener(holder.markTextWatcher);
 
-
+        // Setup view button
+        holder.btnViewSubmission.setEnabled("submitted".equals(submission.status));
+        holder.btnViewSubmission.setAlpha("submitted".equals(submission.status) ? 1.0f : 0.5f);
         holder.btnViewSubmission.setOnClickListener(v -> {
-            if (viewSubmissionClickListener != null) {
+            if (viewSubmissionClickListener != null && "submitted".equals(submission.status)) {
                 viewSubmissionClickListener.onViewSubmissionClick(submission);
             }
         });
+    }
+
+    private String formatStatus(String status) {
+        if (status == null) return "Unknown";
+        switch (status.toLowerCase()) {
+            case "submitted":
+                return "Submitted ✓";
+            case "overdue":
+                return "Overdue ⚠";
+            case "pending":
+                return "Pending ⏳";
+            default:
+                return status;
+        }
+    }
+
+    private void setStatusColor(TextView textView, String status) {
+        if (status == null) {
+            textView.setTextColor(Color.GRAY);
+            return;
+        }
+
+        switch (status.toLowerCase()) {
+            case "submitted":
+                textView.setTextColor(Color.parseColor("#4CAF50")); // Green
+                break;
+            case "overdue":
+                textView.setTextColor(Color.parseColor("#F44336")); // Red
+                break;
+            case "pending":
+                textView.setTextColor(Color.parseColor("#FFA000")); // Orange
+                break;
+            default:
+                textView.setTextColor(Color.GRAY);
+        }
     }
 
     @Override
@@ -121,13 +175,13 @@ public class SubmissionsAdapter extends RecyclerView.Adapter<SubmissionsAdapter.
     }
 
     public static class StudentSubmission {
-        public String studentId;
-        public String studentName;
-        public String submissionDate;
-        public String submissionFileUrl;
+        public final String studentId;
+        public final String studentName;
+        public final String submissionDate;
+        public final String submissionFileUrl;
         public Double mark;
-        public String feedback;
-        public String status;
+        public final String feedback;
+        public final String status;
 
         public StudentSubmission(String studentId, String studentName, String submissionDate,
                                  String submissionFileUrl, Double mark, String feedback, String status) {
