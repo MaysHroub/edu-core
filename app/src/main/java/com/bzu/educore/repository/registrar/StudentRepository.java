@@ -1,0 +1,46 @@
+package com.bzu.educore.repository.registrar;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.bzu.educore.model.user.Student;
+import com.bzu.educore.util.UrlManager;
+import com.bzu.educore.util.VolleySingleton;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class StudentRepository {
+    private final Context context;
+
+    public StudentRepository(Context context) {
+        this.context = context;
+    }
+
+    public void addStudent(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Student student) {
+        Gson gson = new Gson();
+        String stdJson = gson.toJson(student);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(stdJson);
+        } catch (JSONException e) {
+            Log.e("json", e.getMessage());
+        }
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                UrlManager.URL_ADD_NEW_STUDENT,
+                jsonObject,
+                listener,
+                errorListener);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+}
