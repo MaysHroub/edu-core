@@ -2,51 +2,143 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#fff">
 
-    <TextView
-        android:id="@+id/tvSubjectName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subject:"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginBottom="4dp">
 
-    <TextView
-        android:id="@+id/tvClassGradeName"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Subject:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:paddingStart="8dp"
+            android:textColor="#555" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Class:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:paddingStart="8dp"
+            android:textColor="#555" />
+    </LinearLayout>
+
+    <!-- Subject and Class TextViews -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Class:"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tvSubjectName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mathematics"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:background="#f0f0f0"
+            android:elevation="2dp" />
+
+        <TextView
+            android:id="@+id/tvClassGradeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="10-A"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:background="#f0f0f0"
+            android:layout_marginStart="8dp"
+            android:elevation="2dp" />
+
+    </LinearLayout>
+
+    <!-- Exam Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exam Title:"
         android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp" />
+        android:textSize="14sp"
+        android:paddingBottom="4dp" />
 
     <EditText
         android:id="@+id/examTitleEditText"
         android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Enter exam title"
+        android:padding="10dp"
+        android:background="@android:drawable/edit_text"
+        android:textSize="15sp" />
+
+    <!-- Exam Description -->
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Exam Title" />
+        android:text="Exam Description:"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="4dp" />
 
     <EditText
         android:id="@+id/examDescriptionEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Exam Description"
-        android:minLines="3"
-        android:gravity="top"
-        android:layout_marginTop="8dp" />
+        android:layout_height="80dp"
+        android:hint="Enter exam description"
+        android:gravity="top|start"
+        android:padding="10dp"
+        android:background="@android:drawable/edit_text"
+        android:textSize="15sp" />
 
-    <DatePicker
-        android:id="@+id/examDatePicker"
+    <!-- Exam Date -->
+    <!-- Deadline DatePicker Label -->
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:text="Deadline:"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="4dp" />
 
+    <!-- Centered DatePicker -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <DatePicker
+            android:id="@+id/examDatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- Publish Button -->
     <Button
         android:id="@+id/publishAnnouncementButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:text="Announce Exam"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#69C8F4"
+        android:textColor="#fff"
+        android:padding="12dp" />
 
 </LinearLayout>

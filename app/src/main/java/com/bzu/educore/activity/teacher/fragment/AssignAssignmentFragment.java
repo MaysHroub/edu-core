@@ -71,8 +71,8 @@ public class AssignAssignmentFragment extends BaseFragment {
     }
 
     private void updateUI() {
-        subjectTextView.setText("Subject: " + subjectName);
-        classGradeTextView.setText("Class: " + classGradeName);
+        subjectTextView.setText(subjectName);
+        classGradeTextView.setText(classGradeName);
     }
 
     private void openFilePicker() {
