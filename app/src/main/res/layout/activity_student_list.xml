@@ -46,13 +46,14 @@
 
     <Button
         android:id="@+id/btn_publish_marks"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Publish Marks"
         android:layout_marginTop="12dp"
         android:backgroundTint="#4CAF50"
-        android:textColor="@android:color/white"
         android:padding="12dp"
-        android:textAllCaps="false" />
+        android:layout_gravity="center"
+        android:text="Publish Marks"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
