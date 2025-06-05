@@ -25,10 +25,6 @@ public class TeacherMainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * “addToStack” flag controls whether we push this new fragment
-     * onto the back stack. Dashboard itself was loaded with addToStack=false.
-     */
     public void loadFragment(Fragment fragment, boolean addToStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -44,11 +40,9 @@ public class TeacherMainActivity extends AppCompatActivity {
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
 
-        // If there is more than zero entries, pop one. Otherwise, finish.
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
         } else {
-            // No fragments left to pop (we’re at dashboard), so finish the activity:
             super.onBackPressed();
         }
     }

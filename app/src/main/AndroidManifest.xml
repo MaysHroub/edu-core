@@ -17,11 +17,6 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name=".activity.registrar.RegistrarMainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_registrar_main"
-            android:theme="@style/Theme.EduCore.NoActionBar" />
-        <activity
             android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -38,7 +33,7 @@
             </intent-filter>
 
         </activity>
-
+        <activity android:name=".activity.teacher.StudentListActivity"/>
 
     </application>
 

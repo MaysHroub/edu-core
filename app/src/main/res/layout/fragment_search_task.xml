@@ -42,7 +42,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="Search assignments..."
+                    android:hint="Search assignments or exams..."
                     android:textSize="14sp"
                     android:background="@android:color/transparent"
                     android:inputType="text"
@@ -62,14 +62,13 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Compact Filters Row -->
+            <!-- Filters Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="12dp">
 
-                <!-- Subject Filter -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -87,10 +86,9 @@
                     <Spinner
                         android:id="@+id/spinner_subject"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"/>
+                        android:layout_height="36dp" />
                 </LinearLayout>
 
-                <!-- Grade Filter -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -108,9 +106,28 @@
                     <Spinner
                         android:id="@+id/spinner_grade"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"/>
+                        android:layout_height="36dp" />
                 </LinearLayout>
+            </LinearLayout>
 
+            <!-- Type Filter -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="4dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp" />
             </LinearLayout>
 
             <!-- Action Buttons -->
@@ -140,14 +157,12 @@
                     android:minWidth="90dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp" />
-
             </LinearLayout>
 
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
 
-    <!-- Results Header with Count -->
+    <!-- Results Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -168,18 +183,17 @@
             android:id="@+id/tv_result_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 assignments"
+            android:text="0 items"
             android:textSize="12sp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp" />
-
     </LinearLayout>
 
-    <!-- Results RecyclerView -->
+    <!-- RecyclerView for both Assignments and Exams -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_assignments"
+        android:id="@+id/recycler_view_tasks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -202,7 +216,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No assignments found"
+            android:text="No results found"
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
@@ -211,7 +225,5 @@
             android:layout_height="wrap_content"
             android:text="Try adjusting your search or filters"
             android:textSize="12sp" />
-
     </LinearLayout>
-
 </LinearLayout>

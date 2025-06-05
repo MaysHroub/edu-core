@@ -1,7 +1,6 @@
 package com.bzu.educore.activity.teacher.fragment;
+
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,40 +13,46 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.adapter.teacher.AssignmentAdapter;
-import com.bzu.educore.model.task.Assignment;
+import com.bzu.educore.adapter.teacher.TaskAdapter;
+import com.bzu.educore.model.task.Task;
 import com.bzu.educore.util.VolleySingleton;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-/**
- * Fragment to search and display assignments with optional text, subject, and grade filters.
- */
-public class SearchAssignmentsFragment extends Fragment {
 
-    private static final String BASE_URL = "http://10.0.2.2/android/search_assignments.php";
+/**
+ * Fragment to search and display both assignments and exams with optional text, subject, grade, and type filters.
+ */
+public class SearchTasksFragment extends Fragment {
+
+    private static final String BASE_URL = "http://10.0.2.2/android/search_tasks.php";
 
     private EditText etSearch;
     private Button btnClearSearch;
-    private Spinner spinnerSubject, spinnerGrade;
+    private Spinner spinnerSubject, spinnerGrade, spinnerType;
     private Button btnSearch, btnClearFilters;
-    private RecyclerView recyclerViewAssignments;
+    private RecyclerView recyclerViewTasks;
     private TextView tvResultCount;
     private LinearLayout layoutEmptyState;
 
-    private AssignmentAdapter assignmentAdapter;
-    private List<Assignment> assignmentList;
+    private TaskAdapter taskAdapter;
+    private List<Task> taskList;
     private List<String> subjectOptions;
     private List<String> gradeOptions;
+    private List<String> typeOptions;
 
     @Nullable
     @Override
@@ -56,14 +61,13 @@ public class SearchAssignmentsFragment extends Fragment {
             @Nullable  ViewGroup container,
             @Nullable  Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(R.layout.fragment_search_assignment, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_task, container, false);
 
         initViews(view);
         setupRecyclerView();
         populateSpinners();
         setupListeners();
 
-        // Initial state: show empty list until user searches or applies filters
         updateEmptyState();
         updateResultCount();
 
@@ -75,26 +79,29 @@ public class SearchAssignmentsFragment extends Fragment {
         btnClearSearch = view.findViewById(R.id.btn_clear_search);
         spinnerSubject = view.findViewById(R.id.spinner_subject);
         spinnerGrade = view.findViewById(R.id.spinner_grade);
+        spinnerType = view.findViewById(R.id.spinner_type);
         btnSearch = view.findViewById(R.id.btn_search);
         btnClearFilters = view.findViewById(R.id.btn_clear_filters);
-        recyclerViewAssignments = view.findViewById(R.id.recycler_view_assignments);
+        recyclerViewTasks = view.findViewById(R.id.recycler_view_tasks);
         tvResultCount = view.findViewById(R.id.tv_result_count);
         layoutEmptyState = view.findViewById(R.id.layout_empty_state);
 
-        assignmentList = new ArrayList<>();
+        taskList = new ArrayList<>();
         subjectOptions = new ArrayList<>();
         gradeOptions = new ArrayList<>();
+        typeOptions = new ArrayList<>();
     }
 
     private void setupRecyclerView() {
-        assignmentAdapter = new AssignmentAdapter(assignmentList, requireActivity());
-        recyclerViewAssignments.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerViewAssignments.setAdapter(assignmentAdapter);
+        taskAdapter = new TaskAdapter(taskList, requireActivity());
+        recyclerViewTasks.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerViewTasks.setAdapter(taskAdapter);
     }
 
     private void populateSpinners() {
         loadSubjects();
         loadGrades();
+        loadTypes();
     }
 
     private void loadSubjects() {
@@ -157,18 +164,33 @@ public class SearchAssignmentsFragment extends Fragment {
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
 
+    private void loadTypes() {
+        // We manually set the types: All, Assignment, Exam
+        typeOptions.clear();
+        typeOptions.add("All");
+        typeOptions.add("Assignment");
+        typeOptions.add("Exam");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                typeOptions
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerType.setAdapter(adapter);
+    }
+
     private void setupListeners() {
         // Search text change: show/hide clear button
-        etSearch.addTextChangedListener(new TextWatcher() {
+        etSearch.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 btnClearSearch.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
             }
-            @Override public void afterTextChanged(Editable s) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
         });
 
-        // Search on IME search or Enter key
+        // Search on IME action or Enter key
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -193,13 +215,15 @@ public class SearchAssignmentsFragment extends Fragment {
             etSearch.setText("");
             spinnerSubject.setSelection(0);
             spinnerGrade.setSelection(0);
+            spinnerType.setSelection(0);
             btnClearSearch.setVisibility(View.GONE);
-            assignmentList.clear();
-            assignmentAdapter.notifyDataSetChanged();
+            taskList.clear();
+            taskAdapter.notifyDataSetChanged();
             updateEmptyState();
             updateResultCount();
         });
     }
+
     private void applyFilters() {
         StringBuilder urlBuilder = new StringBuilder(BASE_URL).append("?");
 
@@ -219,66 +243,76 @@ public class SearchAssignmentsFragment extends Fragment {
             urlBuilder.append("grade=").append(gradeNumber).append("&");
         }
 
+        String selectedType = (String) spinnerType.getSelectedItem();
+        if (selectedType != null && !selectedType.equals("All")) {
+            urlBuilder.append("type=").append(selectedType.toLowerCase()).append("&");
+        }
+
         // Trim trailing '&' or '?' if present
         String finalUrl = urlBuilder.toString();
         if (finalUrl.endsWith("&") || finalUrl.endsWith("?")) {
             finalUrl = finalUrl.substring(0, finalUrl.length() - 1);
         }
 
-        fetchAssignments(finalUrl);
+        fetchTasks(finalUrl);
     }
 
-    private void fetchAssignments(String url) {
+    private void fetchTasks(String url) {
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
                 null,
                 response -> {
-                    assignmentList.clear();
+                    taskList.clear();
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject obj = response.getJSONObject(i);
-                            Assignment assignment = new Assignment(
+                            // Construct a Task object from JSON
+                            Task task = new Task(
                                     obj.getInt("id"),
                                     obj.getString("subject_title"),
                                     obj.getInt("grade_number"),
                                     obj.getString("teacher_name"),
                                     obj.getDouble("max_score"),
                                     obj.getString("date"),
-                                    obj.getString("deadline"),
-                                    obj.getString("question_file_url")
+                                    obj.optString("deadline", ""),       // exams might not have a “deadline”, but keep the field
+                                    obj.optString("question_file_url", ""),
+                                    obj.getString("type")               // "assignment" or "exam"
                             );
-                            assignmentList.add(assignment);
+                            taskList.add(task);
                         }
-                        assignmentAdapter.notifyDataSetChanged();
+                        taskAdapter.notifyDataSetChanged();
                         updateEmptyState();
                         updateResultCount();
                     } catch (JSONException e) {
-                        showToast("Error parsing assignment data");
+                        showToast("Error parsing task data");
                         updateEmptyState();
                         updateResultCount();
                     }
                 },
                 error -> {
-                    showToast("Failed to retrieve assignments");
-                    assignmentList.clear();
-                    assignmentAdapter.notifyDataSetChanged();
+                    showToast("Failed to retrieve tasks");
+                    taskList.clear();
+                    taskAdapter.notifyDataSetChanged();
                     updateEmptyState();
                     updateResultCount();
                 }
         );
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
+
     private void updateResultCount() {
-        int count = assignmentList.size();
-        tvResultCount.setText(count + (count == 1 ? " assignment" : " assignments"));
+        int count = taskList.size();
+        tvResultCount.setText(count + (count == 1 ? " item" : " items"));
     }
+
     private void updateEmptyState() {
-        boolean isEmpty = assignmentList.isEmpty();
+        boolean isEmpty = taskList.isEmpty();
         layoutEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        recyclerViewAssignments.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        recyclerViewTasks.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         tvResultCount.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
+
     private void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
