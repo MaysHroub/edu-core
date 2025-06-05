@@ -48,7 +48,7 @@ public class TimetableSelectionAdapter extends RecyclerView.Adapter<TimetableSel
     @Override
     public TimetableSelectionAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_timetable, parent, false); // Simplified layout
+                .inflate(R.layout.item_selection_timetable, parent, false); // Simplified layout
         return new ViewHolder(view);
     }
 
