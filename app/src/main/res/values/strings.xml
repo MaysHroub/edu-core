@@ -18,4 +18,16 @@
     <string name="class_grades_in_school">Class grades in school:</string>
     <string name="number_of_classrooms">Number of classrooms:</string>
     <string name="number_of_subjects_added">Number of subjects added:</string>
+    <string name="educore_teacher">EduCore Teacher</string>
+    <string name="mathematics">Mathematics</string>
+    <string name="register_a_new_student">Register a new student</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="generated_id">Generated ID:</string>
+    <string name="generated_email">Generated Email:</string>
+    <string name="enter_student_s_date_of_birth">Enter Student\'s Date of Birth:</string>
+    <string name="choose_grade_number">Choose Grade Number:</string>
+    <string name="choose_classroom">Choose Classroom:</string>
+    <string name="register_student">Register Student</string>
+    <string name="june_14_2025">JUNE 14 2025</string>
 </resources>

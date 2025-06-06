@@ -35,17 +35,15 @@ android {
 }
 
 dependencies {
+    implementation(libs.gson)
     implementation(libs.mpandroidchart)
     implementation(libs.support.annotations)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.lombok)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
     implementation(libs.volley)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

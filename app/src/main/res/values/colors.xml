@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary_accent">#6C63FF</color>
+    <color name="primary_dark">#5A52E0</color>
+    <color name="nav_inactive">#9E9E9E</color>
+    <color name="nav_background">#FFFFFF</color>
+    <color name="ripple_color">#26000000</color>
+
 </resources>
