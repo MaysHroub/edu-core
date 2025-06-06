@@ -30,4 +30,8 @@
     <string name="choose_classroom">Choose Classroom:</string>
     <string name="register_student">Register Student</string>
     <string name="june_14_2025">JUNE 14 2025</string>
+    <string name="register_a_new_teacher">Register a New Teacher</string>
+    <string name="enter_teacher_s_date_of_birth">Enter teacher\'s date of birth:</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="subject_taught">Subject taught:</string>
 </resources>
