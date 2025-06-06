@@ -11,9 +11,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.volley.VolleyError;
+import com.bzu.educore.model.school.Classroom;
 import com.bzu.educore.model.user.Student;
 import com.bzu.educore.repository.registrar.StudentRepository;
 import com.github.mikephil.charting.data.PieEntry;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,16 +26,22 @@ import java.util.List;
 public class StudentRegistrationViewModel extends AndroidViewModel {
 
     private final MutableLiveData<Integer> numOfStudentsForCurrentYear;
+    private final MutableLiveData<List<DummyClassroom>> classrooms;
     private final StudentRepository studentRepo;
 
     public StudentRegistrationViewModel(Application application) {
         super(application);
-        numOfStudentsForCurrentYear = new MutableLiveData<>();
         studentRepo = new StudentRepository(application);
+        numOfStudentsForCurrentYear = new MutableLiveData<>();
+        classrooms = new MutableLiveData<>();
     }
 
     public LiveData<Integer> getNumOfStudentsForCurrentYear() {
         return numOfStudentsForCurrentYear;
+    }
+
+    public LiveData<List<DummyClassroom>> getClassrooms() {
+        return classrooms;
     }
 
     public void registerStudent(DummyStudent student) {
@@ -65,4 +73,25 @@ public class StudentRegistrationViewModel extends AndroidViewModel {
         );
     }
 
+    public void fetchAllClassrooms() {
+        studentRepo.getAllClassrooms(
+                response -> {
+                    Gson gson = new Gson();
+                    List<DummyClassroom> classroomList = new ArrayList<>();
+
+                    for (int i = 0; i < response.length(); i++)
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            DummyClassroom classroom = gson.fromJson(obj.toString(), DummyClassroom.class);
+                            classroomList.add(classroom);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    classrooms.postValue(classroomList);
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
 }

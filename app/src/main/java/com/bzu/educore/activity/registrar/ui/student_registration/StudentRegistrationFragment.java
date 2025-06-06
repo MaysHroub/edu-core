@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bzu.educore.R;
 import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
 import com.bzu.educore.model.user.Student;
 import com.bzu.educore.util.InputValidator;
@@ -25,6 +27,7 @@ import java.util.Calendar;
 public class StudentRegistrationFragment extends Fragment {
 
     private FragmentStudentRegistrationBinding binding;
+    private StudentRegistrationViewModel studentRegistrationViewModel;
     private int generatedId;
     private String generatedEmail;
     private LocalDate dob;
@@ -32,7 +35,7 @@ public class StudentRegistrationFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        StudentRegistrationViewModel studentRegistrationViewModel =
+        studentRegistrationViewModel =
                 new ViewModelProvider(this).get(StudentRegistrationViewModel.class);
 
         binding = FragmentStudentRegistrationBinding.inflate(inflater, container, false);
@@ -45,27 +48,36 @@ public class StudentRegistrationFragment extends Fragment {
             binding.edttxtStdEmail.setText(generatedEmail);
         });
 
+        studentRegistrationViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
+            ArrayAdapter<DummyClassroom> adapter = new ArrayAdapter<>(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    classrooms
+            );
+            binding.spnrStdClassroom.setAdapter(adapter);
+        });
+
         studentRegistrationViewModel.fetchNumOfStudentsForCurrentYear();
+        studentRegistrationViewModel.fetchAllClassrooms();
 
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
-        binding.btnStdRegister.setOnClickListener(v -> addStudentToDB(studentRegistrationViewModel));
+        binding.btnStdRegister.setOnClickListener(v -> addStudentToDB());
 
         return root;
     }
 
-    private void addStudentToDB(StudentRegistrationViewModel studentRegistrationViewModel) {
+    private void addStudentToDB() {
         if (!InputValidator.validateEditTexts(binding.edttxtStdFname, binding.edttxtStdLname) ||
-                !InputValidator.validateSpinners(binding.spnrStdGrade, binding.spnrStdClassroom) ||
+                !InputValidator.validateSpinners(binding.spnrStdClassroom) ||
                 dob == null) {
             Toast.makeText(getContext(), "Please Fill Empty Fields", Toast.LENGTH_SHORT).show();
             return;
         }
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
-        int gradeNum = (Integer) binding.spnrStdGrade.getSelectedItem();
-        String section = (String) binding.spnrStdClassroom.getSelectedItem();
+        DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
         // TODO: replace dummy-student with actual student class
-        DummyStudent student = new DummyStudent(generatedId, gradeNum, fname, lname, generatedEmail, section, dob);
+        DummyStudent student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
         studentRegistrationViewModel.registerStudent(student);
     }
 

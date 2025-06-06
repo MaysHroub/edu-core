@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bzu.educore.activity.registrar.ui.student_registration.DummyStudent;
@@ -13,6 +14,7 @@ import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +48,11 @@ public class StudentRepository {
 
     public void getStudentCountForCurrentYear(Response.Listener<String> listener, Response.ErrorListener errorListener) {
         StringRequest request = new StringRequest(Request.Method.GET, UrlManager.URL_GET_STUDENT_COUNT_FOR_CURRENT_YEAR, listener, errorListener);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void getAllClassrooms(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, UrlManager.URL_GET_ALL_CLASSROOMS, null, listener, errorListener);
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 
