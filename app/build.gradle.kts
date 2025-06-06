@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.navigation.ui)
     implementation(libs.gson)
     implementation(libs.mpandroidchart)
     implementation(libs.support.annotations)
@@ -48,4 +49,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.navigation.fragment)
+
 }
