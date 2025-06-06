@@ -24,6 +24,7 @@
 
             </intent-filter>
         </activity>
+        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity
             android:name=".activity.teacher.TeacherMainActivity"
             android:exported="true">
