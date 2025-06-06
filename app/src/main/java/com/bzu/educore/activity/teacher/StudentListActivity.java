@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,9 +16,9 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.adapter.teacher.StudentExamAdapter;
-import com.bzu.educore.adapter.teacher.StudentSubmissionAdapter;
+import com.bzu.educore.adapter.teacher.UnifiedStudentAdapter;
 import com.bzu.educore.model.task.StudentSubmission;
+import com.bzu.educore.util.Constants;
 import com.bzu.educore.util.VolleySingleton;
 
 import org.json.JSONArray;
@@ -30,18 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity
-        implements StudentSubmissionAdapter.OnViewSubmissionClickListener,
-        StudentSubmissionAdapter.OnMarkChangedListener,
-        StudentExamAdapter.OnMarkChangedListener {
+        implements UnifiedStudentAdapter.OnViewSubmissionClickListener,
+        UnifiedStudentAdapter.OnMarkChangedListener {
 
     private RecyclerView recyclerViewStudents;
     private Button btnPublishMarks;
     private EditText etSearchStudent;
     private int taskId;
     private String type;
+    private double maxMark;
 
-    private StudentSubmissionAdapter submissionAdapter;
-    private StudentExamAdapter examAdapter;
+    private UnifiedStudentAdapter studentAdapter;
     private List<StudentSubmission> studentList;
     private List<StudentSubmission> filteredStudentList;
 
@@ -50,53 +48,51 @@ public class StudentListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
 
+        initViews();
+        getIntentData();
+        setupAdapter();
+        setupListeners();
+        setupRecyclerView();
+        fetchStudentList();
+    }
+
+    private void initViews() {
         recyclerViewStudents = findViewById(R.id.recycler_view_students);
         btnPublishMarks = findViewById(R.id.btn_publish_marks);
         etSearchStudent = findViewById(R.id.et_search_student);
 
         studentList = new ArrayList<>();
         filteredStudentList = new ArrayList<>();
+    }
 
+    private void getIntentData() {
         taskId = getIntent().getIntExtra("taskId", -1);
         type = getIntent().getStringExtra("type");
+        maxMark = getIntent().getDoubleExtra("maxMark", Constants.MAX_MARK);
 
         if (type == null || taskId == -1) {
             Toast.makeText(this, "Invalid data", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-
-        setupAdapter();
-        setupPublishButton();
-        setupSearchFunctionality();
-
-        recyclerViewStudents.setLayoutManager(new LinearLayoutManager(this));
-
-        fetchStudentList();
     }
 
     private void setupAdapter() {
-        if ("assignment".equalsIgnoreCase(type)) {
-            submissionAdapter = new StudentSubmissionAdapter(
-                    filteredStudentList,
-                    this,
-                    this
-            );
-            recyclerViewStudents.setAdapter(submissionAdapter);
-        } else {
-            examAdapter = new StudentExamAdapter(
-                    filteredStudentList,
-                    this
-            );
-            recyclerViewStudents.setAdapter(examAdapter);
-        }
+        UnifiedStudentAdapter.DisplayMode displayMode = "assignment".equalsIgnoreCase(type) ?
+                UnifiedStudentAdapter.DisplayMode.ASSIGNMENT_MODE :
+                UnifiedStudentAdapter.DisplayMode.EXAM_MODE;
+
+        studentAdapter = new UnifiedStudentAdapter(
+                filteredStudentList,
+                displayMode,
+                this, // OnViewSubmissionClickListener
+                this, // OnMarkChangedListener
+                maxMark
+        );
     }
 
-    private void setupPublishButton() {
+    private void setupListeners() {
         btnPublishMarks.setOnClickListener(v -> publishMarks());
-    }
-
-    private void setupSearchFunctionality() {
         etSearchStudent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -109,6 +105,11 @@ public class StudentListActivity extends AppCompatActivity
             @Override
             public void afterTextChanged(Editable s) {}
         });
+    }
+
+    private void setupRecyclerView() {
+        recyclerViewStudents.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewStudents.setAdapter(studentAdapter);
     }
 
     private void filterStudents(String searchText) {
@@ -128,11 +129,7 @@ public class StudentListActivity extends AppCompatActivity
         }
 
         // Notify adapter of data change
-        if ("assignment".equalsIgnoreCase(type)) {
-            submissionAdapter.notifyDataSetChanged();
-        } else {
-            examAdapter.notifyDataSetChanged();
-        }
+        studentAdapter.notifyDataSetChanged();
 
         // Update publish button state based on filtered results
         updatePublishButtonState();
@@ -300,12 +297,7 @@ public class StudentListActivity extends AppCompatActivity
                         filteredStudentList.clear();
                         filteredStudentList.addAll(studentList);
 
-                        if ("assignment".equalsIgnoreCase(type)) {
-                            submissionAdapter.notifyDataSetChanged();
-                        } else {
-                            examAdapter.notifyDataSetChanged();
-                        }
-
+                        studentAdapter.notifyDataSetChanged();
                         updatePublishButtonState();
                     } catch (JSONException e) {
                         Toast.makeText(this, "Error parsing student data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
