@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bzu.educore.R;
 import com.bzu.educore.model.task.StudentSubmission;
-import com.bzu.educore.util.teacher.Constants;
 import com.bzu.educore.util.teacher.MarkValidator;
 import com.bzu.educore.util.teacher.StatusUtils;
 import java.util.List;
@@ -21,8 +20,8 @@ import java.util.List;
 public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAdapter.StudentViewHolder> {
 
     public enum DisplayMode {
-        ASSIGNMENT_MODE,  // Shows status, date, view button
-        EXAM_MODE        // Shows only name and mark input
+        ASSIGNMENT_MODE,
+        EXAM_MODE
     }
 
     private final List<StudentSubmission> students;
@@ -36,28 +35,13 @@ public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAd
             DisplayMode displayMode,
             OnViewSubmissionClickListener viewSubmissionClickListener,
             OnMarkChangedListener markChangedListener,
-            double maxMark) {
+            double maxMark
+    ) {
         this.students = students;
         this.displayMode = displayMode;
         this.viewSubmissionClickListener = viewSubmissionClickListener;
         this.markChangedListener = markChangedListener;
         this.maxMark = maxMark;
-    }
-
-    // Convenience constructor for exam mode
-    public UnifiedStudentAdapter(
-            List<StudentSubmission> students,
-            OnMarkChangedListener markChangedListener,
-            double maxMark) {
-        this(students, DisplayMode.EXAM_MODE, null, markChangedListener, maxMark);
-    }
-
-    // Convenience constructor for assignment mode with default max mark
-    public UnifiedStudentAdapter(
-            List<StudentSubmission> students,
-            OnViewSubmissionClickListener viewSubmissionClickListener,
-            OnMarkChangedListener markChangedListener) {
-        this(students, DisplayMode.ASSIGNMENT_MODE, viewSubmissionClickListener, markChangedListener, Constants.MAX_MARK);
     }
 
     @NonNull
@@ -87,26 +71,26 @@ public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAd
     }
 
     static class StudentViewHolder extends RecyclerView.ViewHolder {
+
         private final ImageView imgStudentPfp;
         private final TextView tvStudentName;
         private final TextView tvSubmissionStatus;
         private final TextView tvSubmissionDate;
-        private final EditText etStudentMarkInput;
         private final Button btnViewSubmission;
+        private final EditText etStudentMarkInput;
         private final DisplayMode displayMode;
 
         private TextWatcher markTextWatcher;
 
-        public StudentViewHolder(@NonNull View itemView, DisplayMode displayMode) {
+        public StudentViewHolder(@NonNull View itemView, DisplayMode mode) {
             super(itemView);
-            this.displayMode = displayMode;
+            this.displayMode = mode;
 
             imgStudentPfp = itemView.findViewById(R.id.imgStudentPfp);
             tvStudentName = itemView.findViewById(R.id.tvStudentName);
             etStudentMarkInput = itemView.findViewById(R.id.etStudentMarkInput);
 
-            // These views only exist in assignment mode
-            if (displayMode == DisplayMode.ASSIGNMENT_MODE) {
+            if (mode == DisplayMode.ASSIGNMENT_MODE) {
                 tvSubmissionStatus = itemView.findViewById(R.id.tvSubmissionStatus);
                 tvSubmissionDate = itemView.findViewById(R.id.tvSubmissionDate);
                 btnViewSubmission = itemView.findViewById(R.id.btnViewSubmission);
@@ -121,63 +105,54 @@ public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAd
                          OnViewSubmissionClickListener viewClickListener,
                          OnMarkChangedListener markChangedListener) {
 
-            // Set student name
             tvStudentName.setText(student.getStudentName());
 
-            // Handle assignment-specific views
-            if (displayMode == DisplayMode.ASSIGNMENT_MODE && student.getStatus() != null) {
-                bindAssignmentViews(student, viewClickListener);
+            if (displayMode == DisplayMode.ASSIGNMENT_MODE) {
+                bindAssignmentInfo(student, viewClickListener);
             }
 
-            // Handle mark input
             bindMarkInput(student, maxMark, markChangedListener);
         }
 
-        private void bindAssignmentViews(StudentSubmission student, OnViewSubmissionClickListener viewClickListener) {
-            // Status
+        private void bindAssignmentInfo(StudentSubmission student, OnViewSubmissionClickListener listener) {
             tvSubmissionStatus.setText(StatusUtils.formatStatus(student.getStatus()));
             tvSubmissionStatus.setTextColor(StatusUtils.getStatusColor(student.getStatus()));
 
-            // Submission date
-            String submissionDate = student.getSubmissionDate();
-            if (submissionDate != null && !submissionDate.isEmpty() && !"null".equals(submissionDate)) {
-                tvSubmissionDate.setText("Submitted: " + submissionDate);
+            String date = student.getSubmissionDate();
+            if (date != null && !date.isEmpty() && !"null".equals(date)) {
+                tvSubmissionDate.setText("Submitted: " + date);
                 tvSubmissionDate.setVisibility(View.VISIBLE);
             } else {
                 tvSubmissionDate.setVisibility(View.GONE);
             }
 
-            // View button
             boolean canView = StatusUtils.canViewSubmission(student.getStatus());
             btnViewSubmission.setEnabled(canView);
             btnViewSubmission.setAlpha(canView ? 1.0f : 0.5f);
             btnViewSubmission.setOnClickListener(v -> {
-                if (viewClickListener != null && canView) {
-                    viewClickListener.onViewSubmissionClick(student);
+                if (listener != null && canView) {
+                    listener.onViewSubmissionClick(student);
                 }
             });
         }
 
-        private void bindMarkInput(StudentSubmission student, double maxMark, OnMarkChangedListener markChangedListener) {
-            // Remove previous watcher
+        private void bindMarkInput(StudentSubmission student, double maxMark, OnMarkChangedListener listener) {
             cleanup();
 
-            // Set mark input state
             boolean canMark = displayMode == DisplayMode.EXAM_MODE ||
                     StatusUtils.canMarkSubmission(student.getStatus());
+
             etStudentMarkInput.setEnabled(canMark);
             etStudentMarkInput.setAlpha(canMark ? 1.0f : 0.5f);
+            etStudentMarkInput.setHint(canMark ? "Mark" : "N/A");
 
-            // Set current value
             if (student.getMark() != null) {
                 etStudentMarkInput.setText(String.format("%.2f", student.getMark()));
             } else {
                 etStudentMarkInput.setText("");
             }
-            etStudentMarkInput.setHint(canMark ? "Mark" : "N/A");
 
-            // Add new watcher
-            markTextWatcher = new MarkTextWatcher(student, maxMark, markChangedListener);
+            markTextWatcher = new MarkTextWatcher(student, maxMark, listener);
             etStudentMarkInput.addTextChangedListener(markTextWatcher);
         }
 
@@ -190,6 +165,7 @@ public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAd
     }
 
     private static class MarkTextWatcher implements TextWatcher {
+
         private final StudentSubmission student;
         private final double maxMark;
         private final OnMarkChangedListener listener;

@@ -1,69 +1,56 @@
 package com.bzu.educore.activity.teacher.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.TaskAdapter;
 import com.bzu.educore.model.task.Task;
 import com.bzu.educore.util.VolleySingleton;
+import com.bzu.educore.util.teacher.Constants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.text.TextUtils;
-import com.bzu.educore.util.teacher.Constants;
-import com.bzu.educore.util.teacher.ErrorHandler;
-import java.util.Arrays;
+import java.util.*;
 
 public class SearchTasksFragment extends Fragment {
 
-    // UI Components
     private EditText etSearch;
-    private Button btnClearSearch;
+    private Button btnClearSearch, btnSearch, btnClearFilters;
     private Spinner spinnerSubject, spinnerGrade, spinnerType;
-    private Button btnSearch, btnClearFilters;
     private RecyclerView recyclerViewTasks;
     private TextView tvResultCount;
     private LinearLayout layoutEmptyState;
+    private ProgressBar progressBar;
 
-    // Data
     private TaskAdapter taskAdapter;
-    private List<Task> taskList;
-    private List<String> subjectOptions;
-    private List<String> gradeOptions;
+    private final List<Task> taskList = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_task, container, false);
-
         initViews(view);
         setupRecyclerView();
-        populateSpinners();
         setupListeners();
+        loadSpinners();
         updateUI();
-
         return view;
     }
 
@@ -78,10 +65,7 @@ public class SearchTasksFragment extends Fragment {
         recyclerViewTasks = view.findViewById(R.id.recycler_view_tasks);
         tvResultCount = view.findViewById(R.id.tv_result_count);
         layoutEmptyState = view.findViewById(R.id.layout_empty_state);
-
-        taskList = new ArrayList<>();
-        subjectOptions = new ArrayList<>();
-        gradeOptions = new ArrayList<>();
+        progressBar = view.findViewById(R.id.progress_bar);
     }
 
     private void setupRecyclerView() {
@@ -90,55 +74,15 @@ public class SearchTasksFragment extends Fragment {
         recyclerViewTasks.setAdapter(taskAdapter);
     }
 
-    private void populateSpinners() {
-        loadSpinnerData(Constants.GET_SUBJECTS_URL, spinnerSubject, Constants.ALL_SUBJECTS,
-                subjectOptions, obj -> obj.getString("title"));
-        loadSpinnerData(Constants.GET_GRADES_URL, spinnerGrade, Constants.ALL_GRADES,
-                gradeOptions, obj -> "Grade " + obj.getString("grade_number"));
-        setupTypeSpinner();
-    }
-
-    private void loadSpinnerData(String url, Spinner spinner, String defaultItem,
-                                 List<String> options, JsonExtractor extractor) {
-        JsonArrayRequest request = new JsonArrayRequest(
-                Request.Method.GET, url, null,
-                response -> {
-                    options.clear();
-                    options.add(defaultItem);
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject obj = response.getJSONObject(i);
-                            options.add(extractor.extract(obj));
-                        }
-                        setupSpinnerAdapter(spinner, options);
-                    } catch (JSONException e) {
-                        ErrorHandler.handleParsingError(requireContext());
-                    }
-                },
-                error -> ErrorHandler.handleNetworkError(requireContext(), error)
-        );
-        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
-    }
-
-    private void setupTypeSpinner() {
-        List<String> typeOptions = Arrays.asList(Constants.ALL_TYPES, "Assignment", "Exam");
-        setupSpinnerAdapter(spinnerType, typeOptions);
-    }
-
-    private void setupSpinnerAdapter(Spinner spinner, List<String> options) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-    }
-
     private void setupListeners() {
-        // Search text change
-        etSearch.addTextChangedListener(new SimpleTextWatcher(
-                text -> btnClearSearch.setVisibility(text.length() > 0 ? View.VISIBLE : View.GONE)
-        ));
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                btnClearSearch.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
+            }
+        });
 
-        // Search on enter/IME action
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -148,29 +92,126 @@ public class SearchTasksFragment extends Fragment {
             return false;
         });
 
-        // Button listeners
-        btnClearSearch.setOnClickListener(v -> clearSearchText());
+        btnClearSearch.setOnClickListener(v -> {
+            etSearch.setText("");
+            btnClearSearch.setVisibility(View.GONE);
+            clearResults();
+        });
+
         btnSearch.setOnClickListener(v -> performSearch());
-        btnClearFilters.setOnClickListener(v -> clearAllFilters());
+
+        btnClearFilters.setOnClickListener(v -> {
+            etSearch.setText("");
+            spinnerSubject.setSelection(0);
+            spinnerGrade.setSelection(0);
+            spinnerType.setSelection(0);
+            btnClearSearch.setVisibility(View.GONE);
+            clearResults();
+        });
     }
 
-    private void clearSearchText() {
-        etSearch.setText("");
-        btnClearSearch.setVisibility(View.GONE);
-        performSearch();
+    private void loadSpinners() {
+        loadSpinner(spinnerSubject, Constants.GET_SUBJECTS_URL, Constants.ALL_SUBJECTS, "title", false);
+        loadSpinner(spinnerGrade, Constants.GET_GRADES_URL, Constants.ALL_GRADES, "grade_number", true);
+
+        List<String> types = Arrays.asList(Constants.ALL_TYPES, "Assignment", "Exam");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, types);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerType.setAdapter(adapter);
     }
 
-    private void clearAllFilters() {
-        etSearch.setText("");
-        resetSpinners();
-        btnClearSearch.setVisibility(View.GONE);
-        clearResults();
+    private void loadSpinner(Spinner spinner, String url, String defaultItem, String jsonKey, boolean prefixGrade) {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    List<String> items = new ArrayList<>();
+                    items.add(defaultItem);
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            String item = obj.getString(jsonKey);
+                            if (prefixGrade) item = "Grade " + item;
+                            items.add(item);
+                        } catch (JSONException e) {
+                            Toast.makeText(getContext(), "Error parsing spinner data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
+                            android.R.layout.simple_spinner_item, items);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapter);
+                },
+                error -> Toast.makeText(getContext(), "Failed to load spinner data", Toast.LENGTH_SHORT).show()
+        );
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
 
-    private void resetSpinners() {
-        spinnerSubject.setSelection(0);
-        spinnerGrade.setSelection(0);
-        spinnerType.setSelection(0);
+    private void performSearch() {
+        String url = buildSearchUrl();
+        showLoading(true);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    handleSearchResults(response);
+                    showLoading(false);
+                },
+                error -> {
+                    Toast.makeText(getContext(), "Search failed", Toast.LENGTH_SHORT).show();
+                    clearResults();
+                    showLoading(false);
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
+    }
+
+    private String buildSearchUrl() {
+        StringBuilder url = new StringBuilder(Constants.SEARCH_TASKS_URL);
+        List<String> params = new ArrayList<>();
+
+        String text = etSearch.getText().toString().trim();
+        if (!text.isEmpty()) params.add("search=" + text);
+
+        String subject = getSelectedValue(spinnerSubject, Constants.ALL_SUBJECTS);
+        if (subject != null) params.add("subject=" + subject);
+
+        String grade = getSelectedValue(spinnerGrade, Constants.ALL_GRADES);
+        if (grade != null) params.add("grade=" + grade.replace("Grade ", ""));
+
+        String type = getSelectedValue(spinnerType, Constants.ALL_TYPES);
+        if (type != null) params.add("type=" + type.toLowerCase());
+
+        if (!params.isEmpty()) url.append("?").append(TextUtils.join("&", params));
+        return url.toString();
+    }
+
+    private String getSelectedValue(Spinner spinner, String defaultValue) {
+        String selected = (String) spinner.getSelectedItem();
+        return (selected != null && !selected.equals(defaultValue)) ? selected : null;
+    }
+
+    private void handleSearchResults(JSONArray response) {
+        taskList.clear();
+        for (int i = 0; i < response.length(); i++) {
+            try {
+                JSONObject obj = response.getJSONObject(i);
+                Task task = new Task(
+                        obj.getInt("id"),
+                        obj.getString("subject_title"),
+                        obj.getInt("grade_number"),
+                        obj.getString("teacher_name"),
+                        obj.getDouble("max_score"),
+                        obj.getString("date"),
+                        obj.optString("deadline", ""),
+                        obj.optString("question_file_url", ""),
+                        obj.getString("type")
+                );
+                taskList.add(task);
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), "Error parsing tasks", Toast.LENGTH_SHORT).show();
+            }
+        }
+        taskAdapter.notifyDataSetChanged();
+        updateUI();
     }
 
     private void clearResults() {
@@ -179,147 +220,19 @@ public class SearchTasksFragment extends Fragment {
         updateUI();
     }
 
-    private void performSearch() {
-        FilterParams params = buildFilterParams();
-        String url = buildSearchUrl(params);
-        fetchTasks(url);
-    }
-
-    private FilterParams buildFilterParams() {
-        return new FilterParams(
-                etSearch.getText().toString().trim(),
-                getSelectedSpinnerValue(spinnerSubject, Constants.ALL_SUBJECTS),
-                getSelectedSpinnerValue(spinnerGrade, Constants.ALL_GRADES),
-                getSelectedSpinnerValue(spinnerType, Constants.ALL_TYPES)
-        );
-    }
-
-    private String getSelectedSpinnerValue(Spinner spinner, String defaultValue) {
-        String selected = (String) spinner.getSelectedItem();
-        return (selected != null && !selected.equals(defaultValue)) ? selected : null;
-    }
-
-    private String buildSearchUrl(FilterParams params) {
-        StringBuilder url = new StringBuilder(Constants.SEARCH_TASKS_URL);
-        List<String> queryParams = new ArrayList<>();
-
-        if (!TextUtils.isEmpty(params.searchQuery)) {
-            queryParams.add("search=" + params.searchQuery);
-        }
-        if (params.selectedSubject != null) {
-            queryParams.add("subject=" + params.selectedSubject);
-        }
-        if (params.selectedGrade != null) {
-            String gradeNumber = params.selectedGrade.replace("Grade ", "");
-            queryParams.add("grade=" + gradeNumber);
-        }
-        if (params.selectedType != null) {
-            queryParams.add("type=" + params.selectedType.toLowerCase());
-        }
-
-        if (!queryParams.isEmpty()) {
-            url.append("?").append(TextUtils.join("&", queryParams));
-        }
-
-        return url.toString();
-    }
-
-    private void fetchTasks(String url) {
-        JsonArrayRequest request = new JsonArrayRequest(
-                Request.Method.GET, url, null,
-                response -> {
-                    taskList.clear();
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject obj = response.getJSONObject(i);
-                            Task task = createTaskFromJson(obj);
-                            taskList.add(task);
-                        }
-                        taskAdapter.notifyDataSetChanged();
-                        updateUI();
-                    } catch (JSONException e) {
-                        ErrorHandler.handleParsingError(requireContext());
-                        updateUI();
-                    }
-                },
-                error -> {
-                    ErrorHandler.handleNetworkError(requireContext(), error);
-                    clearResults();
-                }
-        );
-        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
-    }
-
-    private Task createTaskFromJson(JSONObject obj) throws JSONException {
-        return new Task(
-                obj.getInt("id"),
-                obj.getString("subject_title"),
-                obj.getInt("grade_number"),
-                obj.getString("teacher_name"),
-                obj.getDouble("max_score"),
-                obj.getString("date"),
-                obj.optString("deadline", ""),
-                obj.optString("question_file_url", ""),
-                obj.getString("type")
-        );
+    private void showLoading(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        btnSearch.setEnabled(!show);
+        btnSearch.setText(show ? "Searching..." : "Search");
     }
 
     private void updateUI() {
-        updateResultCount();
-        updateEmptyState();
-    }
-
-    private void updateResultCount() {
         int count = taskList.size();
         tvResultCount.setText(count + (count == 1 ? " item" : " items"));
-    }
 
-    private void updateEmptyState() {
         boolean isEmpty = taskList.isEmpty();
         layoutEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerViewTasks.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         tvResultCount.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
-    }
-
-    // Helper classes and interfaces
-    private static class FilterParams {
-        final String searchQuery;
-        final String selectedSubject;
-        final String selectedGrade;
-        final String selectedType;
-
-        FilterParams(String searchQuery, String selectedSubject, String selectedGrade, String selectedType) {
-            this.searchQuery = searchQuery;
-            this.selectedSubject = selectedSubject;
-            this.selectedGrade = selectedGrade;
-            this.selectedType = selectedType;
-        }
-    }
-
-    private interface JsonExtractor {
-        String extract(JSONObject obj) throws JSONException;
-    }
-
-    private static class SimpleTextWatcher implements android.text.TextWatcher {
-        private final TextChangeListener listener;
-
-        SimpleTextWatcher(TextChangeListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            listener.onTextChanged(s);
-        }
-
-        @Override
-        public void afterTextChanged(android.text.Editable s) {}
-
-        interface TextChangeListener {
-            void onTextChanged(CharSequence text);
-        }
     }
 }
