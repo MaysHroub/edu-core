@@ -70,7 +70,7 @@ public class StudentRegistrationFragment extends Fragment {
         if (!InputValidator.validateEditTexts(binding.edttxtStdFname, binding.edttxtStdLname) ||
                 !InputValidator.validateSpinners(binding.spnrStdClassroom) ||
                 dob == null) {
-            Toast.makeText(getContext(), "Please Fill Empty Fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Please Fill Empty Fields", Toast.LENGTH_SHORT).show();
             return;
         }
         String fname = binding.edttxtStdFname.getText().toString(),
