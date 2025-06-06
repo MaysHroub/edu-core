@@ -19,8 +19,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 public class StatisticsFragment extends Fragment {
 
     private FragmentStatisticsBinding binding;
-    private TextView txtNumOfStds, txtNumOfTeachers, txtNumOfClassrooms, txtNumOfSubjects;
-    private PieChart pieChartTeacherSubjectDist, pieChartStdGradeDist;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -31,12 +29,12 @@ public class StatisticsFragment extends Fragment {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        txtNumOfStds = binding.txtNumOfStds;
-        txtNumOfTeachers = binding.txtNumOfTeachers;
-        txtNumOfClassrooms = binding.txtNumOfSections;
-        txtNumOfSubjects = binding.txtNumOfSubjects;
-        pieChartTeacherSubjectDist = binding.pieChartTeacherSubjectDist;
-        pieChartStdGradeDist = binding.pieChartStdGradeDist;
+        final TextView txtNumOfStds = binding.txtNumOfStds;
+        final TextView txtNumOfTeachers = binding.txtNumOfTeachers;
+        final TextView txtNumOfClassrooms = binding.txtNumOfSections;
+        final TextView txtNumOfSubjects = binding.txtNumOfSubjects;
+        final PieChart pieChartTeacherSubjectDist = binding.pieChartTeacherSubjectDist;
+        final PieChart pieChartStdGradeDist = binding.pieChartStdGradeDist;
 
         statisticsViewModel.getNumOfStudents().observe(getViewLifecycleOwner(), txtNumOfStds::setText);
         statisticsViewModel.getNumOfTeachers().observe(getViewLifecycleOwner(), txtNumOfTeachers::setText);
@@ -58,6 +56,13 @@ public class StatisticsFragment extends Fragment {
             pieChartStdGradeDist.setData(pieData);
             pieChartStdGradeDist.invalidate();
         });
+
+        statisticsViewModel.fetchNumOfStudents();
+        statisticsViewModel.fetchNumOfTeachers();
+        statisticsViewModel.fetchNumOfSubjects();
+        statisticsViewModel.fetchNumOfClassrooms();
+        statisticsViewModel.fetchStudentPerGrade();
+        statisticsViewModel.fetchTeacherPerSubject();
 
         return root;
     }
