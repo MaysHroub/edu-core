@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.gson)
+    implementation(libs.mpandroidchart)
     implementation(libs.support.annotations)
     implementation(libs.appcompat)
     implementation(libs.material)
