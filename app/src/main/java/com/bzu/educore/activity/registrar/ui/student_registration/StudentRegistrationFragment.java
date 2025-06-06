@@ -12,14 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bzu.educore.R;
 import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
-import com.bzu.educore.model.user.Student;
 import com.bzu.educore.util.InputValidator;
-import com.bzu.educore.util.StudentCredentialsGenerator;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import com.bzu.educore.util.CredentialsGenerator;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -42,8 +37,8 @@ public class StudentRegistrationFragment extends Fragment {
         View root = binding.getRoot();
 
         studentRegistrationViewModel.getNumOfStudentsForCurrentYear().observe(getViewLifecycleOwner(), numOfStds -> {
-            generatedId = StudentCredentialsGenerator.generateId(numOfStds);
-            generatedEmail = StudentCredentialsGenerator.generateEmail(generatedId);
+            generatedId = CredentialsGenerator.generateStudentId(numOfStds);
+            generatedEmail = CredentialsGenerator.generateStudentEmail(generatedId);
             binding.edttxtStdId.setText(generatedId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
         });
