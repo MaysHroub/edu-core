@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.slideshow;
+package com.bzu.educore.activity.registrar.ui.teacher_registration;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bzu.educore.databinding.FragmentSlideshowBinding;
+import com.bzu.educore.databinding.FragmentTeacherRegistrationBinding;
 
-public class SlideshowFragment extends Fragment {
+public class TeacherRegistrationFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+    private FragmentTeacherRegistrationBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        TeacherRegistrationViewModel teacherRegistrationViewModel =
+                new ViewModelProvider(this).get(TeacherRegistrationViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        binding = FragmentTeacherRegistrationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        teacherRegistrationViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
