@@ -1,4 +1,4 @@
-package com.bzu.educore.util;
+package com.bzu.educore.util.teacher;
 
 public class Constants {
     // API URLs

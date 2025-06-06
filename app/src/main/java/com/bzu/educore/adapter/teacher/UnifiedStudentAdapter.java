@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bzu.educore.R;
 import com.bzu.educore.model.task.StudentSubmission;
-import com.bzu.educore.util.Constants;
-import com.bzu.educore.util.MarkValidator;
-import com.bzu.educore.util.StatusUtils;
+import com.bzu.educore.util.teacher.Constants;
+import com.bzu.educore.util.teacher.MarkValidator;
+import com.bzu.educore.util.teacher.StatusUtils;
 import java.util.List;
 
 public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAdapter.StudentViewHolder> {

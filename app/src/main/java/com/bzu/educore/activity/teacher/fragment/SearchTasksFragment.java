@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.text.TextUtils;
-import com.bzu.educore.util.Constants;
-import com.bzu.educore.util.ErrorHandler;
+import com.bzu.educore.util.teacher.Constants;
+import com.bzu.educore.util.teacher.ErrorHandler;
 import java.util.Arrays;
 
 public class SearchTasksFragment extends Fragment {

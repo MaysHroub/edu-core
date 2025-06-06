@@ -1,4 +1,4 @@
-package com.bzu.educore.util;
+package com.bzu.educore.util.teacher;
 
 import android.content.Context;
 import android.widget.Toast;

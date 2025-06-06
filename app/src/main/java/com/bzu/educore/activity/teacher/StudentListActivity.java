@@ -18,7 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.UnifiedStudentAdapter;
 import com.bzu.educore.model.task.StudentSubmission;
-import com.bzu.educore.util.Constants;
+import com.bzu.educore.util.teacher.Constants;
 import com.bzu.educore.util.VolleySingleton;
 
 import org.json.JSONArray;
