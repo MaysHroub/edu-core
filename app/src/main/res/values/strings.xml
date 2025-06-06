@@ -18,6 +18,8 @@
     <string name="class_grades_in_school">Class grades in school:</string>
     <string name="number_of_classrooms">Number of classrooms:</string>
     <string name="number_of_subjects_added">Number of subjects added:</string>
+    <string name="educore_teacher">EduCore Teacher</string>
+    <string name="mathematics">Mathematics</string>
     <string name="register_a_new_student">Register a new student</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>

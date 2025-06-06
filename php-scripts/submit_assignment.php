@@ -27,4 +27,5 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([$assignment_id, $student_id, $relative_url, $date]);
 
 echo json_encode(["status" => "success"]);
+>>>>>>> main
 ?>
