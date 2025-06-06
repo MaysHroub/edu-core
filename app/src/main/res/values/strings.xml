@@ -34,4 +34,6 @@
     <string name="enter_teacher_s_date_of_birth">Enter teacher\'s date of birth:</string>
     <string name="phone_number">Phone Number</string>
     <string name="subject_taught">Subject taught:</string>
+    <string name="grade">Grade:</string>
+    <string name="semester">Semester:</string>
 </resources>
