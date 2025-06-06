@@ -16,9 +16,11 @@ import java.util.List;
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHolder> {
 
     private final List<Subject> subjects;
+    private final OnItemClickListener listener;
 
-    public SubjectAdapter(List<Subject> subjects) {
+    public SubjectAdapter(List<Subject> subjects, OnItemClickListener listener) {
         this.subjects = subjects;
+        this.listener = listener;
     }
 
     @NonNull
@@ -31,7 +33,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Subject subject = subjects.get(position);
-        holder.bind(subject);
+        holder.bind(subject, listener);
     }
 
     @Override
@@ -49,11 +51,16 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
             txtSubjectSemester = view.findViewById(R.id.txt_subj_semester);
         }
 
-        public void bind(Subject subject) {
+        public void bind(Subject subject, OnItemClickListener listener) {
             txtSubjectTitle.setText(subject.getTitle());
             txtSubjectGrade.setText(subject.getGradeNumber()+"");
             txtSubjectSemester.setText(subject.getSemesterNumber() == 1 ? "First" : "Second");
+            itemView.setOnClickListener(v -> listener.onItemClick(subject));
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Subject subject);
     }
 
 }

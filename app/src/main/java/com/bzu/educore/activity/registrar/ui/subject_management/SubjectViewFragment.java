@@ -17,8 +17,9 @@ import com.bzu.educore.activity.registrar.ui.teacher_registration.TeacherRegistr
 import com.bzu.educore.adapter.registrar.SubjectAdapter;
 import com.bzu.educore.databinding.FragmentSubjectViewBinding;
 import com.bzu.educore.databinding.FragmentTeacherRegistrationBinding;
+import com.bzu.educore.model.school.Subject;
 
-public class SubjectViewFragment extends Fragment {
+public class SubjectViewFragment extends Fragment implements SubjectAdapter.OnItemClickListener {
 
     private FragmentSubjectViewBinding binding;
     private SubjectManagementViewModel subjectManagementViewModel;
@@ -31,7 +32,7 @@ public class SubjectViewFragment extends Fragment {
         View root = binding.getRoot();
 
         subjectManagementViewModel.getSubjects().observe(getViewLifecycleOwner(), subjects -> {
-            SubjectAdapter adapter = new SubjectAdapter(subjects);
+            SubjectAdapter adapter = new SubjectAdapter(subjects, SubjectViewFragment.this);
             binding.rclrviewSubjects.setAdapter(adapter);
         });
 
@@ -46,4 +47,8 @@ public class SubjectViewFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void onItemClick(Subject subject) {
+        // TODO: open modify-subject fragment
+    }
 }
