@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.teacher;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,7 +36,6 @@ public class StudentListActivity extends AppCompatActivity
     private RecyclerView recyclerViewStudents;
     private Button btnPublishMarks;
     private EditText etSearchStudent;
-
     private UnifiedStudentAdapter studentAdapter;
     private final List<StudentSubmission> studentList = new ArrayList<>();
     private final List<StudentSubmission> filteredStudentList = new ArrayList<>();
@@ -247,12 +248,25 @@ public class StudentListActivity extends AppCompatActivity
     @Override
     public void onViewSubmissionClick(StudentSubmission submission) {
         if (submission.getSubmissionFileUrl() != null && !submission.getSubmissionFileUrl().isEmpty()) {
-            Toast.makeText(this, "View URL: " + submission.getSubmissionFileUrl(), Toast.LENGTH_SHORT).show();
-            // TODO: Open file viewer or browser
+            try {
+                Uri uri = Uri.parse(submission.getSubmissionFileUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(uri);
+                if (intent.resolveActivity(this.getPackageManager()) != null) {
+                    this.startActivity(intent);
+                } else {
+                    Toast.makeText(this, "No app found to open this file", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (Exception e) {
+                Toast.makeText(this, "Error opening file", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
         } else {
             Toast.makeText(this, "No submission file available", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public void onMarkChanged(String studentId, Double newMark) {

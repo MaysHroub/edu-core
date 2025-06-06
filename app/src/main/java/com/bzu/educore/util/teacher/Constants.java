@@ -20,8 +20,4 @@ public class Constants {
     public static final String ALL_SUBJECTS = "All Subjects";
     public static final String ALL_GRADES = "All Grades";
     public static final String ALL_TYPES = "All";
-
-    // Task types
-    public static final String TYPE_ASSIGNMENT = "assignment";
-    public static final String TYPE_EXAM = "exam";
 }
