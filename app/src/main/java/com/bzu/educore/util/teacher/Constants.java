@@ -6,6 +6,8 @@ public class Constants {
     public static final String SEARCH_TASKS_URL = BASE_URL + "search_tasks.php";
     public static final String GET_SUBJECTS_URL = BASE_URL + "get_subjects.php";
     public static final String GET_GRADES_URL = BASE_URL + "get_grades.php";
+    public static final String PUBLISH_MARKS_URL = BASE_URL + "publish_marks.php";
+
 
     // Grading
     public static final double MIN_MARK = 0.0;

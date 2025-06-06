@@ -169,7 +169,7 @@ public class StudentListActivity extends AppCompatActivity
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2/android/publish_marks.php",
+                Constants.PUBLISH_MARKS_URL,
                 requestBody,
                 response -> {
                     btnPublishMarks.setEnabled(true);
