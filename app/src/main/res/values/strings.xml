@@ -36,4 +36,13 @@
     <string name="subject_taught">Subject taught:</string>
     <string name="grade">Grade:</string>
     <string name="semester">Semester:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="subject_id">Subject ID:</string>
+    <string name="subject_title">Subject Title:</string>
+    <string name="subject_target_grade">Subject Target Grade:</string>
+    <string name="subject_target_semester">Subject Target Semester:</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="back">back</string>
 </resources>
