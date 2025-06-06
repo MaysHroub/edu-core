@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".activity.registrar.ui.teacher_registration.TeacherRegistrationFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_a_new_teacher"/>
+
+    <EditText
+        android:id="@+id/edttxt_tchr_fname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/first_name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/edttxt_tchr_lname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/last_name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/edttxt_tchr_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/phone_number"
+        android:inputType="phone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_teacher_s_date_of_birth"
+        android:layout_marginTop="24dp"/>
+
+    <Button
+        android:id="@+id/btn_tchr_dob"
+        style="?android:spinnerStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/june_14_2025"
+        android:textColor="@color/black" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/subject_taught"/>
+
+        <Spinner
+            android:id="@+id/spnr_tchr_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/generated_id"
+        android:layout_marginTop="24dp"/>
+
+    <EditText
+        android:id="@+id/edttxt_tchr_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="TCHR ID"
+        android:inputType="none" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/generated_email"
+        android:layout_marginTop="24dp"/>
+
+    <EditText
+        android:id="@+id/edttxt_tchr_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="TCHR EMAIL"
+        android:inputType="none" />
+
+    <Button
+        android:id="@+id/btn_tchr_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Register Teacher" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
