@@ -14,10 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bzu.educore.R;
-import com.bzu.educore.activity.registrar.ui.teacher_registration.TeacherRegistrationViewModel;
 import com.bzu.educore.adapter.registrar.SubjectAdapter;
 import com.bzu.educore.databinding.FragmentSubjectViewBinding;
-import com.bzu.educore.databinding.FragmentTeacherRegistrationBinding;
 import com.bzu.educore.model.school.Subject;
 
 public class SubjectViewFragment extends Fragment implements SubjectAdapter.OnItemClickListener {

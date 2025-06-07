@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.teacher_registration;
+package com.bzu.educore.activity.registrar.ui.teacher_management;
 
 import com.bzu.educore.model.school.Subject;
 

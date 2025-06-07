@@ -7,7 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.bzu.educore.activity.registrar.ui.teacher_registration.DummyTeacher;
+import com.bzu.educore.activity.registrar.ui.teacher_management.DummyTeacher;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
 import com.google.gson.Gson;
