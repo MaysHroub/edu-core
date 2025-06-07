@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.bzu.educore.activity.registrar.ui.student_management.StudentRegistrationFragment"
+        android:name="com.bzu.educore.activity.registrar.ui.student_management.ModifyStudentFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_student_registration" />
+        tools:layout="@layout/fragment_modify_student" />
 
     <fragment
         android:id="@+id/nav_slideshow"

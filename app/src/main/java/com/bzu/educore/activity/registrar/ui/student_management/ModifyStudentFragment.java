@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.registrar.ui.student_management;
 
+import static android.view.View.VISIBLE;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
+import com.bzu.educore.databinding.FragmentModifyStudentBinding;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.CredentialsGenerator;
 
@@ -20,30 +22,62 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 // TODO: add button to navigate back
-public class StudentRegistrationFragment extends Fragment {
+public class ModifyStudentFragment extends Fragment {
 
-    private FragmentStudentRegistrationBinding binding;
+    private FragmentModifyStudentBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
     private int generatedId;
     private String generatedEmail;
     private LocalDate dob;
+    private int index;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         studentManagementViewModel =
                 new ViewModelProvider(this).get(StudentManagementViewModel.class);
-
-        binding = FragmentStudentRegistrationBinding.inflate(inflater, container, false);
+        binding = FragmentModifyStudentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        index = studentManagementViewModel.getIndex().getValue();
+
+        fillClassroomSpinner();
+        binding.btnSaveStd.setOnClickListener(v -> saveStudent());
+        binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
+
+        if (index == -1)
+            generateCredentials();
+        else {
+            fillViewWithData();
+
+        }
+
+        return root;
+    }
+
+    private void fillViewWithData() {
+        DummyStudent student = studentManagementViewModel.getStudents().getValue().get(index);
+        binding.edttxtStdId.setText(student.getId()+"");
+        binding.edttxtStdEmail.setText(student.getEmail());
+        binding.edttxtStdFname.setText(student.getFname());
+        binding.edttxtStdLname.setText(student.getLname());
+        String date = student.getDateOfBirth().getYear() + "-" + student.getDateOfBirth().getMonthValue() + "-" + student.getDateOfBirth().getDayOfMonth();
+        binding.btnStdDob.setText(date);
+        int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(student.getClassroom());
+        binding.spnrStdClassroom.setSelection(pos);
+    }
+
+    private void generateCredentials() {
         studentManagementViewModel.getNumOfStudentsForCurrentYear().observe(getViewLifecycleOwner(), numOfStds -> {
             generatedId = CredentialsGenerator.generateStudentId(numOfStds);
             generatedEmail = CredentialsGenerator.generateStudentEmail(generatedId);
             binding.edttxtStdId.setText(generatedId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
         });
+        studentManagementViewModel.fetchNumOfStudentsForCurrentYear();
+    }
 
+    private void fillClassroomSpinner() {
         studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
             ArrayAdapter<DummyClassroom> adapter = new ArrayAdapter<>(
                     requireContext(),
@@ -52,17 +86,10 @@ public class StudentRegistrationFragment extends Fragment {
             );
             binding.spnrStdClassroom.setAdapter(adapter);
         });
-
-        studentManagementViewModel.fetchNumOfStudentsForCurrentYear();
         studentManagementViewModel.fetchAllClassrooms();
-
-        binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
-        binding.btnStdRegister.setOnClickListener(v -> addStudentToDB());
-
-        return root;
     }
 
-    private void addStudentToDB() {
+    private void saveStudent() {
         if (!InputValidator.validateEditTexts(binding.edttxtStdFname, binding.edttxtStdLname) ||
                 !InputValidator.validateSpinners(binding.spnrStdClassroom) ||
                 dob == null) {
@@ -74,7 +101,11 @@ public class StudentRegistrationFragment extends Fragment {
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
         // TODO: replace dummy-student with actual student class
         DummyStudent student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
-        studentManagementViewModel.registerStudent(student);
+
+        if (index == -1)
+            studentManagementViewModel.registerStudent(student);
+        else
+            studentManagementViewModel.updateStudent(student);
     }
 
     private void showDatePickerDialog() {

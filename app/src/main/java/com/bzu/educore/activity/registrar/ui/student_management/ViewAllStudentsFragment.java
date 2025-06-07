@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.registrar.UserAdapter;
-import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
 import com.bzu.educore.databinding.FragmentViewAllStudentsBinding;
 import com.bzu.educore.listener.OnItemClickListener;
 import com.bzu.educore.model.user.Person;
@@ -41,7 +40,8 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
         studentManagementViewModel.fetchAllStudents();
 
         binding.layoutViewAllUsrs.fltbtnAddStd.setOnClickListener(v -> {
-            StudentRegistrationFragment fragment = new StudentRegistrationFragment();
+            ModifyStudentFragment fragment = new ModifyStudentFragment();
+            studentManagementViewModel.setIndex(-1);
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
             transaction.addToBackStack(null); // so the user can navigate back
@@ -53,6 +53,11 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
 
     @Override
     public void onItemClick(int position) {
-
+        ModifyStudentFragment fragment = new ModifyStudentFragment();
+        studentManagementViewModel.setIndex(position);
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
+        transaction.addToBackStack(null); // so the user can navigate back
+        transaction.commit();
     }
 }

@@ -6,15 +6,13 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".activity.registrar.ui.student_management.StudentRegistrationFragment">
+    tools:context=".activity.registrar.ui.student_management.ModifyStudentFragment">
 
-    <TextView
-        android:id="@+id/textView2"
+    <ImageView
+        android:id="@+id/img_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register_a_new_student"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:srcCompat="@drawable/baseline_arrow_back_24" />
 
     <EditText
         android:id="@+id/edttxt_std_fname"
@@ -96,10 +94,11 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <Button
-        android:id="@+id/btn_std_register"
+        android:id="@+id/btn_save_std"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="@string/register_student" />
+        android:text="@string/save" />
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>
