@@ -100,6 +100,11 @@ public class SubjectModifyFragment extends Fragment {
         binding.spnrSubjSemester.setAdapter(semesterAdapter);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
 
 
