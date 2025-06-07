@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.repository.registrar.StatsRepository;
-import com.bzu.educore.repository.registrar.TeacherRepository;
 import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
 
