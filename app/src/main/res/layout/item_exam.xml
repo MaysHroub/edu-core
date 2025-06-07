@@ -26,7 +26,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mathematics"
+                android:text="@string/mathematics"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#333333" />
@@ -35,7 +35,7 @@
                 android:id="@+id/tv_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Grade 9"
+                android:text="@string/grade_9"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:padding="4dp"
@@ -53,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Teacher: John Smith"
+                android:text="@string/teacher_john_smith"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:gravity="center_vertical" />
@@ -62,7 +62,7 @@
                 android:id="@+id/tv_max_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Max: 100.0"
+                android:text="@string/max_100_0"
                 android:textSize="14sp"
                 android:textColor="#FF9800"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Exam Date: 2025-01-25"
+                android:text="@string/exam_date_2025_01_25"
                 android:textSize="12sp"
                 android:textColor="#666666" />
         </LinearLayout>
@@ -88,7 +88,7 @@
             android:id="@+id/btn_view_submissions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Submissions"
+            android:text="@string/view_submissions"
             android:layout_gravity="end"
             android:textColor="@android:color/white"
             android:paddingStart="16dp"

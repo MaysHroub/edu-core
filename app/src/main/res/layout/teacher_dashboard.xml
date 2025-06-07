@@ -13,7 +13,7 @@
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome, Teacher"
+        android:text="@string/welcome_teacher"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp"
@@ -51,14 +51,14 @@
                     android:id="@+id/iconAssignment"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="Create Assignment"
+                    android:contentDescription="@string/create_assignment_desc"
                     android:src="@drawable/assignment_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Assignment"
+                    android:text="@string/create_assignment"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -84,14 +84,14 @@
                     android:id="@+id/iconExam"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="Announce Exam"
+                    android:contentDescription="@string/announce_exam_desc"
                     android:src="@drawable/exam_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Exam"
+                    android:text="@string/announce_exam"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -117,18 +117,19 @@
                     android:id="@+id/iconSubmissions"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="View submissions"
+                    android:contentDescription="@string/view_marks_desc"
                     android:src="@drawable/marks_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Marks"
+                    android:text="@string/view_marks"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- View Time Table -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewTimeTable"
             android:layout_width="150dp"
@@ -149,20 +150,21 @@
                     android:id="@+id/timeTable"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="View submissions"
+                    android:contentDescription="@string/view_timetable_desc"
                     android:src="@drawable/time_table" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Time Table"
+                    android:text="@string/view_timetable"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
     </GridLayout>
-    <!-- View Submissions -->
+
+    <!-- View Attendance -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewAttendance"
         android:layout_width="150dp"
@@ -182,14 +184,14 @@
                 android:id="@+id/iconAttendance"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="Attendance"
+                android:contentDescription="@string/view_attendance_desc"
                 android:src="@drawable/attendance_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Attendance"
+                android:text="@string/view_attendance"
                 android:textSize="16sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

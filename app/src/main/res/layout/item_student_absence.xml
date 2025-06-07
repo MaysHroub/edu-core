@@ -19,7 +19,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/student_icon"
-            android:contentDescription="Profile picture"
+            android:contentDescription="@string/profile_picture_desc"
             android:layout_marginEnd="12dp" />
 
         <!-- Student name -->
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Student Name"
+            android:text="@string/student_name_placeholder"
             android:textSize="16sp"
             android:layout_marginEnd="12dp" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/cbAbsent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Absent" />
+            android:text="@string/absent_label" />
 
     </LinearLayout>
 
@@ -56,14 +56,14 @@
             android:id="@+id/rbUnexcused"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unexcused"
+            android:text="@string/unexcused_label"
             android:layout_marginEnd="16dp" />
 
         <RadioButton
             android:id="@+id/rbExcused"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Excused" />
+            android:text="@string/excused_label" />
 
     </RadioGroup>
 

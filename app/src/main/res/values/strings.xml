@@ -33,5 +33,36 @@
     <string name="register_a_new_teacher">Register a New Teacher</string>
     <string name="enter_teacher_s_date_of_birth">Enter teacher\'s date of birth:</string>
     <string name="phone_number">Phone Number</string>
-    <string name="subject_taught">Subject taught:</string>
+    <string name="subject_taught">Subject taught:</string>     <string name="welcome_teacher">Welcome, Teacher</string>
+    <string name="student_profile_desc">Student Profile</string>
+    <string name="student_name_placeholder">Student Name</string>
+    <string name="mark_hint">Mark</string>
+    <string name="toggle_feedback_desc">Toggle Feedback</string>
+    <string name="feedback_label">Feedback:</string>
+    <string name="feedback_hint">Enter feedback for student...</string>
+    <string name="profile_picture_desc">Profile picture</string>
+    <string name="absent_label">Absent</string>
+    <string name="unexcused_label">Unexcused</string>
+    <string name="excused_label">Excused</string>
+    <string name="create_assignment">Assignment</string>
+    <string name="create_assignment_desc">Create Assignment</string>
+    <string name="announce_exam">Exam</string>
+    <string name="announce_exam_desc">Announce Exam</string>
+    <string name="view_marks">Marks</string>
+    <string name="view_marks_desc">View submissions</string>
+    <string name="view_timetable">Time Table</string>
+    <string name="view_timetable_desc">View timetable</string>
+    <string name="view_attendance">Attendance</string>
+    <string name="view_attendance_desc">Attendance</string>
+    <string name="class_grade">Class Grade</string>
+    <string name="subject_name">Subject Name</string>
+    <string name="view_submissions">View Submissions</string>
+    <string name="exam_date_2025_01_25">Exam Date: 2025-01-25</string>
+    <string name="max_100_0">Max: 100.0</string>
+    <string name="teacher_john_smith">Teacher: John Smith</string>
+    <string name="grade_9">Grade 9</string>
+    <string name="select_class">Select Class</string>
+    <string name="no_timetable_available">No timetable available.</string>
+    <string name="register_teacher">Register Teacher</string>
+    <string name="tchr_email">TCHR EMAIL</string>
 </resources>
