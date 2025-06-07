@@ -53,6 +53,11 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
             transaction.commit();
         });
 
+        teacherManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success)
+                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyItemRemoved(teacherManagementViewModel.getCurrentIndex().getValue());
+        });
+
         return binding.getRoot();
     }
 

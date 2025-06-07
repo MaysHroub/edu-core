@@ -48,6 +48,11 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
             transaction.commit();
         });
 
+        studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success)
+                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyItemRemoved(studentManagementViewModel.getIndex().getValue());
+        });
+
         return binding.getRoot();
     }
 
