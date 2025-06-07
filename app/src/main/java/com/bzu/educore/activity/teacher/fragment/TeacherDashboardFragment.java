@@ -30,6 +30,8 @@ public class TeacherDashboardFragment extends BaseFragment {
         CardView cardCreateAssignment = view.findViewById(R.id.cardCreateAssignment);
         CardView cardAnnounceExam    = view.findViewById(R.id.cardAnnounceExam);
         CardView cardSubmissions     = view.findViewById(R.id.cardViewSubmissions);
+        CardView cardAttendance     = view.findViewById(R.id.cardViewAttendance);
+
 
         cardCreateAssignment.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -56,5 +58,13 @@ public class TeacherDashboardFragment extends BaseFragment {
                         true
                 )
         );
+        cardAttendance.setOnClickListener(v -> {
+            int dummyTeacherId = 14;
+            int dummyClassId   = 1;
+
+            AbsenceFragment frag = AbsenceFragment.newInstance(dummyTeacherId, dummyClassId);
+            ((TeacherMainActivity) requireActivity()).loadFragment(frag, true);
+        });
+
     }
 }
