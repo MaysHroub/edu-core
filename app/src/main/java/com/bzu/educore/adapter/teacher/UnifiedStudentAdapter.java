@@ -1,5 +1,8 @@
 package com.bzu.educore.adapter.teacher;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -8,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,184 +23,158 @@ import java.util.List;
 
 public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAdapter.StudentViewHolder> {
 
-    public enum DisplayMode {
-        ASSIGNMENT_MODE,
-        EXAM_MODE
-    }
+    public enum DisplayMode { ASSIGNMENT_MODE, EXAM_MODE }
 
+    private final Context context;
     private final List<StudentSubmission> students;
     private final DisplayMode displayMode;
-    private final OnViewSubmissionClickListener viewSubmissionClickListener;
-    private final OnMarkChangedListener markChangedListener;
     private final double maxMark;
 
     public UnifiedStudentAdapter(
+            Context context,
             List<StudentSubmission> students,
             DisplayMode displayMode,
-            OnViewSubmissionClickListener viewSubmissionClickListener,
-            OnMarkChangedListener markChangedListener,
             double maxMark
     ) {
+        this.context = context;
         this.students = students;
         this.displayMode = displayMode;
-        this.viewSubmissionClickListener = viewSubmissionClickListener;
-        this.markChangedListener = markChangedListener;
         this.maxMark = maxMark;
     }
 
     @NonNull
     @Override
     public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = displayMode == DisplayMode.EXAM_MODE ?
-                R.layout.item_student_exam : R.layout.item_student_submission;
-        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
-        return new StudentViewHolder(view, displayMode);
+        int layout = displayMode == DisplayMode.EXAM_MODE
+                ? R.layout.item_student_exam
+                : R.layout.item_student_submission;
+        View v = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+        return new StudentViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
-        StudentSubmission student = students.get(position);
-        holder.bind(student, maxMark, viewSubmissionClickListener, markChangedListener);
+    public void onBindViewHolder(@NonNull StudentViewHolder h, int pos) {
+        h.bind(students.get(pos));
     }
 
     @Override
-    public int getItemCount() {
-        return students.size();
-    }
+    public int getItemCount() { return students.size(); }
 
     @Override
-    public void onViewRecycled(@NonNull StudentViewHolder holder) {
-        holder.cleanup();
-        super.onViewRecycled(holder);
+    public void onViewRecycled(@NonNull StudentViewHolder h) {
+        h.cleanup();
+        super.onViewRecycled(h);
     }
 
-    static class StudentViewHolder extends RecyclerView.ViewHolder {
+    class StudentViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgPfp, imgToggle;
+        TextView tvName, tvStatus, tvDate;
+        Button btnView;
+        EditText etMark, etFeedback;
+        LinearLayout llFeedback;
+        TextWatcher markWatcher, fbWatcher;
+        boolean feedbackOpen = false;
 
-        private final ImageView imgStudentPfp;
-        private final TextView tvStudentName;
-        private final TextView tvSubmissionStatus;
-        private final TextView tvSubmissionDate;
-        private final Button btnViewSubmission;
-        private final EditText etStudentMarkInput;
-        private final DisplayMode displayMode;
-
-        private TextWatcher markTextWatcher;
-
-        public StudentViewHolder(@NonNull View itemView, DisplayMode mode) {
+        StudentViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.displayMode = mode;
-
-            imgStudentPfp = itemView.findViewById(R.id.imgStudentPfp);
-            tvStudentName = itemView.findViewById(R.id.tvStudentName);
-            etStudentMarkInput = itemView.findViewById(R.id.etStudentMarkInput);
-
-            if (mode == DisplayMode.ASSIGNMENT_MODE) {
-                tvSubmissionStatus = itemView.findViewById(R.id.tvSubmissionStatus);
-                tvSubmissionDate = itemView.findViewById(R.id.tvSubmissionDate);
-                btnViewSubmission = itemView.findViewById(R.id.btnViewSubmission);
-            } else {
-                tvSubmissionStatus = null;
-                tvSubmissionDate = null;
-                btnViewSubmission = null;
-            }
-        }
-
-        public void bind(StudentSubmission student, double maxMark,
-                         OnViewSubmissionClickListener viewClickListener,
-                         OnMarkChangedListener markChangedListener) {
-
-            tvStudentName.setText(student.getStudentName());
+            imgPfp      = itemView.findViewById(R.id.imgStudentPfp);
+            imgToggle   = itemView.findViewById(R.id.imgFeedbackToggle);
+            tvName      = itemView.findViewById(R.id.tvStudentName);
+            etMark      = itemView.findViewById(R.id.etStudentMarkInput);
+            llFeedback  = itemView.findViewById(R.id.llFeedbackSection);
+            etFeedback  = itemView.findViewById(R.id.etFeedbackInput);
 
             if (displayMode == DisplayMode.ASSIGNMENT_MODE) {
-                bindAssignmentInfo(student, viewClickListener);
+                tvStatus = itemView.findViewById(R.id.tvSubmissionStatus);
+                tvDate   = itemView.findViewById(R.id.tvSubmissionDate);
+                btnView  = itemView.findViewById(R.id.btnViewSubmission);
             }
-
-            bindMarkInput(student, maxMark, markChangedListener);
         }
 
-        private void bindAssignmentInfo(StudentSubmission student, OnViewSubmissionClickListener listener) {
-            tvSubmissionStatus.setText(StatusUtils.formatStatus(student.getStatus()));
-            tvSubmissionStatus.setTextColor(StatusUtils.getStatusColor(student.getStatus()));
+        void bind(StudentSubmission s) {
+            tvName.setText(s.getStudentName());
 
-            String date = student.getSubmissionDate();
-            if (date != null && !date.isEmpty() && !"null".equals(date)) {
-                tvSubmissionDate.setText("Submitted: " + date);
-                tvSubmissionDate.setVisibility(View.VISIBLE);
-            } else {
-                tvSubmissionDate.setVisibility(View.GONE);
+            if (displayMode == DisplayMode.ASSIGNMENT_MODE) {
+                // status + date
+                int color = StatusUtils.getStatusColor(s.getStatus());
+                tvStatus.setText(StatusUtils.formatStatus(s.getStatus()));
+                tvStatus.setTextColor(color);
+
+                String d = s.getSubmissionDate();
+                if (d!=null && d.length()>0 && !"null".equals(d)) {
+                    tvDate.setText("Submitted: "+d);
+                    tvDate.setVisibility(View.VISIBLE);
+                } else tvDate.setVisibility(View.GONE);
+
+                boolean canView = StatusUtils.canViewSubmission(s.getStatus());
+                btnView.setEnabled(canView);
+                btnView.setAlpha(canView?1f:0.5f);
+                btnView.setOnClickListener(v -> {
+                    String url = s.getSubmissionFileUrl();
+                    if (url!=null && !url.isEmpty()) {
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        if (i.resolveActivity(context.getPackageManager())!=null)
+                            context.startActivity(i);
+                    }
+                });
             }
 
-            boolean canView = StatusUtils.canViewSubmission(student.getStatus());
-            btnViewSubmission.setEnabled(canView);
-            btnViewSubmission.setAlpha(canView ? 1.0f : 0.5f);
-            btnViewSubmission.setOnClickListener(v -> {
-                if (listener != null && canView) {
-                    listener.onViewSubmissionClick(student);
+            // MARK
+            if (markWatcher!=null) etMark.removeTextChangedListener(markWatcher);
+            boolean canMark = displayMode==DisplayMode.EXAM_MODE
+                    || StatusUtils.canMarkSubmission(s.getStatus());
+            etMark.setEnabled(canMark);
+            etMark.setAlpha(canMark?1f:0.5f);
+            etMark.setHint(canMark?"Mark":"N/A");
+            etMark.setText(s.getMark()!=null
+                    ? String.format("%.2f", s.getMark())
+                    : "");
+            markWatcher = new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence c,int a,int b,int d){}
+                @Override public void afterTextChanged(Editable e){}
+                @Override public void onTextChanged(CharSequence c,int a,int b,int d) {
+                    MarkValidator.ValidationResult r =
+                            MarkValidator.validateMark(c.toString(), maxMark);
+                    s.setMark(r.value);
                 }
-            });
+            };
+            etMark.addTextChangedListener(markWatcher);
+            imgToggle.setVisibility(canMark ? View.VISIBLE : View.GONE);
+
+            // FEEDBACK
+            if (fbWatcher!=null) etFeedback.removeTextChangedListener(fbWatcher);
+            String fb = s.getFeedback();
+            boolean hasFb = fb!=null && fb.trim().length()>0 && !"null".equalsIgnoreCase(fb);
+            etFeedback.setText(hasFb ? fb : "");
+            if (hasFb && !feedbackOpen) toggleFeedback();
+            imgToggle.setOnClickListener(v -> toggleFeedback());
+            fbWatcher = new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence c,int a,int b,int d){}
+                @Override public void afterTextChanged(Editable e){}
+                @Override public void onTextChanged(CharSequence c,int a,int b,int d) {
+                    String t = c.toString().trim();
+                    s.setFeedback(t.isEmpty() ? null : t);
+                }
+            };
+            etFeedback.addTextChangedListener(fbWatcher);
+            imgToggle.setAlpha(hasFb ? 1f : 0.6f);
         }
 
-        private void bindMarkInput(StudentSubmission student, double maxMark, OnMarkChangedListener listener) {
-            cleanup();
-
-            boolean canMark = displayMode == DisplayMode.EXAM_MODE ||
-                    StatusUtils.canMarkSubmission(student.getStatus());
-
-            etStudentMarkInput.setEnabled(canMark);
-            etStudentMarkInput.setAlpha(canMark ? 1.0f : 0.5f);
-            etStudentMarkInput.setHint(canMark ? "Mark" : "N/A");
-
-            if (student.getMark() != null) {
-                etStudentMarkInput.setText(String.format("%.2f", student.getMark()));
-            } else {
-                etStudentMarkInput.setText("");
-            }
-
-            markTextWatcher = new MarkTextWatcher(student, maxMark, listener);
-            etStudentMarkInput.addTextChangedListener(markTextWatcher);
+        void toggleFeedback() {
+            feedbackOpen = !feedbackOpen;
+            llFeedback.setVisibility(feedbackOpen
+                    ? View.VISIBLE : View.GONE);
+            imgToggle.animate()
+                    .rotation(feedbackOpen?180f:0f)
+                    .setDuration(200).start();
+            if (feedbackOpen) etFeedback.requestFocus();
         }
 
-        public void cleanup() {
-            if (markTextWatcher != null) {
-                etStudentMarkInput.removeTextChangedListener(markTextWatcher);
-                markTextWatcher = null;
-            }
+        void cleanup() {
+            if (markWatcher!=null)
+                etMark.removeTextChangedListener(markWatcher);
+            if (fbWatcher!=null)
+                etFeedback.removeTextChangedListener(fbWatcher);
         }
-    }
-
-    private static class MarkTextWatcher implements TextWatcher {
-
-        private final StudentSubmission student;
-        private final double maxMark;
-        private final OnMarkChangedListener listener;
-
-        public MarkTextWatcher(StudentSubmission student, double maxMark, OnMarkChangedListener listener) {
-            this.student = student;
-            this.maxMark = maxMark;
-            this.listener = listener;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            MarkValidator.ValidationResult result = MarkValidator.validateMark(s.toString(), maxMark);
-            student.setMark(result.value);
-            if (listener != null) {
-                listener.onMarkChanged(student.getStudentId(), result.value);
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {}
-    }
-
-    public interface OnViewSubmissionClickListener {
-        void onViewSubmissionClick(StudentSubmission submission);
-    }
-
-    public interface OnMarkChangedListener {
-        void onMarkChanged(String studentId, Double mark);
     }
 }
