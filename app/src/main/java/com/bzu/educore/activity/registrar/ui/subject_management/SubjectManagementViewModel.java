@@ -23,16 +23,38 @@ import java.util.List;
 public class SubjectManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Subject>> subjects;
+    private final MutableLiveData<Subject> currentSubject;
     private final SubjectRepository subjectRepo;
 
     public SubjectManagementViewModel(@NonNull Application application) {
         super(application);
         subjectRepo = new SubjectRepository(application);
         subjects = new MutableLiveData<>();
+        currentSubject = new MutableLiveData<>();
     }
 
     public LiveData<List<Subject>> getSubjects() {
         return subjects;
+    }
+
+    public LiveData<Subject> getCurrentSubject() {
+        return currentSubject;
+    }
+
+    public void setCurrentSubject(Subject subject) {
+        currentSubject.setValue(subject);
+    }
+
+    public void updateSubject(Subject modifiedSubject) {
+        subjectRepo.updateSubject(
+                modifiedSubject,
+                response -> {
+                    Toast.makeText(getApplication(), "Modifications are saved!", LENGTH_SHORT).show();
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
     }
 
     public void fetchAllSubjects() {
@@ -56,5 +78,4 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                 }
         );
     }
-
 }
