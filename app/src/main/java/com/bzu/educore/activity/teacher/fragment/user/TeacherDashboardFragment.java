@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment;
+package com.bzu.educore.activity.teacher.fragment.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.cardview.widget.CardView;
 
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
+import com.bzu.educore.activity.teacher.fragment.BaseFragment;
+import com.bzu.educore.activity.teacher.fragment.task.SearchTasksFragment;
 
 public class TeacherDashboardFragment extends BaseFragment {
 

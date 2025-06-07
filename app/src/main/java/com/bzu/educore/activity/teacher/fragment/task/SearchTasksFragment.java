@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment;
+package com.bzu.educore.activity.teacher.fragment.task;
 
 import android.os.Bundle;
 import android.text.Editable;

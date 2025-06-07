@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment;
+package com.bzu.educore.activity.teacher.fragment.user;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.*;
