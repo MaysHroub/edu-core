@@ -8,17 +8,24 @@
     android:padding="16dp"
     tools:context=".activity.registrar.ui.teacher_management.ModifyTeacherFragment">
 
+
     <ImageView
         android:id="@+id/img_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:srcCompat="@drawable/baseline_arrow_back_24" />
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        tools:srcCompat="@drawable/teacher" />
+
     <EditText
         android:id="@+id/edttxt_tchr_fname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/first_name"
         android:inputType="text" />
@@ -105,7 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <Button
             android:id="@+id/btn_tchr_save"
@@ -117,7 +124,6 @@
             android:id="@+id/btn_tchr_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:visibility="gone"
             android:text="@string/delete"/>
 
