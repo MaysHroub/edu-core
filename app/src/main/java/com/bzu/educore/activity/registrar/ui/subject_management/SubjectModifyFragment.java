@@ -49,7 +49,6 @@ public class SubjectModifyFragment extends Fragment {
         });
 
         binding.btnSubjDelete.setOnClickListener(v -> {
-
             DialogUtils.showConfirmationDialog(
                     requireContext(),
                     "Delete Subject",
@@ -62,6 +61,10 @@ public class SubjectModifyFragment extends Fragment {
                         });
                     }
             );
+        });
+
+        binding.imgBack.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         return binding.getRoot();
