@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
-import com.bzu.educore.util.CredentialsGenerator;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -37,7 +36,7 @@ public class ModifyStudentFragment extends Fragment {
         binding = FragmentModifyStudentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        index = studentManagementViewModel.getIndex().getValue();
+        index = studentManagementViewModel.getCurrentIndex().getValue();
 
         fillClassroomSpinner();
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
@@ -69,9 +68,8 @@ public class ModifyStudentFragment extends Fragment {
 
     private void generateCredentials() {
         studentManagementViewModel.getStudentId().observe(getViewLifecycleOwner(), studentId -> {
-            int generatedId = studentId;
             String generatedEmail = String.format("%d@student.educore.edu", studentId);
-            binding.edttxtStdId.setText(generatedId+"");
+            binding.edttxtStdId.setText(studentId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
         });
         studentManagementViewModel.generateStudentId();
@@ -117,8 +115,8 @@ public class ModifyStudentFragment extends Fragment {
                 "Delete Student",
                 "Are you sure you want to delete this student?",
                 () -> {
-                    int generatedId = Integer.parseInt(binding.edttxtStdId.getText().toString());
-                    studentManagementViewModel.deleteStudentById(generatedId);
+                    int studentId = Integer.parseInt(binding.edttxtStdId.getText().toString());
+                    studentManagementViewModel.deleteStudentById(studentId);
                     studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
                         if (!success) return;
                         requireActivity().getSupportFragmentManager().popBackStack();

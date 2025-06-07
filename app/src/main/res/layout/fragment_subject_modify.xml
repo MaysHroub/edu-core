@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".activity.registrar.ui.subject_management.SubjectModifyFragment">
+    tools:context=".activity.registrar.ui.subject_management.ModifySubjectFragment">
 
     <ImageView
         android:id="@+id/img_back"

@@ -1,12 +1,14 @@
-package com.bzu.educore.activity.registrar.ui.teacher_registration;
+package com.bzu.educore.activity.registrar.ui.teacher_management;
 
 import com.bzu.educore.model.school.Subject;
 
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class DummyTeacher {
     private Integer id;
     private String fname, lname, email, phoneNumber;
