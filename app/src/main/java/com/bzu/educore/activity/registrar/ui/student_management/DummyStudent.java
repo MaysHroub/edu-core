@@ -20,11 +20,3 @@ public class DummyStudent extends Person {
 
 }
 
-@AllArgsConstructor
-@Getter
-@Setter
-public class DummyClassroom {
-    private int grade_number;
-    private char section;
-    private int homeroom_teacher_id;
-}

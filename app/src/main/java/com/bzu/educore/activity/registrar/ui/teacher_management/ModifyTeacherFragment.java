@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
 import com.bzu.educore.databinding.FragmentModifyTeacherBinding;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.DialogUtils;
@@ -52,6 +53,27 @@ public class ModifyTeacherFragment extends Fragment {
         }
 
         return root;
+    }
+
+    private void saveTeacher() {
+        if (!InputValidator.validateEditTexts(binding.edttxtTchrFname, binding.edttxtTchrLname, binding.edttxtTchrPhone) ||
+                !InputValidator.validateSpinners(binding.spnrTchrSubject) ||
+                dob == null) {
+            Toast.makeText(requireContext(), "Please Fill Empty Fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String fname = binding.edttxtTchrFname.getText().toString(),
+                lname = binding.edttxtTchrLname.getText().toString(),
+                phoneNumber = binding.edttxtTchrPhone.getText().toString();
+        Subject subject = (Subject) binding.spnrTchrSubject.getSelectedItem();
+        int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
+        String generatedEmail = binding.edttxtTchrEmail.getText().toString();
+        // TODO: replace dummy-teacher with actual teacher class
+        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, phoneNumber, subject, dob);
+        if (index == -1)
+            teacherManagementViewModel.registerTeacher(teacher);
+        else
+            teacherManagementViewModel.updateTeacher(teacher);
     }
 
     private void deleteTeacher() {
@@ -102,27 +124,6 @@ public class ModifyTeacherFragment extends Fragment {
             binding.spnrTchrSubject.setAdapter(adapter);
         });
         teacherManagementViewModel.fetchAllSubjects();
-    }
-
-    private void saveTeacher() {
-        if (!InputValidator.validateEditTexts(binding.edttxtTchrFname, binding.edttxtTchrLname, binding.edttxtTchrPhone) ||
-                !InputValidator.validateSpinners(binding.spnrTchrSubject) ||
-                dob == null) {
-            Toast.makeText(requireContext(), "Please Fill Empty Fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String fname = binding.edttxtTchrFname.getText().toString(),
-                lname = binding.edttxtTchrLname.getText().toString(),
-                phoneNumber = binding.edttxtTchrPhone.getText().toString();
-        Subject subject = (Subject) binding.spnrTchrSubject.getSelectedItem();
-        int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
-        String generatedEmail = binding.edttxtTchrEmail.getText().toString();
-        // TODO: replace dummy-teacher with actual teacher class
-        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, phoneNumber, subject, dob);
-        if (index == -1)
-            teacherManagementViewModel.registerTeacher(teacher);
-        else
-            teacherManagementViewModel.updateTeacher(teacher);
     }
 
     private void showDatePickerDialog() {

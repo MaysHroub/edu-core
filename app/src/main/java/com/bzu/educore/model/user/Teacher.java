@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Teacher extends Person {
     private String phone_number;
     public Teacher(String id, Integer age, String name, String email, LocalDate dateOfBirth, String phone_number) {
