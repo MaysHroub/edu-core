@@ -17,4 +17,9 @@ public class UrlManager {
     public static final String URL_UPDATE_SUBJECT = BASE_URL + "update_subject.php";
     public static final String URL_DELETE_SUBJECT = BASE_URL + "delete_subject.php";
     public static final String URL_GET_ALL_GRADES = BASE_URL + "get_all_grades.php";
+    public static final String URL_GET_ALL_STUDENTS = BASE_URL + "get_all_students.php";
+    public static final String URL_UPDATE_STUDENT = BASE_URL + "update_student.php";
+    public static final String URL_DELETE_STUDENT = BASE_URL + "delete_student.php";
+    public static final String URL_GENERATE_STD_ID = BASE_URL + "generate_student_id.php";
+    public static final String URL_GENERATE_TCHR_ID = BASE_URL + "generate_teacher_id.php";
 }
