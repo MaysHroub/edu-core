@@ -1,5 +1,6 @@
 package com.bzu.educore.activity.registrar.ui.subject_management;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -49,6 +50,11 @@ public class SubjectViewFragment extends Fragment implements SubjectAdapter.OnIt
 
     @Override
     public void onItemClick(Subject subject) {
-        // TODO: open modify-subject fragment
+        subjectManagementViewModel.setCurrentSubject(subject);
+        SubjectModifyFragment fragment = new SubjectModifyFragment();
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
+        transaction.addToBackStack(null); // so the user can navigate back
+        transaction.commit();
     }
 }
