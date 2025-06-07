@@ -35,11 +35,11 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
         studentManagementViewModel.getStudents().observe(getViewLifecycleOwner(), students -> {
             List<Person> users = new ArrayList<>(students);
             UserAdapter adapter = new UserAdapter(users, this);
-            binding.layoutViewAllUsrs.rclrviewStds.setAdapter(adapter);
+            binding.layoutViewAllUsrs.rclrviewUsrs.setAdapter(adapter);
         });
         studentManagementViewModel.fetchAllStudents();
 
-        binding.layoutViewAllUsrs.fltbtnAddStd.setOnClickListener(v -> {
+        binding.layoutViewAllUsrs.fltbtnAddUsr.setOnClickListener(v -> {
             ModifyStudentFragment fragment = new ModifyStudentFragment();
             studentManagementViewModel.setIndex(-1);
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
