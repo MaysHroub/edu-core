@@ -6,15 +6,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Date picker for selecting the day of absence -->
-    <DatePicker
-        android:id="@+id/datePicker"
+    <!-- Replace inline DatePicker with a Button -->
+    <Button
+        android:id="@+id/btnDatePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:calendarViewShown="true"
-        android:spinnersShown="false" />
+        android:text="Select Date" />
 
-    <!-- RecyclerView of students with a checkbox -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStudentsAbsence"
         android:layout_width="match_parent"
@@ -22,7 +20,6 @@
         android:layout_weight="1"
         android:paddingTop="8dp" />
 
-    <!-- Button to submit attendance -->
     <Button
         android:id="@+id/btnSubmitAbsence"
         android:layout_width="match_parent"
