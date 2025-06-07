@@ -24,6 +24,7 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Subject>> subjects;
     private final MutableLiveData<List<Integer>> grades;
     private final MutableLiveData<Subject> currentSubject;
+    private final MutableLiveData<Boolean> deletionSuccess;
     private final SubjectRepository subjectRepo;
 
     public SubjectManagementViewModel(@NonNull Application application) {
@@ -32,6 +33,7 @@ public class SubjectManagementViewModel extends AndroidViewModel {
         subjects = new MutableLiveData<>();
         grades = new MutableLiveData<>();
         currentSubject = new MutableLiveData<>();
+        deletionSuccess = new MutableLiveData<>();
     }
 
     public LiveData<List<Subject>> getSubjects() {
@@ -49,6 +51,11 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     public void setCurrentSubject(Subject subject) {
         currentSubject.setValue(subject);
     }
+
+    public LiveData<Boolean> getDeletionSuccess() {
+        return deletionSuccess;
+    }
+
 
     public void updateSubject(Subject modifiedSubject) {
         subjectRepo.updateSubject(
@@ -99,6 +106,19 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                             e.printStackTrace();
                         }
                     grades.postValue(gradeList);
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
+
+    public void deleteCurrentSubject() {
+        subjectRepo.deleteSubjectById(
+                currentSubject.getValue().getId(),
+                response -> {
+                    Toast.makeText(getApplication(), "Deleted Successfully!", LENGTH_SHORT).show();
+                    deletionSuccess.postValue(true);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();

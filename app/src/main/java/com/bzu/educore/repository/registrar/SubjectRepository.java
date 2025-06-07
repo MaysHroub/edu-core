@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
@@ -49,6 +50,17 @@ public class SubjectRepository {
 
     public void getAllGrades(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, UrlManager.URL_GET_ALL_GRADES, null, listener, errorListener);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void deleteSubjectById(Integer subjectId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        String url = UrlManager.URL_DELETE_SUBJECT + "?id=" + subjectId;
+        StringRequest request = new StringRequest(
+                Request.Method.DELETE,
+                UrlManager.URL_UPDATE_SUBJECT,
+                listener,
+                errorListener
+        );
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 

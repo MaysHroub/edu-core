@@ -47,6 +47,14 @@ public class SubjectModifyFragment extends Fragment {
             subjectManagementViewModel.updateSubject(subject);
         });
 
+        binding.btnSubjDelete.setOnClickListener(v -> {
+            subjectManagementViewModel.deleteCurrentSubject();
+            subjectManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+                if (!success) return;
+                requireActivity().getSupportFragmentManager().popBackStack();
+            });
+        });
+
         return binding.getRoot();
     }
 
