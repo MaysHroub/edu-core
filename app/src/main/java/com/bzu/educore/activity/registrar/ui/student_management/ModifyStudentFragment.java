@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
+import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.CredentialsGenerator;
 
@@ -43,13 +44,14 @@ public class ModifyStudentFragment extends Fragment {
 
         fillClassroomSpinner();
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
+        binding.btnDeleteStd.setOnClickListener(v -> deleteStudent());
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
 
         if (index == -1)
             generateCredentials();
         else {
             fillViewWithData();
-
+            binding.btnDeleteStd.setVisibility(VISIBLE);
         }
 
         return root;
@@ -57,6 +59,8 @@ public class ModifyStudentFragment extends Fragment {
 
     private void fillViewWithData() {
         DummyStudent student = studentManagementViewModel.getStudents().getValue().get(index);
+        generatedId = student.getId();
+        generatedEmail = student.getEmail();
         binding.edttxtStdId.setText(student.getId()+"");
         binding.edttxtStdEmail.setText(student.getEmail());
         binding.edttxtStdFname.setText(student.getFname());
@@ -106,6 +110,21 @@ public class ModifyStudentFragment extends Fragment {
             studentManagementViewModel.registerStudent(student);
         else
             studentManagementViewModel.updateStudent(student);
+    }
+
+    private void deleteStudent() {
+        DialogUtils.showConfirmationDialog(
+                requireContext(),
+                "Delete Student",
+                "Are you sure you want to delete this student?",
+                () -> {
+                    studentManagementViewModel.deleteStudentById(generatedId);
+                    studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+                        if (!success) return;
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    });
+                }
+        );
     }
 
     private void showDatePickerDialog() {

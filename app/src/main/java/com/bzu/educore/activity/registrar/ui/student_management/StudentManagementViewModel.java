@@ -25,6 +25,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<DummyStudent>> students;
     private final MutableLiveData<Integer> numOfStudentsForCurrentYear;
     private final MutableLiveData<Integer> index;
+    private final MutableLiveData<Boolean> deletionSuccess;
     private final MainRepository repo;
 
     public StudentManagementViewModel(Application application) {
@@ -34,6 +35,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
         classrooms = new MutableLiveData<>();
         students = new MutableLiveData<>();
         index = new MutableLiveData<>(-1);
+        deletionSuccess = new MutableLiveData<>();
     }
 
     public LiveData<Integer> getNumOfStudentsForCurrentYear() {
@@ -48,10 +50,9 @@ public class StudentManagementViewModel extends AndroidViewModel {
         return students;
     }
 
-//    public DummyStudent getCurrentStudent() {
-//        if (index.getValue() == -1) return null;
-//        return students.getValue().get(index.getValue());
-//    }
+    public LiveData<Boolean> getDeletionSuccess() {
+        return deletionSuccess;
+    }
 
     public LiveData<Integer> getIndex() {
         return index;
@@ -80,6 +81,20 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 modifiedStudent,
                 response -> {
                     Toast.makeText(getApplication(), "Student is updated successfully!", LENGTH_SHORT).show();
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
+
+    public void deleteStudentById(int studentId) {
+        repo.deleteItemById(
+                UrlManager.URL_DELETE_STUDENT,
+                studentId,
+                response -> {
+                    Toast.makeText(getApplication(), "Student is deleted successfully!", LENGTH_SHORT).show();
+                    deletionSuccess.postValue(true);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
