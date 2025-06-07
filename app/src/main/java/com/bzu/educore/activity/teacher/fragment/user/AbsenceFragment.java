@@ -12,6 +12,8 @@ import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.AbsenceAdapter;
 import com.bzu.educore.model.user.*;
 import com.bzu.educore.util.VolleySingleton;
+import com.bzu.educore.util.teacher.Constants;
+
 import org.json.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -85,7 +87,7 @@ public class AbsenceFragment extends Fragment {
     }
 
     private void fetchStudents() {
-        String url = "http://10.0.2.2/android/get_class_students.php?classId=" + classId;
+        String url = Constants.BASE_URL + "get_class_students.php?classId=" + classId;
 
         JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null,
                 resp -> {
@@ -152,7 +154,7 @@ public class AbsenceFragment extends Fragment {
             return;
         }
 
-        String url = "http://10.0.2.2/android/submit_absence.php";
+        String url = Constants.BASE_URL + "submit_absence.php";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, body,
                 resp -> showToast(resp.optString("message", "Saved")),
                 err -> showToast("Submit failed")

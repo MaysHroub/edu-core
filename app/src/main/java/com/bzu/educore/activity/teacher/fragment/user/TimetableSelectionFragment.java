@@ -20,6 +20,7 @@ import com.bzu.educore.activity.teacher.fragment.task.AnnounceExamFragment;
 import com.bzu.educore.activity.teacher.fragment.task.AssignAssignmentFragment;
 import com.bzu.educore.adapter.teacher.TimetableSelectionAdapter;
 import com.bzu.educore.util.VolleySingleton;
+import com.bzu.educore.util.teacher.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +56,7 @@ public class TimetableSelectionFragment extends Fragment {
     }
 
     private void fetchTimetable() {
-        String url = "http://10.0.2.2/android/get_timetable_by_teacher.php";
+        String url = Constants.BASE_URL+ "get_timetable_by_teacher.php";
 
         JSONObject requestBody = new JSONObject();
         try {

@@ -111,10 +111,10 @@ public class SearchTasksFragment extends Fragment {
     }
 
     private void loadSpinners() {
-        loadSpinner(spinnerSubject, Constants.GET_SUBJECTS_URL, Constants.ALL_SUBJECTS, "title", false);
-        loadSpinner(spinnerGrade, Constants.GET_GRADES_URL, Constants.ALL_GRADES, "grade_number", true);
+        loadSpinner(spinnerSubject, Constants.GET_SUBJECTS_URL, Constants.ALL_SUBJECTS, Constants.JSON_TITLE, false);
+        loadSpinner(spinnerGrade, Constants.GET_GRADES_URL, Constants.ALL_GRADES, Constants.JSON_GRADE_NUMBER, true);
 
-        List<String> types = Arrays.asList(Constants.ALL_TYPES, "Assignment", "Exam");
+        List<String> types = Arrays.asList(Constants.ALL_TYPES, Constants.TYPE_ASSIGNMENT, Constants.TYPE_EXAM);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(adapter);
@@ -129,10 +129,10 @@ public class SearchTasksFragment extends Fragment {
                         try {
                             JSONObject obj = response.getJSONObject(i);
                             String item = obj.getString(jsonKey);
-                            if (prefixGrade) item = "Grade " + item;
+                            if (prefixGrade) item = Constants.GRADE_PREFIX + item;
                             items.add(item);
                         } catch (JSONException e) {
-                            Toast.makeText(getContext(), "Error parsing spinner data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), Constants.ERROR_PARSE_SPINNER, Toast.LENGTH_SHORT).show();
                         }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
@@ -140,7 +140,7 @@ public class SearchTasksFragment extends Fragment {
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(adapter);
                 },
-                error -> Toast.makeText(getContext(), "Failed to load spinner data", Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(getContext(), Constants.ERROR_LOAD_SPINNER, Toast.LENGTH_SHORT).show()
         );
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
@@ -155,7 +155,7 @@ public class SearchTasksFragment extends Fragment {
                     showLoading(false);
                 },
                 error -> {
-                    Toast.makeText(getContext(), "Search failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), Constants.ERROR_SEARCH_FAILED, Toast.LENGTH_SHORT).show();
                     clearResults();
                     showLoading(false);
                 }
@@ -175,7 +175,7 @@ public class SearchTasksFragment extends Fragment {
         if (subject != null) params.add("subject=" + subject);
 
         String grade = getSelectedValue(spinnerGrade, Constants.ALL_GRADES);
-        if (grade != null) params.add("grade=" + grade.replace("Grade ", ""));
+        if (grade != null) params.add("grade=" + grade.replace(Constants.GRADE_PREFIX, ""));
 
         String type = getSelectedValue(spinnerType, Constants.ALL_TYPES);
         if (type != null) params.add("type=" + type.toLowerCase());
@@ -207,7 +207,7 @@ public class SearchTasksFragment extends Fragment {
                 );
                 taskList.add(task);
             } catch (JSONException e) {
-                Toast.makeText(getContext(), "Error parsing tasks", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), Constants.ERROR_PARSE_TASKS, Toast.LENGTH_SHORT).show();
             }
         }
         taskAdapter.notifyDataSetChanged();
@@ -223,12 +223,12 @@ public class SearchTasksFragment extends Fragment {
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         btnSearch.setEnabled(!show);
-        btnSearch.setText(show ? "Searching..." : "Search");
+        btnSearch.setText(show ? Constants.TEXT_SEARCHING : Constants.TEXT_SEARCH);
     }
 
     private void updateUI() {
         int count = taskList.size();
-        tvResultCount.setText(count + (count == 1 ? " item" : " items"));
+        tvResultCount.setText(count + (count == 1 ? Constants.TEXT_ITEM_SINGULAR : Constants.TEXT_ITEM_PLURAL));
 
         boolean isEmpty = taskList.isEmpty();
         layoutEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);

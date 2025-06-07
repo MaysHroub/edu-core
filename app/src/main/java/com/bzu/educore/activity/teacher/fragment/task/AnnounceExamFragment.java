@@ -17,7 +17,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.fragment.BaseFragment;
 import com.bzu.educore.model.task.Task;
+import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.VolleySingleton;
+import com.bzu.educore.util.teacher.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,23 +84,14 @@ public class AnnounceExamFragment extends BaseFragment {
         classGradeTextView.setText(classGradeName);
     }
 
+    // inside publishExam()
     private void publishExam() {
-        // 1. Read UI values
         String titleStr = examTitleEditText.getText().toString().trim();
         String descStr = examDescriptionEditText.getText().toString().trim();
         String maxScoreStr = examMaxScoreEditText.getText().toString().trim();
 
-        // 2. Validate inputs
-        if (titleStr.isEmpty()) {
-            examTitleEditText.setError("Title required");
-            return;
-        }
-        if (descStr.isEmpty()) {
-            examDescriptionEditText.setError("Description required");
-            return;
-        }
-        if (maxScoreStr.isEmpty()) {
-            examMaxScoreEditText.setError("Max score required");
+        if (!InputValidator.validateEditTexts(examTitleEditText, examDescriptionEditText, examMaxScoreEditText)) {
+            showToast("All fields are required");
             return;
         }
 
@@ -114,22 +107,20 @@ public class AnnounceExamFragment extends BaseFragment {
             return;
         }
 
-        // 3. Build the selected exam date
         LocalDate selectedDate = LocalDate.of(
                 examDatePicker.getYear(),
                 examDatePicker.getMonth() + 1,
                 examDatePicker.getDayOfMonth()
         );
 
-        // 4. Build Task POJO (null ID because new record)
         Task newTask = new Task(
-                null,               // id
-                subjectId,          // subjectId
-                classGradeId,       // sectionId
-                selectedDate,       // date
-                teacherId,          // teacherId
+                null,
+                subjectId,
+                classGradeId,
+                selectedDate,
+                teacherId,
                 "exam",
-                maxScore            // maxScore from user input
+                maxScore
         );
 
         try {
@@ -139,7 +130,7 @@ public class AnnounceExamFragment extends BaseFragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    "http://10.0.2.2/android/exam.php",
+                    Constants.BASE_URL + "exam.php",
                     data,
                     response -> {
                         showToast("Exam announced successfully!");
@@ -148,8 +139,7 @@ public class AnnounceExamFragment extends BaseFragment {
                     error -> showErrorToast("Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
             );
 
-            VolleySingleton.getInstance(requireContext())
-                    .addToRequestQueue(request);
+            VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
 
         } catch (JSONException e) {
             showErrorToast("Failed to create request: " + e.getMessage());

@@ -20,7 +20,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.fragment.BaseFragment;
 import com.bzu.educore.model.task.Assignment;
+import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.VolleySingleton;
+import com.bzu.educore.util.teacher.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,16 +112,8 @@ public class AssignAssignmentFragment extends BaseFragment {
         String description = descEditText.getText().toString().trim();
         String maxScoreStr = maxScoreEditText.getText().toString().trim();
 
-        if (title.isEmpty()) {
-            titleEditText.setError("Title required");
-            return;
-        }
-        if (description.isEmpty()) {
-            descEditText.setError("Description required");
-            return;
-        }
-        if (maxScoreStr.isEmpty()) {
-            maxScoreEditText.setError("Max score required");
+        if (!InputValidator.validateEditTexts(titleEditText, descEditText, maxScoreEditText)) {
+            showToast("All fields are required");
             return;
         }
 
@@ -140,36 +134,33 @@ public class AssignAssignmentFragment extends BaseFragment {
             return;
         }
 
-        // Build deadline date
         LocalDate deadlineDate = LocalDate.of(
                 deadlinePicker.getYear(),
                 deadlinePicker.getMonth() + 1,
                 deadlinePicker.getDayOfMonth()
         );
 
-        // Build Assignment POJO
         Assignment assignment = new Assignment(
-                null,                  // id (server generated)
-                subjectId,             // subjectId
-                classGradeId,          // sectionId
-                null,                  // date (server sets current date)
-                teacherId,             // teacherId
-                "assignment",          // type
-                uploadedFileUrl,       // pdfFile (question_file_url)
-                deadlineDate,          // deadline
-                null,                  // assessmentId (if needed)
-                maxScore               // maxScore from user input
+                null,
+                subjectId,
+                classGradeId,
+                null,
+                teacherId,
+                "assignment",
+                uploadedFileUrl,
+                deadlineDate,
+                null,
+                maxScore
         );
 
         try {
             JSONObject data = assignment.toJson();
-            // Add title & description separately if not in Assignment model
             data.put("title", title);
             data.put("description", description);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    "http://10.0.2.2/android/assignment.php",
+                    Constants.BASE_URL + "assignment.php",
                     data,
                     response -> {
                         showToast("Assignment published successfully!");
@@ -178,8 +169,7 @@ public class AssignAssignmentFragment extends BaseFragment {
                     error -> showErrorToast("Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
             );
 
-            VolleySingleton.getInstance(requireContext())
-                    .addToRequestQueue(request);
+            VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
 
         } catch (JSONException e) {
             showErrorToast("Failed to create request: " + e.getMessage());

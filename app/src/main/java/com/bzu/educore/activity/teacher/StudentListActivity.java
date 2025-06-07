@@ -152,8 +152,8 @@ public class StudentListActivity extends AppCompatActivity {
 
     private void fetchStudentList() {
         String url = type.equalsIgnoreCase("assignment")
-                ? "http://10.0.2.2/android/get_assignment_students.php?taskId="+taskId
-                : "http://10.0.2.2/android/get_exam_students.php?taskId="+taskId;
+                ? Constants.BASE_URL + "get_assignment_students.php?taskId="+taskId
+                : Constants.BASE_URL + "get_exam_students.php?taskId="+taskId;
 
         JsonArrayRequest req = new JsonArrayRequest(
                 Request.Method.GET, url, null,
