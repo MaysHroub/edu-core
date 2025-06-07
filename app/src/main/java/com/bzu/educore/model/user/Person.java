@@ -12,6 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 
+// TODO: rename Person to User
 public abstract class Person {
     private Integer age;
     private String id;
