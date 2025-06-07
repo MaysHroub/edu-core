@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import static android.view.View.VISIBLE;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
 import com.bzu.educore.databinding.FragmentModifyTeacherBinding;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.CredentialsGenerator;
@@ -25,18 +28,54 @@ public class ModifyTeacherFragment extends Fragment {
     private FragmentModifyTeacherBinding binding;
     private TeacherManagementViewModel teacherManagementViewModel;
     private LocalDate dob;
+    private int index;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         teacherManagementViewModel =
                 new ViewModelProvider(this).get(TeacherManagementViewModel.class);
-
         binding = FragmentModifyTeacherBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.btnTchrDob.setOnClickListener(v -> showDatePickerDialog());
+        fillSubjectsSpinner();
         binding.btnTchrRegister.setOnClickListener(v -> registerTeacher());
+        binding.btnTchrDob.setOnClickListener(v -> showDatePickerDialog());
 
+        index = teacherManagementViewModel.getCurrentIndex().getValue();
+
+        if (index == -1)
+            generateCredentials();
+        else {
+            fillViewWithData();
+        }
+
+        return root;
+    }
+
+
+    private void fillViewWithData() {
+        DummyTeacher teacher = teacherManagementViewModel.getTeachers().getValue().get(index);
+        binding.edttxtTchrId.setText(teacher.getId()+"");
+        binding.edttxtTchrEmail.setText(teacher.getEmail());
+        binding.edttxtTchrFname.setText(teacher.getFname());
+        binding.edttxtTchrLname.setText(teacher.getLname());
+        String date = teacher.getDateOfBirth().getYear() + "-" + teacher.getDateOfBirth().getMonthValue() + "-" + teacher.getDateOfBirth().getDayOfMonth();
+        binding.btnTchrDob.setText(date);
+        int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(teacher.getSubjectTaught());
+        binding.spnrTchrSubject.setSelection(pos);
+    }
+
+    private void generateCredentials() {
+        teacherManagementViewModel.getTeacherId().observe(getViewLifecycleOwner(), teacherId -> {
+            String generatedEmail = String.format("%d@teacher.educore.edu", teacherId);
+            binding.edttxtTchrId.setText(teacherId+"");
+            binding.edttxtTchrEmail.setText(generatedEmail);
+        });
+        teacherManagementViewModel.generateTeacherId();
+    }
+
+    private void fillSubjectsSpinner() {
         teacherManagementViewModel.getSubjects().observe(getViewLifecycleOwner(), subjects -> {
             ArrayAdapter<Subject> adapter = new ArrayAdapter<>(
                     requireContext(),
@@ -45,10 +84,7 @@ public class ModifyTeacherFragment extends Fragment {
             );
             binding.spnrTchrSubject.setAdapter(adapter);
         });
-
         teacherManagementViewModel.fetchAllSubjects();
-
-        return root;
     }
 
     private void registerTeacher() {
@@ -62,9 +98,14 @@ public class ModifyTeacherFragment extends Fragment {
                 lname = binding.edttxtTchrLname.getText().toString(),
                 phoneNumber = binding.edttxtTchrPhone.getText().toString();
         Subject subject = (Subject) binding.spnrTchrSubject.getSelectedItem();
+        int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
+        String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
         DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, phoneNumber, subject, dob);
-        teacherManagementViewModel.registerTeacher(teacher);
+        if (index == -1)
+            teacherManagementViewModel.registerTeacher(teacher);
+        else
+            teacherManagementViewModel.updateTeacher(teacher);
     }
 
     private void showDatePickerDialog() {
@@ -92,4 +133,5 @@ public class ModifyTeacherFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }
