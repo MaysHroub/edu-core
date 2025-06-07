@@ -54,6 +54,7 @@ public class AbsenceFragment extends Fragment {
             teacherId = getArguments().getInt("teacherId");
             classId   = getArguments().getInt("classId");
         }
+
         LocalDate now = LocalDate.now();
         year  = now.getYear();
         month = now.getMonthValue() - 1;
@@ -100,8 +101,9 @@ public class AbsenceFragment extends Fragment {
     }
 
     private void fetchStudents() {
-        String url = "http://yourserver.com/android/get_class_students.php"
+        String url = "http://10.0.2.2/android/get_class_students.php"
                 + "?classId=" + classId;
+
         JsonArrayRequest req = new JsonArrayRequest(
                 Request.Method.GET, url, null,
                 resp -> {
@@ -109,8 +111,9 @@ public class AbsenceFragment extends Fragment {
                     for (int i = 0; i < resp.length(); i++) {
                         try {
                             JSONObject o = resp.getJSONObject(i);
+                            // Fixed: Use getString for id since it's VARCHAR(20) in database
                             Student s = new Student(
-                                    o.getInt("id"),
+                                    o.getString("id"),    // Changed from getInt to getString
                                     null, // age
                                     o.getString("name"),
                                     o.getString("email"),
@@ -121,18 +124,35 @@ public class AbsenceFragment extends Fragment {
                             studentList.add(s);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            // Add more detailed error logging
+                            Toast.makeText(getContext(),
+                                    "Error parsing student data: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                     adapter.notifyDataSetChanged();
-                },
-                err -> Toast.makeText(getContext(),
-                        "Failed to load students",
-                        Toast.LENGTH_SHORT).show()
-        );
-        VolleySingleton.getInstance(requireContext())
-                .addToRequestQueue(req);
-    }
 
+                    // Add success message for debugging
+                    Toast.makeText(getContext(),
+                            "Loaded " + studentList.size() + " students",
+                            Toast.LENGTH_SHORT).show();
+                },
+                err -> {
+                    // Add more detailed error logging
+                    String errorMsg = "Failed to load students";
+                    if (err.networkResponse != null) {
+                        errorMsg += " (HTTP " + err.networkResponse.statusCode + ")";
+                    }
+                    if (err.getMessage() != null) {
+                        errorMsg += ": " + err.getMessage();
+                    }
+                    Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                    err.printStackTrace();
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(req);
+    }
     private void submitAttendance() {
         JSONArray arr = new JSONArray();
         LocalDate sel = LocalDate.of(year, month+1, day);

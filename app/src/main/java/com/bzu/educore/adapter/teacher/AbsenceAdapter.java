@@ -41,7 +41,7 @@ public class AbsenceAdapter
     @Override
     public void onBindViewHolder(@NonNull VH h, int pos) {
         Student s = students.get(pos);
-        Integer sid = s.getId();
+        String sid = s.getId();
 
         // Name & placeholder image
         h.tvName.setText(s.getName());
@@ -66,9 +66,9 @@ public class AbsenceAdapter
             if (checked) {
                 // create default unexcused Absence; date set later in Fragment
                 Absence a = new Absence();
-                a.setStudentId(sid);
+                a.setStudentId(Integer.valueOf(sid));
                 a.setStatus("unexcused");
-                absenceMap.put(sid, a);
+                absenceMap.put(Integer.valueOf(sid), a);
                 h.rgStatus.setVisibility(View.VISIBLE);
                 h.rbUnexcused.setChecked(true);
             } else {

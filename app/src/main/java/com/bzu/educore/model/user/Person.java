@@ -13,10 +13,11 @@ import lombok.ToString;
 @ToString
 
 public abstract class Person {
-    private Integer id,age;
+    private Integer age;
+    private String id;
     private String name,email;
     private LocalDate dateOfBirth;
-    public Person(Integer id, Integer age, String name, String email, LocalDate dateOfBirth) {
+    public Person(String id, Integer age, String name, String email, LocalDate dateOfBirth) {
         this.id = id;
         this.age = age;
         this.name = name;
