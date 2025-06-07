@@ -46,6 +46,7 @@ public class ModifyStudentFragment extends Fragment {
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
         binding.btnDeleteStd.setOnClickListener(v -> deleteStudent());
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
+        binding.imgBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
         if (index == -1)
             generateCredentials();
