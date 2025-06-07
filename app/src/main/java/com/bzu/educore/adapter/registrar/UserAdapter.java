@@ -3,12 +3,14 @@ package com.bzu.educore.adapter.registrar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
+import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
 import com.bzu.educore.listener.OnItemClickListener;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.model.user.Person;
@@ -46,17 +48,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtId, txtName;
+        private final ImageView imgUser;
 
         public ViewHolder(View view) {
             super(view);
             txtId = view.findViewById(R.id.txt_usr_id);
             txtName = view.findViewById(R.id.txt_usr_name);
+            imgUser = view.findViewById(R.id.img_user);
         }
 
         public void bind(Person user, int position, OnItemClickListener listener) {
             txtId.setText(user.getId());
             txtName.setText(user.getName());
             itemView.setOnClickListener(v -> listener.onItemClick(position));
+            if (user instanceof DummyStudent)
+                imgUser.setImageResource(R.drawable.student_icon);
+            else
+                imgUser.setImageResource(R.drawable.teacher);
         }
     }
 

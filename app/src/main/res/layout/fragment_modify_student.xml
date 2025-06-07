@@ -14,11 +14,17 @@
         android:layout_height="wrap_content"
         tools:srcCompat="@drawable/baseline_arrow_back_24" />
 
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        tools:srcCompat="@drawable/student_icon" />
+
     <EditText
         android:id="@+id/edttxt_std_fname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="@string/first_name"
         android:inputType="text" />
@@ -36,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generated_id"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/edttxt_std_id"
@@ -50,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generated_email"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/edttxt_std_email"
@@ -64,21 +70,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/enter_student_s_date_of_birth"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btn_std_dob"
         style="?android:spinnerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/june_14_2025"
         android:textColor="@color/black" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,14 +102,14 @@
         android:id="@+id/btn_save_std"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:text="@string/save" />
 
     <Button
         android:id="@+id/btn_delete_std"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/delete"
         android:visibility="gone"/>
 
