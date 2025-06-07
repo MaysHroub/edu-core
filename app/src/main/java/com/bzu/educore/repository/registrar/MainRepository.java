@@ -8,8 +8,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
-import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
 import com.google.gson.Gson;
 
@@ -17,12 +15,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CrudRepository {
+public class MainRepository {
 
+    private static MainRepository instance;
     private final Context context;
 
-    public CrudRepository(Context context) {
+    private MainRepository(Context context) {
         this.context = context;
+    }
+
+    public static void init(Context context) {
+        instance = new MainRepository(context);
+    }
+
+    public static synchronized MainRepository getInstance() {
+        if (instance == null)
+            throw new AssertionError("You have to call init first");
+        return instance;
     }
 
     public void getAllItems(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
