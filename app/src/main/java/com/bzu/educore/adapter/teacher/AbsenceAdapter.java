@@ -1,31 +1,20 @@
 package com.bzu.educore.adapter.teacher;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bzu.educore.R;
-import com.bzu.educore.model.user.Student;
-import com.bzu.educore.model.user.Absence;
+import com.bzu.educore.model.user.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class AbsenceAdapter
-        extends RecyclerView.Adapter<AbsenceAdapter.VH> {
+public class AbsenceAdapter extends RecyclerView.Adapter<AbsenceAdapter.VH> {
 
     private final List<Student> students;
-    private final Map<String, Absence> absenceMap; // Changed from Integer to String
-    // key: student.getId() (String), value: current Absence record
+    private final Map<String, Absence> absenceMap;
 
-    public AbsenceAdapter(List<Student> students,
-                          Map<String, Absence> absenceMap) { // Changed from Integer to String
+    public AbsenceAdapter(List<Student> students, Map<String, Absence> absenceMap) {
         this.students = students;
         this.absenceMap = absenceMap;
     }
@@ -43,48 +32,38 @@ public class AbsenceAdapter
         Student s = students.get(pos);
         String sid = s.getId();
 
-        // Name & placeholder image
         h.tvName.setText(s.getName());
         h.ivProfile.setImageResource(R.drawable.student_icon);
 
-        // Does map have an Absence for this student?
         boolean isAbsent = absenceMap.containsKey(sid);
         h.cbAbsent.setOnCheckedChangeListener(null);
         h.cbAbsent.setChecked(isAbsent);
         h.rgStatus.setVisibility(isAbsent ? View.VISIBLE : View.GONE);
 
-        // Initialize radios if absent
         if (isAbsent) {
-            Absence a = absenceMap.get(sid);
-            boolean exc = "excused".equalsIgnoreCase(a.getStatus());
+            boolean exc = "excused".equalsIgnoreCase(absenceMap.get(sid).getStatus());
             h.rbExcused.setChecked(exc);
             h.rbUnexcused.setChecked(!exc);
         }
 
-        // Handle checkbox toggle
         h.cbAbsent.setOnCheckedChangeListener((cb, checked) -> {
             if (checked) {
-                // create default unexcused Absence; date set later in Fragment
                 Absence a = new Absence();
-                a.setStudentId(sid); // Using String directly - no conversion needed
+                a.setStudentId(sid);
                 a.setStatus("unexcused");
-                absenceMap.put(sid, a); // Using String key directly
+                absenceMap.put(sid, a);
                 h.rgStatus.setVisibility(View.VISIBLE);
                 h.rbUnexcused.setChecked(true);
             } else {
-                absenceMap.remove(sid); // Using String key directly
+                absenceMap.remove(sid);
                 h.rgStatus.setVisibility(View.GONE);
             }
         });
 
-        // Handle radio‐group changes
         h.rgStatus.setOnCheckedChangeListener((grp, checkedId) -> {
             Absence a = absenceMap.get(sid);
-            if (a == null) return;
-            if (checkedId == R.id.rbExcused) {
-                a.setStatus("excused");
-            } else {
-                a.setStatus("unexcused");
+            if (a != null) {
+                a.setStatus(checkedId == R.id.rbExcused ? "excused" : "unexcused");
             }
         });
     }
@@ -101,14 +80,14 @@ public class AbsenceAdapter
         RadioGroup rgStatus;
         RadioButton rbUnexcused, rbExcused;
 
-        VH(@NonNull View itemView) {
-            super(itemView);
-            ivProfile   = itemView.findViewById(R.id.ivProfile);
-            tvName      = itemView.findViewById(R.id.tvStudentName);
-            cbAbsent    = itemView.findViewById(R.id.cbAbsent);
-            rgStatus    = itemView.findViewById(R.id.rgStatus);
-            rbUnexcused = itemView.findViewById(R.id.rbUnexcused);
-            rbExcused   = itemView.findViewById(R.id.rbExcused);
+        VH(@NonNull View v) {
+            super(v);
+            ivProfile = v.findViewById(R.id.ivProfile);
+            tvName = v.findViewById(R.id.tvStudentName);
+            cbAbsent = v.findViewById(R.id.cbAbsent);
+            rgStatus = v.findViewById(R.id.rgStatus);
+            rbUnexcused = v.findViewById(R.id.rbUnexcused);
+            rbExcused = v.findViewById(R.id.rbExcused);
         }
     }
 }

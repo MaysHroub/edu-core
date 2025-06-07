@@ -1,29 +1,18 @@
 package com.bzu.educore.activity.teacher.fragment;
-
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.view.*;
+import android.widget.*;
+import androidx.annotation.*;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.*;
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.*;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.AbsenceAdapter;
-import com.bzu.educore.model.user.Student;
-import com.bzu.educore.model.user.Absence;
+import com.bzu.educore.model.user.*;
 import com.bzu.educore.util.VolleySingleton;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -32,11 +21,10 @@ public class AbsenceFragment extends Fragment {
     private RecyclerView rvStudents;
     private Button btnDate, btnSubmit;
     private final List<Student> studentList = new ArrayList<>();
-    private final Map<String, Absence> absenceMap = new HashMap<>(); // Changed from Integer to String
+    private final Map<String, Absence> absenceMap = new HashMap<>();
     private AbsenceAdapter adapter;
 
-    private int classId, teacherId;
-    private int year, month, day;
+    private int classId, teacherId, year, month, day;
 
     public static AbsenceFragment newInstance(int teacherId, int classId) {
         AbsenceFragment f = new AbsenceFragment();
@@ -52,152 +40,128 @@ public class AbsenceFragment extends Fragment {
         super.onCreate(s);
         if (getArguments() != null) {
             teacherId = getArguments().getInt("teacherId");
-            classId   = getArguments().getInt("classId");
+            classId = getArguments().getInt("classId");
         }
 
         LocalDate now = LocalDate.now();
-        year  = now.getYear();
+        year = now.getYear();
         month = now.getMonthValue() - 1;
-        day   = now.getDayOfMonth();
+        day = now.getDayOfMonth();
     }
 
     @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup cont, Bundle s
-    ) {
-        return inflater.inflate(R.layout.fragment_absence, cont, false);
+    public View onCreateView(@NonNull LayoutInflater inf, ViewGroup cont, Bundle s) {
+        return inf.inflate(R.layout.fragment_absence, cont, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle s) {
         super.onViewCreated(v, s);
         rvStudents = v.findViewById(R.id.rvStudentsAbsence);
-        btnDate    = v.findViewById(R.id.btnDatePicker);
-        btnSubmit  = v.findViewById(R.id.btnSubmitAbsence);
+        btnDate = v.findViewById(R.id.btnDatePicker);
+        btnSubmit = v.findViewById(R.id.btnSubmitAbsence);
 
         btnDate.setText(fmtDate());
-        btnDate.setOnClickListener(_btn -> new DatePickerDialog(
-                requireContext(),
-                (DatePicker dp, int y, int m, int d) -> {
-                    year=y; month=m; day=d;
-                    btnDate.setText(fmtDate());
-                },
-                year, month, day
-        ).show());
+        btnDate.setOnClickListener(_btn -> pickDate());
 
         adapter = new AbsenceAdapter(studentList, absenceMap);
         rvStudents.setLayoutManager(new LinearLayoutManager(getContext()));
         rvStudents.setAdapter(adapter);
 
         btnSubmit.setOnClickListener(_b -> submitAttendance());
-
         fetchStudents();
     }
 
+    private void pickDate() {
+        new DatePickerDialog(requireContext(), (dp, y, m, d) -> {
+            year = y; month = m; day = d;
+            btnDate.setText(fmtDate());
+        }, year, month, day).show();
+    }
+
     private String fmtDate() {
-        return String.format(Locale.getDefault(),
-                "%04d-%02d-%02d", year, month+1, day);
+        return String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, day);
     }
 
     private void fetchStudents() {
-        String url = "http://10.0.2.2/android/get_class_students.php"
-                + "?classId=" + classId;
+        String url = "http://10.0.2.2/android/get_class_students.php?classId=" + classId;
 
-        JsonArrayRequest req = new JsonArrayRequest(
-                Request.Method.GET, url, null,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null,
                 resp -> {
                     studentList.clear();
                     for (int i = 0; i < resp.length(); i++) {
                         try {
                             JSONObject o = resp.getJSONObject(i);
-                            // Fixed: Use getString for id since it's VARCHAR(20) in database
-                            Student s = new Student(
-                                    o.getString("id"),    // Changed from getInt to getString
-                                    null, // age
+                            studentList.add(new Student(
+                                    o.getString("id"),
+                                    null,
                                     o.getString("name"),
                                     o.getString("email"),
-                                    null, // dateOfBirth
+                                    null,
                                     o.getString("grade_number"),
                                     o.getString("class_id")
-                            );
-                            studentList.add(s);
+                            ));
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            // Add more detailed error logging
-                            Toast.makeText(getContext(),
-                                    "Error parsing student data: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+                            showToast("Error parsing student: " + e.getMessage());
                         }
                     }
                     adapter.notifyDataSetChanged();
-
-                    // Add success message for debugging
-                    Toast.makeText(getContext(),
-                            "Loaded " + studentList.size() + " students",
-                            Toast.LENGTH_SHORT).show();
+                    showToast("Loaded " + studentList.size() + " students");
                 },
                 err -> {
-                    // Add more detailed error logging
-                    String errorMsg = "Failed to load students";
-                    if (err.networkResponse != null) {
-                        errorMsg += " (HTTP " + err.networkResponse.statusCode + ")";
-                    }
-                    if (err.getMessage() != null) {
-                        errorMsg += ": " + err.getMessage();
-                    }
-                    Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                    String msg = "Failed to load students";
+                    if (err.networkResponse != null) msg += " (HTTP " + err.networkResponse.statusCode + ")";
+                    if (err.getMessage() != null) msg += ": " + err.getMessage();
+                    showToast(msg);
                     err.printStackTrace();
                 }
         );
 
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(req);
     }
+
     private void submitAttendance() {
         JSONArray arr = new JSONArray();
-        LocalDate sel = LocalDate.of(year, month+1, day);
+        LocalDate sel = LocalDate.of(year, month + 1, day);
 
         for (Absence a : absenceMap.values()) {
-            a.setDate(sel); // set chosen date
+            a.setDate(sel);
             JSONObject o = new JSONObject();
             try {
-                o.put("student_id", a.getStudentId()); // Now this should be a String
-                o.put("date",       sel.toString());
-                o.put("status",     a.getStatus());
+                o.put("student_id", a.getStudentId());
+                o.put("date", sel.toString());
+                o.put("status", a.getStatus());
                 arr.put(o);
             } catch (JSONException ignored) {}
         }
 
         if (arr.length() == 0) {
-            Toast.makeText(getContext(),
-                    "No absences marked",
-                    Toast.LENGTH_SHORT).show();
+            showToast("No absences marked");
             return;
         }
 
         JSONObject body = new JSONObject();
         try {
             body.put("teacher_id", teacherId);
-            body.put("class_id",   classId);
-            body.put("absences",   arr);
+            body.put("class_id", classId);
+            body.put("absences", arr);
         } catch (JSONException e) {
-            Toast.makeText(getContext(),
-                    "Error preparing data",
-                    Toast.LENGTH_SHORT).show();
+            showToast("Error preparing data");
             return;
         }
 
         String url = "http://10.0.2.2/android/submit_absence.php";
-        JsonObjectRequest req = new JsonObjectRequest(
-                Request.Method.POST, url, body,
-                resp -> Toast.makeText(getContext(),
-                        resp.optString("message","Saved"),
-                        Toast.LENGTH_LONG).show(),
-                err -> Toast.makeText(getContext(),
-                        "Submit failed",
-                        Toast.LENGTH_LONG).show()
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, body,
+                resp -> showToast(resp.optString("message", "Saved")),
+                err -> showToast("Submit failed")
         );
-        VolleySingleton.getInstance(requireContext())
-                .addToRequestQueue(req);
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(req);
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }
