@@ -22,4 +22,7 @@ public class UrlManager {
     public static final String URL_DELETE_STUDENT = BASE_URL + "delete_student.php";
     public static final String URL_GENERATE_STD_ID = BASE_URL + "generate_student_id.php";
     public static final String URL_GENERATE_TCHR_ID = BASE_URL + "generate_teacher_id.php";
+    public static final String URL_UPDATE_TEACHER = BASE_URL + "update_teacher.php";
+    public static final String URL_DELETE_TEACHER = BASE_URL + "delete_teacher.php";
+    public static final String URL_GET_ALL_TEACHERS = BASE_URL + "get_all_teachers.php";
 }

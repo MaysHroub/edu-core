@@ -69,9 +69,8 @@ public class ModifyStudentFragment extends Fragment {
 
     private void generateCredentials() {
         studentManagementViewModel.getStudentId().observe(getViewLifecycleOwner(), studentId -> {
-            int generatedId = studentId;
             String generatedEmail = String.format("%d@student.educore.edu", studentId);
-            binding.edttxtStdId.setText(generatedId+"");
+            binding.edttxtStdId.setText(studentId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
         });
         studentManagementViewModel.generateStudentId();
