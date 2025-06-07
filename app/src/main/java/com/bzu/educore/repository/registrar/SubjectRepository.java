@@ -47,4 +47,9 @@ public class SubjectRepository {
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void getAllGrades(Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, UrlManager.URL_GET_ALL_GRADES, null, listener, errorListener);
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
 }

@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectManagementViewModel extends AndroidViewModel {
-
     private final MutableLiveData<List<Subject>> subjects;
+    private final MutableLiveData<List<Integer>> grades;
     private final MutableLiveData<Subject> currentSubject;
     private final SubjectRepository subjectRepo;
 
@@ -30,11 +30,16 @@ public class SubjectManagementViewModel extends AndroidViewModel {
         super(application);
         subjectRepo = new SubjectRepository(application);
         subjects = new MutableLiveData<>();
+        grades = new MutableLiveData<>();
         currentSubject = new MutableLiveData<>();
     }
 
     public LiveData<List<Subject>> getSubjects() {
         return subjects;
+    }
+
+    public LiveData<List<Integer>> getGrades() {
+        return grades;
     }
 
     public LiveData<Subject> getCurrentSubject() {
@@ -78,4 +83,27 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                 }
         );
     }
+
+    public void fetchAllGrades() {
+        subjectRepo.getAllGrades(
+                response -> {
+                    Gson gson = new Gson();
+                    List<Integer> gradeList = new ArrayList<>();
+
+                    for (int i = 0; i < response.length(); i++)
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            Integer grade = gson.fromJson(obj.toString(), Integer.class);
+                            gradeList.add(grade);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    grades.postValue(gradeList);
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
+
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.bzu.educore.R;
@@ -29,27 +30,54 @@ public class SubjectModifyFragment extends Fragment {
         binding = FragmentSubjectModifyBinding.inflate(inflater, container, false);
         subjectManagementViewModel = new ViewModelProvider(this).get(SubjectManagementViewModel.class);
 
+        fillSpnrSemester();
+        fillSpnrGrades();
+        fillViewWithSubjectData();
+
+        binding.btnSubjSave.setOnClickListener(v -> {
+            if (!InputValidator.validateEditTexts(binding.edtxtSubjTitle)) {
+                Toast.makeText(requireContext(), "Title can't be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Subject subject = subjectManagementViewModel.getCurrentSubject().getValue();
+            assert subject != null;
+            subject.setTitle(binding.edtxtSubjTitle.getText().toString());
+            subject.setGradeNumber((Integer) binding.spnrSubjGrade.getSelectedItem());
+            subject.setSemesterNumber((Integer) binding.spnrSubjSemester.getSelectedItem());
+            subjectManagementViewModel.updateSubject(subject);
+        });
+
+        return binding.getRoot();
+    }
+
+    private void fillViewWithSubjectData() {
         subjectManagementViewModel.getCurrentSubject().observe(getViewLifecycleOwner(), subject -> {
             binding.edtxtSubjId.setText(subject.getId());
             binding.edtxtSubjTitle.setText(subject.getTitle());
             binding.spnrSubjSemester.setSelection(subject.getSemesterNumber() == 1 ? 0 : 1, true);
             binding.spnrSubjGrade.setSelection(subject.getGradeNumber() - (Integer) binding.spnrSubjGrade.getAdapter().getItem(0), true);
         });
-        
-        binding.btnSubjSave.setOnClickListener(v -> {
-            if (!InputValidator.validateEditTexts(binding.edtxtSubjTitle)) {
-                Toast.makeText(requireContext(), "Title can't be empty", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Subject modifiedSubject = subjectManagementViewModel.getCurrentSubject().getValue();
-            assert modifiedSubject != null;
-            modifiedSubject.setTitle(binding.edtxtSubjTitle.getText().toString());
-            modifiedSubject.setGradeNumber((Integer) binding.spnrSubjGrade.getSelectedItem());
-            modifiedSubject.setSemesterNumber((Integer) binding.spnrSubjSemester.getSelectedItem());
-            subjectManagementViewModel.updateSubject(modifiedSubject);
-        });
+    }
 
-        return binding.getRoot();
+    private void fillSpnrGrades() {
+        subjectManagementViewModel.getGrades().observe(getViewLifecycleOwner(), grades -> {
+            ArrayAdapter<Integer> adapter = new ArrayAdapter<>(
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    grades
+            );
+            binding.spnrSubjGrade.setAdapter(adapter);
+        });
+        subjectManagementViewModel.fetchAllGrades();
+    }
+
+    private void fillSpnrSemester() {
+        ArrayAdapter<Integer> semesterAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                new Integer[] {1, 2}
+        );
+        binding.spnrSubjSemester.setAdapter(semesterAdapter);
     }
 
 }
