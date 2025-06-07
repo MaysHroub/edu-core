@@ -1,6 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.student_registration;
-
-import com.bzu.educore.model.school.Classroom;
+package com.bzu.educore.activity.registrar.ui.student_management;
 
 import java.time.LocalDate;
 

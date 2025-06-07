@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.bzu.educore.activity.registrar.ui.student_registration.StudentRegistrationFragment"
+        android:name="com.bzu.educore.activity.registrar.ui.student_management.StudentRegistrationFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_student_registration" />
 

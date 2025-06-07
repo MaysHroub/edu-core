@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.student_registration;
+package com.bzu.educore.activity.registrar.ui.student_management;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import java.util.Calendar;
 public class StudentRegistrationFragment extends Fragment {
 
     private FragmentStudentRegistrationBinding binding;
-    private StudentRegistrationViewModel studentRegistrationViewModel;
+    private StudentManagementViewModel studentManagementViewModel;
     private int generatedId;
     private String generatedEmail;
     private LocalDate dob;
@@ -30,20 +30,20 @@ public class StudentRegistrationFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        studentRegistrationViewModel =
-                new ViewModelProvider(this).get(StudentRegistrationViewModel.class);
+        studentManagementViewModel =
+                new ViewModelProvider(this).get(StudentManagementViewModel.class);
 
         binding = FragmentStudentRegistrationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        studentRegistrationViewModel.getNumOfStudentsForCurrentYear().observe(getViewLifecycleOwner(), numOfStds -> {
+        studentManagementViewModel.getNumOfStudentsForCurrentYear().observe(getViewLifecycleOwner(), numOfStds -> {
             generatedId = CredentialsGenerator.generateStudentId(numOfStds);
             generatedEmail = CredentialsGenerator.generateStudentEmail(generatedId);
             binding.edttxtStdId.setText(generatedId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
         });
 
-        studentRegistrationViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
+        studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
             ArrayAdapter<DummyClassroom> adapter = new ArrayAdapter<>(
                     requireContext(),
                     android.R.layout.simple_spinner_item,
@@ -52,8 +52,8 @@ public class StudentRegistrationFragment extends Fragment {
             binding.spnrStdClassroom.setAdapter(adapter);
         });
 
-        studentRegistrationViewModel.fetchNumOfStudentsForCurrentYear();
-        studentRegistrationViewModel.fetchAllClassrooms();
+        studentManagementViewModel.fetchNumOfStudentsForCurrentYear();
+        studentManagementViewModel.fetchAllClassrooms();
 
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
         binding.btnStdRegister.setOnClickListener(v -> addStudentToDB());
@@ -73,7 +73,7 @@ public class StudentRegistrationFragment extends Fragment {
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
         // TODO: replace dummy-student with actual student class
         DummyStudent student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
-        studentRegistrationViewModel.registerStudent(student);
+        studentManagementViewModel.registerStudent(student);
     }
 
     private void showDatePickerDialog() {

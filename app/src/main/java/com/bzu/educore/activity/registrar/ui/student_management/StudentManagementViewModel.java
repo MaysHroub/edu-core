@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar.ui.student_registration;
+package com.bzu.educore.activity.registrar.ui.student_management;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -8,13 +8,8 @@ import android.widget.Toast;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.android.volley.VolleyError;
-import com.bzu.educore.model.school.Classroom;
-import com.bzu.educore.model.user.Student;
 import com.bzu.educore.repository.registrar.StudentRepository;
-import com.github.mikephil.charting.data.PieEntry;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -23,13 +18,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentRegistrationViewModel extends AndroidViewModel {
+public class StudentManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<Integer> numOfStudentsForCurrentYear;
     private final MutableLiveData<List<DummyClassroom>> classrooms;
     private final StudentRepository studentRepo;
 
-    public StudentRegistrationViewModel(Application application) {
+    public StudentManagementViewModel(Application application) {
         super(application);
         studentRepo = new StudentRepository(application);
         numOfStudentsForCurrentYear = new MutableLiveData<>();

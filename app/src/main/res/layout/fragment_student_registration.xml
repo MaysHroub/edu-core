@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".activity.registrar.ui.student_registration.StudentRegistrationFragment">
+    tools:context=".activity.registrar.ui.student_management.StudentRegistrationFragment">
 
     <TextView
         android:id="@+id/textView2"
