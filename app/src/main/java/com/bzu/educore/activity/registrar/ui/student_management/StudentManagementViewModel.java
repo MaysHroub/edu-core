@@ -23,23 +23,19 @@ public class StudentManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<DummyClassroom>> classrooms;
     private final MutableLiveData<List<DummyStudent>> students;
-    private final MutableLiveData<Integer> numOfStudentsForCurrentYear;
     private final MutableLiveData<Integer> index;
     private final MutableLiveData<Boolean> deletionSuccess;
+    private final MutableLiveData<Integer> studentId;
     private final MainRepository repo;
 
     public StudentManagementViewModel(Application application) {
         super(application);
         repo = MainRepository.getInstance();
-        numOfStudentsForCurrentYear = new MutableLiveData<>();
         classrooms = new MutableLiveData<>();
         students = new MutableLiveData<>();
         index = new MutableLiveData<>(-1);
         deletionSuccess = new MutableLiveData<>();
-    }
-
-    public LiveData<Integer> getNumOfStudentsForCurrentYear() {
-        return numOfStudentsForCurrentYear;
+        studentId = new MutableLiveData<>();
     }
 
     public LiveData<List<DummyClassroom>> getClassrooms() {
@@ -58,13 +54,34 @@ public class StudentManagementViewModel extends AndroidViewModel {
         return index;
     }
 
+    public LiveData<Integer> getStudentId() {
+        return studentId;
+    }
+
     public void setIndex(int index) {
         this.index.setValue(index);
     }
 
+    public void generateStudentId() {
+        repo.getData(
+                UrlManager.URL_GENERATE_STD_ID,
+                response -> {
+                    try {
+                        int generatedId = response.getInt("id");
+                        studentId.postValue(generatedId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
+
     public void registerStudent(DummyStudent student) {
         repo.addItem(
-                UrlManager.URL_ADD_NEW_TEACHER,
+                UrlManager.URL_ADD_NEW_STUDENT,
                 student,
                 response -> {
                     Toast.makeText(getApplication(), "Student is added successfully!", LENGTH_SHORT).show();
@@ -102,23 +119,6 @@ public class StudentManagementViewModel extends AndroidViewModel {
         );
     }
 
-    public void fetchNumOfStudentsForCurrentYear() {
-        repo.getStatisticalInfo(
-                UrlManager.URL_GET_STUDENT_COUNT_FOR_CURRENT_YEAR,
-                response -> {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        int count = jsonObject.getInt("count");
-                        numOfStudentsForCurrentYear.postValue(count);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
-                error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
-                }
-        );
-    }
 
     public void fetchAllClassrooms() {
         repo.getAllItems(

@@ -39,8 +39,8 @@ public class MainRepository {
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 
-    public void getStatisticalInfo(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        StringRequest request = new StringRequest(Request.Method.GET, url, listener, errorListener);
+    public void getData(String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
         VolleySingleton.getInstance(context).addToRequestQueue(request);
     }
 

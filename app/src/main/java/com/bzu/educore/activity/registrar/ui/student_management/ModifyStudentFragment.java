@@ -22,13 +22,10 @@ import com.bzu.educore.util.CredentialsGenerator;
 import java.time.LocalDate;
 import java.util.Calendar;
 
-// TODO: add button to navigate back
 public class ModifyStudentFragment extends Fragment {
 
     private FragmentModifyStudentBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
-    private int generatedId;
-    private String generatedEmail;
     private LocalDate dob;
     private int index;
 
@@ -60,8 +57,6 @@ public class ModifyStudentFragment extends Fragment {
 
     private void fillViewWithData() {
         DummyStudent student = studentManagementViewModel.getStudents().getValue().get(index);
-        generatedId = student.getId();
-        generatedEmail = student.getEmail();
         binding.edttxtStdId.setText(student.getId()+"");
         binding.edttxtStdEmail.setText(student.getEmail());
         binding.edttxtStdFname.setText(student.getFname());
@@ -73,13 +68,13 @@ public class ModifyStudentFragment extends Fragment {
     }
 
     private void generateCredentials() {
-        studentManagementViewModel.getNumOfStudentsForCurrentYear().observe(getViewLifecycleOwner(), numOfStds -> {
-            generatedId = CredentialsGenerator.generateStudentId(numOfStds);
-            generatedEmail = CredentialsGenerator.generateStudentEmail(generatedId);
+        studentManagementViewModel.getStudentId().observe(getViewLifecycleOwner(), studentId -> {
+            int generatedId = studentId;
+            String generatedEmail = String.format("%d@student.educore.edu", studentId);
             binding.edttxtStdId.setText(generatedId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
         });
-        studentManagementViewModel.fetchNumOfStudentsForCurrentYear();
+        studentManagementViewModel.generateStudentId();
     }
 
     private void fillClassroomSpinner() {
@@ -104,6 +99,9 @@ public class ModifyStudentFragment extends Fragment {
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
+        int generatedId = Integer.parseInt(binding.edttxtStdId.getText().toString());
+        String generatedEmail = binding.edttxtStdEmail.getText().toString();
+
         // TODO: replace dummy-student with actual student class
         DummyStudent student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
 
@@ -119,6 +117,7 @@ public class ModifyStudentFragment extends Fragment {
                 "Delete Student",
                 "Are you sure you want to delete this student?",
                 () -> {
+                    int generatedId = Integer.parseInt(binding.edttxtStdId.getText().toString());
                     studentManagementViewModel.deleteStudentById(generatedId);
                     studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
                         if (!success) return;
