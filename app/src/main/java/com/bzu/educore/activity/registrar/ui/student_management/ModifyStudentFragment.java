@@ -116,8 +116,8 @@ public class ModifyStudentFragment extends Fragment {
                 "Delete Student",
                 "Are you sure you want to delete this student?",
                 () -> {
-                    int generatedId = Integer.parseInt(binding.edttxtStdId.getText().toString());
-                    studentManagementViewModel.deleteStudentById(generatedId);
+                    int studentId = Integer.parseInt(binding.edttxtStdId.getText().toString());
+                    studentManagementViewModel.deleteStudentById(studentId);
                     studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
                         if (!success) return;
                         requireActivity().getSupportFragmentManager().popBackStack();

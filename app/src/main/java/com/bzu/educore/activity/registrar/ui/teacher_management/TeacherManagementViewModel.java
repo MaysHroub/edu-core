@@ -66,6 +66,10 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         currentTeacherIndex.setValue(index);
     }
 
+    public LiveData<Boolean> getDeletionSuccess() {
+        return deletionSuccess;
+    }
+
     public void registerTeacher(DummyTeacher teacher) {
         repo.addItem(
                 UrlManager.URL_ADD_NEW_TEACHER,

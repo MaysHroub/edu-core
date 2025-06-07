@@ -8,16 +8,17 @@
     android:padding="16dp"
     tools:context=".activity.registrar.ui.teacher_management.ModifyTeacherFragment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register_a_new_teacher"/>
+        tools:srcCompat="@drawable/baseline_arrow_back_24" />
 
     <EditText
         android:id="@+id/edttxt_tchr_fname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="@string/first_name"
         android:inputType="text" />
@@ -44,21 +45,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/enter_teacher_s_date_of_birth"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btn_tchr_dob"
         style="?android:spinnerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/june_14_2025"
         android:textColor="@color/black" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generated_id"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/edttxt_tchr_id"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generated_email"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/edttxt_tchr_email"
@@ -101,11 +101,45 @@
         android:hint="TCHR EMAIL"
         android:inputType="none" />
 
-    <Button
-        android:id="@+id/btn_tchr_register"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Register Teacher" />
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assign to classroom:"
+            android:layout_marginEnd="16dp"/>
+
+        <Spinner
+            android:id="@+id/spnr_tchr_classrooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="32dp">
+
+        <Button
+            android:id="@+id/btn_tchr_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
+
+        <Button
+            android:id="@+id/btn_tchr_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:text="@string/delete"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

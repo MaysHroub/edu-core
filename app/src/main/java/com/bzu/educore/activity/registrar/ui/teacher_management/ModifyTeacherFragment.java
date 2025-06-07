@@ -14,10 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
 import com.bzu.educore.databinding.FragmentModifyTeacherBinding;
 import com.bzu.educore.model.school.Subject;
-import com.bzu.educore.util.CredentialsGenerator;
+import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 
 import java.time.LocalDate;
@@ -39,7 +38,8 @@ public class ModifyTeacherFragment extends Fragment {
         View root = binding.getRoot();
 
         fillSubjectsSpinner();
-        binding.btnTchrRegister.setOnClickListener(v -> registerTeacher());
+        binding.btnTchrSave.setOnClickListener(v -> saveTeacher());
+        binding.btnTchrDelete.setOnClickListener(v -> deleteTeacher());
         binding.btnTchrDob.setOnClickListener(v -> showDatePickerDialog());
 
         index = teacherManagementViewModel.getCurrentIndex().getValue();
@@ -48,11 +48,27 @@ public class ModifyTeacherFragment extends Fragment {
             generateCredentials();
         else {
             fillViewWithData();
+            binding.btnTchrDelete.setVisibility(VISIBLE);
         }
 
         return root;
     }
 
+    private void deleteTeacher() {
+        DialogUtils.showConfirmationDialog(
+                requireContext(),
+                "Delete Teacher",
+                "Are you sure you want to delete this teacher?",
+                () -> {
+                    int teacherId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
+                    teacherManagementViewModel.deleteTeacherById(teacherId);
+                    teacherManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+                        if (!success) return;
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    });
+                }
+        );
+    }
 
     private void fillViewWithData() {
         DummyTeacher teacher = teacherManagementViewModel.getTeachers().getValue().get(index);
@@ -60,6 +76,7 @@ public class ModifyTeacherFragment extends Fragment {
         binding.edttxtTchrEmail.setText(teacher.getEmail());
         binding.edttxtTchrFname.setText(teacher.getFname());
         binding.edttxtTchrLname.setText(teacher.getLname());
+        binding.edttxtTchrPhone.setText(teacher.getPhoneNumber());
         String date = teacher.getDateOfBirth().getYear() + "-" + teacher.getDateOfBirth().getMonthValue() + "-" + teacher.getDateOfBirth().getDayOfMonth();
         binding.btnTchrDob.setText(date);
         int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(teacher.getSubjectTaught());
@@ -87,7 +104,7 @@ public class ModifyTeacherFragment extends Fragment {
         teacherManagementViewModel.fetchAllSubjects();
     }
 
-    private void registerTeacher() {
+    private void saveTeacher() {
         if (!InputValidator.validateEditTexts(binding.edttxtTchrFname, binding.edttxtTchrLname, binding.edttxtTchrPhone) ||
                 !InputValidator.validateSpinners(binding.spnrTchrSubject) ||
                 dob == null) {
