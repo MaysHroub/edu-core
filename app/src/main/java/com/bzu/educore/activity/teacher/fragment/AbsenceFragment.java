@@ -32,7 +32,7 @@ public class AbsenceFragment extends Fragment {
     private RecyclerView rvStudents;
     private Button btnDate, btnSubmit;
     private final List<Student> studentList = new ArrayList<>();
-    private final Map<Integer, Absence> absenceMap = new HashMap<>();
+    private final Map<String, Absence> absenceMap = new HashMap<>(); // Changed from Integer to String
     private AbsenceAdapter adapter;
 
     private int classId, teacherId;
@@ -161,7 +161,7 @@ public class AbsenceFragment extends Fragment {
             a.setDate(sel); // set chosen date
             JSONObject o = new JSONObject();
             try {
-                o.put("student_id", a.getStudentId());
+                o.put("student_id", a.getStudentId()); // Now this should be a String
                 o.put("date",       sel.toString());
                 o.put("status",     a.getStatus());
                 arr.put(o);

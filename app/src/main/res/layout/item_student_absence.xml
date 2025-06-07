@@ -3,57 +3,67 @@
     android:id="@+id/llItemStudent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:gravity="center_vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <!-- Profile picture -->
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/student_icon"
-        android:contentDescription="Profile picture"
-        android:layout_marginEnd="12dp" />
-
-    <!-- Student name -->
-    <TextView
-        android:id="@+id/tvStudentName"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+    <!-- Top row with profile, name, and absent checkbox -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Student Name"
-        android:textSize="16sp"
-        android:layout_marginEnd="12dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-    <!-- Absent checkbox -->
-    <CheckBox
-        android:id="@+id/cbAbsent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Absent" />
+        <!-- Profile picture -->
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/student_icon"
+            android:contentDescription="Profile picture"
+            android:layout_marginEnd="12dp" />
 
-    <!-- Excused vs Unexcused radio buttons -->
+        <!-- Student name -->
+        <TextView
+            android:id="@+id/tvStudentName"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Student Name"
+            android:textSize="16sp"
+            android:layout_marginEnd="12dp" />
+
+        <!-- Absent checkbox -->
+        <CheckBox
+            android:id="@+id/cbAbsent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Absent" />
+
+    </LinearLayout>
+
+    <!-- Radio buttons row (appears below when absent is checked) -->
     <RadioGroup
         android:id="@+id/rgStatus"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:layout_marginStart="8dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="52dp"
+        android:gravity="start">
 
         <RadioButton
             android:id="@+id/rbUnexcused"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unexcused" />
+            android:text="Unexcused"
+            android:layout_marginEnd="16dp" />
 
         <RadioButton
             android:id="@+id/rbExcused"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Excused"
-            android:layout_marginStart="4dp" />
+            android:text="Excused" />
 
     </RadioGroup>
 

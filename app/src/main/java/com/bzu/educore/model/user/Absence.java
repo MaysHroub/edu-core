@@ -1,25 +1,17 @@
 package com.bzu.educore.model.user;
 
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
+@Data // Generates getters, setters, toString, equals, and hashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
-public class Absence implements Serializable {
-    private Integer id;
-    private Integer studentId;
+public class Absence {
+    private int id;
+    private String studentId; // Matches VARCHAR(20) in database
     private LocalDate date;
-    private String status;
+    private String status;    // "excused" or "unexcused"
 }
-

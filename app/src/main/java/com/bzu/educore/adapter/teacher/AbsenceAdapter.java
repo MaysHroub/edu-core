@@ -21,11 +21,11 @@ public class AbsenceAdapter
         extends RecyclerView.Adapter<AbsenceAdapter.VH> {
 
     private final List<Student> students;
-    private final Map<Integer, Absence> absenceMap;
-    // key: student.getId(), value: current Absence record
+    private final Map<String, Absence> absenceMap; // Changed from Integer to String
+    // key: student.getId() (String), value: current Absence record
 
     public AbsenceAdapter(List<Student> students,
-                          Map<Integer, Absence> absenceMap) {
+                          Map<String, Absence> absenceMap) { // Changed from Integer to String
         this.students = students;
         this.absenceMap = absenceMap;
     }
@@ -66,13 +66,13 @@ public class AbsenceAdapter
             if (checked) {
                 // create default unexcused Absence; date set later in Fragment
                 Absence a = new Absence();
-                a.setStudentId(Integer.valueOf(sid));
+                a.setStudentId(sid); // Using String directly - no conversion needed
                 a.setStatus("unexcused");
-                absenceMap.put(Integer.valueOf(sid), a);
+                absenceMap.put(sid, a); // Using String key directly
                 h.rgStatus.setVisibility(View.VISIBLE);
                 h.rbUnexcused.setChecked(true);
             } else {
-                absenceMap.remove(sid);
+                absenceMap.remove(sid); // Using String key directly
                 h.rgStatus.setVisibility(View.GONE);
             }
         });
