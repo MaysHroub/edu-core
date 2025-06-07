@@ -17,6 +17,7 @@ import com.bzu.educore.R;
 import com.bzu.educore.databinding.FragmentSubjectModifyBinding;
 import com.bzu.educore.databinding.FragmentSubjectViewBinding;
 import com.bzu.educore.model.school.Subject;
+import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 
 public class SubjectModifyFragment extends Fragment {
@@ -48,11 +49,19 @@ public class SubjectModifyFragment extends Fragment {
         });
 
         binding.btnSubjDelete.setOnClickListener(v -> {
-            subjectManagementViewModel.deleteCurrentSubject();
-            subjectManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
-                if (!success) return;
-                requireActivity().getSupportFragmentManager().popBackStack();
-            });
+
+            DialogUtils.showConfirmationDialog(
+                    requireContext(),
+                    "Delete Subject",
+                    "Are you sure you want to delete it?",
+                    () -> {
+                        subjectManagementViewModel.deleteCurrentSubject();
+                        subjectManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+                            if (!success) return;
+                            requireActivity().getSupportFragmentManager().popBackStack();
+                        });
+                    }
+            );
         });
 
         return binding.getRoot();
