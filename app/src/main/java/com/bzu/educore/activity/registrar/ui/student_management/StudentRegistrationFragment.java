@@ -19,6 +19,7 @@ import com.bzu.educore.util.CredentialsGenerator;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+// TODO: add button to navigate back
 public class StudentRegistrationFragment extends Fragment {
 
     private FragmentStudentRegistrationBinding binding;

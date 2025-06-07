@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".activity.registrar.ui.student_management.ViewAllStudentsFragment">
 
-    <include layout="@layout/view_all_users_shared" />
+    <include
+        android:id="@+id/layout_view_all_usrs"
+        layout="@layout/view_all_users_shared" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
