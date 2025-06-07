@@ -2,6 +2,7 @@ package com.bzu.educore.activity.registrar.ui.student_management;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,21 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bzu.educore.R;
+import com.bzu.educore.adapter.registrar.UserAdapter;
 import com.bzu.educore.databinding.FragmentStudentRegistrationBinding;
 import com.bzu.educore.databinding.FragmentViewAllStudentsBinding;
+import com.bzu.educore.listener.OnItemClickListener;
+import com.bzu.educore.model.user.Person;
 
-public class ViewAllStudentsFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ViewAllStudentsFragment extends Fragment implements OnItemClickListener {
 
     private FragmentViewAllStudentsBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         studentManagementViewModel =
                 new ViewModelProvider(this).get(StudentManagementViewModel.class);
-
         binding = FragmentViewAllStudentsBinding.inflate(inflater, container, false);
+
+        studentManagementViewModel.getStudents().observe(getViewLifecycleOwner(), students -> {
+            List<Person> users = new ArrayList<>(students);
+            UserAdapter adapter = new UserAdapter(users, this);
+            binding.layoutViewAllUsrs.rclrviewStds.setAdapter(adapter);
+        });
+        studentManagementViewModel.fetchAllStudents();
 
         binding.layoutViewAllUsrs.fltbtnAddStd.setOnClickListener(v -> {
             StudentRegistrationFragment fragment = new StudentRegistrationFragment();
@@ -38,4 +51,8 @@ public class ViewAllStudentsFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onItemClick(int position) {
+
+    }
 }
