@@ -25,7 +25,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<DummyTeacher>> teachers;
     private final MutableLiveData<List<Subject>> subjects;
-    private final MutableLiveData<List<DummyClassroom>> classrooms;
+    private final MutableLiveData<List<DummyClassroom>> unassignedClassrooms;
     private final MutableLiveData<Integer> currentTeacherIndex;
     private final MutableLiveData<Integer> teacherId;
     private final MutableLiveData<Boolean> deletionSuccess;
@@ -35,7 +35,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         super(application);
         teachers = new MutableLiveData<>();
         subjects = new MutableLiveData<>();
-        classrooms = new MutableLiveData<>();
+        unassignedClassrooms = new MutableLiveData<>();
         currentTeacherIndex = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
         teacherId = new MutableLiveData<>();
@@ -46,8 +46,8 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         return teachers;
     }
 
-    public LiveData<List<DummyClassroom>> getClassrooms() {
-        return classrooms;
+    public LiveData<List<DummyClassroom>> getUnassignedClassrooms() {
+        return unassignedClassrooms;
     }
 
     public LiveData<List<Subject>> getSubjects() {
@@ -173,9 +173,9 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         );
     }
     
-    public void fetchAllClassrooms() {
+    public void fetchAllUnassignedClassrooms() {
         repo.getAllItems(
-                UrlManager.URL_GET_ALL_CLASSROOMS,
+                UrlManager.URL_GET_UNASSIGNED_CLASSROOMS,
                 response -> {
                     Gson gson = new Gson();
                     List<DummyClassroom> classroomList = new ArrayList<>();
@@ -188,7 +188,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    classrooms.postValue(classroomList);
+                    unassignedClassrooms.postValue(classroomList);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
