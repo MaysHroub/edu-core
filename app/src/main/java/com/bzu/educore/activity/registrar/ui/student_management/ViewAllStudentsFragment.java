@@ -41,7 +41,7 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
 
         binding.layoutViewAllUsrs.fltbtnAddUsr.setOnClickListener(v -> {
             ModifyStudentFragment fragment = new ModifyStudentFragment();
-            studentManagementViewModel.setIndex(-1);
+            studentManagementViewModel.setCurrentIndex(-1);
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
             transaction.addToBackStack(null); // so the user can navigate back
@@ -50,7 +50,7 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
 
         studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success)
-                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyItemRemoved(studentManagementViewModel.getIndex().getValue());
+                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyItemRemoved(studentManagementViewModel.getCurrentIndex().getValue());
         });
 
         return binding.getRoot();
@@ -59,7 +59,7 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
     @Override
     public void onItemClick(int position) {
         ModifyStudentFragment fragment = new ModifyStudentFragment();
-        studentManagementViewModel.setIndex(position);
+        studentManagementViewModel.setCurrentIndex(position);
         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
         transaction.addToBackStack(null); // so the user can navigate back

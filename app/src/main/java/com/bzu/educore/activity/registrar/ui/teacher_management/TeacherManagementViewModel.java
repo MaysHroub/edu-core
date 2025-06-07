@@ -9,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
@@ -25,7 +24,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<DummyTeacher>> teachers;
     private final MutableLiveData<List<Subject>> subjects;
-    private final MutableLiveData<Integer> currentTeacherIndex;
+    private final MutableLiveData<Integer> currentIndex;
     private final MutableLiveData<Integer> teacherId;
     private final MutableLiveData<Boolean> deletionSuccess;
     private MainRepository repo;
@@ -34,7 +33,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         super(application);
         teachers = new MutableLiveData<>();
         subjects = new MutableLiveData<>();
-        currentTeacherIndex = new MutableLiveData<>();
+        currentIndex = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
         teacherId = new MutableLiveData<>();
         repo = MainRepository.getInstance();
@@ -49,7 +48,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
     }
 
     public LiveData<Integer> getCurrentIndex() {
-        return currentTeacherIndex;
+        return currentIndex;
     }
 
     public LiveData<Integer> getTeacherId() {
@@ -57,7 +56,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
     }
 
     public void setCurrentIndex(int index) {
-        currentTeacherIndex.setValue(index);
+        currentIndex.setValue(index);
     }
 
     public LiveData<Boolean> getDeletionSuccess() {

@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
-import com.bzu.educore.util.CredentialsGenerator;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -37,7 +36,7 @@ public class ModifyStudentFragment extends Fragment {
         binding = FragmentModifyStudentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        index = studentManagementViewModel.getIndex().getValue();
+        index = studentManagementViewModel.getCurrentIndex().getValue();
 
         fillClassroomSpinner();
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
