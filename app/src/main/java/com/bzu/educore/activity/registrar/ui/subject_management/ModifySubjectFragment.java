@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.bzu.educore.R;
 import com.bzu.educore.databinding.FragmentSubjectModifyBinding;
-import com.bzu.educore.databinding.FragmentSubjectViewBinding;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 
-public class SubjectModifyFragment extends Fragment {
+public class ModifySubjectFragment extends Fragment {
 
     private FragmentSubjectModifyBinding binding;
     private SubjectManagementViewModel subjectManagementViewModel;
