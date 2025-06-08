@@ -166,4 +166,16 @@ public class StudentManagementViewModel extends AndroidViewModel {
         );
     }
 
+    public void updateClassroom(DummyClassroom modifiedClassroom) {
+        repo.updateItem(
+                UrlManager.URL_UPDATE_CLASSROOM,
+                modifiedClassroom,
+                response -> {
+                    Toast.makeText(getApplication(), "Classroom is updated successfully!", LENGTH_SHORT).show();
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
 }

@@ -8,47 +8,73 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.bzu.educore.R;
 import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
+import com.bzu.educore.activity.registrar.ui.student_management.StudentManagementViewModel;
 import com.bzu.educore.activity.registrar.ui.teacher_management.DummyTeacher;
 import com.bzu.educore.activity.registrar.ui.teacher_management.TeacherManagementViewModel;
-import com.bzu.educore.adapter.registrar.HomeroomTeacherAdapter;
-import com.bzu.educore.adapter.registrar.UserAdapter;
 import com.bzu.educore.databinding.FragmentAssignHomeroomTeacherBinding;
-import com.bzu.educore.databinding.FragmentViewAllTeachersBinding;
-import com.bzu.educore.model.user.Person;
 import com.bzu.educore.util.DialogUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AssignHomeroomTeacherFragment extends Fragment {
 
     private FragmentAssignHomeroomTeacherBinding binding;
     private TeacherManagementViewModel teacherManagementViewModel;
+    private StudentManagementViewModel studentManagementViewModel;
+    private DummyClassroom classroom;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null)
+            classroom = (DummyClassroom) getArguments().getSerializable("classroom");
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         teacherManagementViewModel = new ViewModelProvider(this).get(TeacherManagementViewModel.class);
+        studentManagementViewModel = new ViewModelProvider(this).get(StudentManagementViewModel.class);
         binding = FragmentAssignHomeroomTeacherBinding.inflate(inflater, container, false);
 
         fillTeacherSpinner();
-        fillClassroomSpinner();
-        fillRecyclerView();
-        addSwapToDeleteFunction();
+        binding.txtClassroom.setText(classroom.toString());
+
+        int pos = findAssignedTeacherPos();
+        if (pos != -1)
+            binding.spnrTchrs.setSelection(pos);
+
+        binding.btnAssign.setOnClickListener(v -> {
+            DummyTeacher teacher = (DummyTeacher) binding.spnrTchrs.getSelectedItem();
+            classroom.setHomeroomTeacherId(teacher.getId());
+            studentManagementViewModel.updateClassroom(classroom);
+        });
+
+        binding.imgBack.setOnClickListener(v ->
+            requireActivity().getSupportFragmentManager().popBackStack()
+        );
 
         return binding.getRoot();
     }
 
+    private int findAssignedTeacherPos() {
+        List<DummyTeacher> teachers = teacherManagementViewModel.getTeachers().getValue();
+        for (int i = 0; i < teachers.size(); i++)
+            if (teachers.get(i).getId() == classroom.getHomeroomTeacherId())
+                return i;
+        return -1;
+    }
+
     private void fillTeacherSpinner() {
         teacherManagementViewModel.getTeachers().observe(getViewLifecycleOwner(), teachers -> {
+            teachers.add(0, new DummyTeacher());
             ArrayAdapter<DummyTeacher> adapter = new ArrayAdapter<>(
                     requireContext(),
                     android.R.layout.simple_spinner_item,
@@ -57,53 +83,6 @@ public class AssignHomeroomTeacherFragment extends Fragment {
             binding.spnrTchrs.setAdapter(adapter);
         });
         teacherManagementViewModel.fetchAllTeachers();
-    }
-
-    private void fillClassroomSpinner() {
-        teacherManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
-            ArrayAdapter<DummyClassroom> adapter = new ArrayAdapter<>(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    classrooms
-            );
-            binding.spnrClassrooms.setAdapter(adapter);
-        });
-        teacherManagementViewModel.fetchAllClassrooms();
-    }
-
-    private void fillRecyclerView() {
-        teacherManagementViewModel.getHomeroomTeacherAssigns().observe(getViewLifecycleOwner(), assigns -> {
-            HomeroomTeacherAdapter adapter = new HomeroomTeacherAdapter(assigns);
-            binding.rclrviewHomeroomTchr.setAdapter(adapter);
-        });
-        teacherManagementViewModel.fetchTeacherClassroomAssigns();
-    }
-
-    private void addSwapToDeleteFunction() {
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
-                return false; // no drag-and-drop needed
-            }
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                DialogUtils.showConfirmationDialog(
-                        requireContext(),
-                        "Delete Assigning",
-                        "Are you sure you want to delete this assigning?",
-                        () -> {
-                            teacherManagementViewModel.getHomeroomTeacherAssigns().getValue().remove(position);
-                        }
-                );
-                binding.rclrviewHomeroomTchr.getAdapter().notifyItemChanged(position);
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(binding.rclrviewHomeroomTchr);
     }
 
     @Override

@@ -7,9 +7,11 @@ import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class DummyTeacher extends Person {
     private Integer id;
     private String fname, lname, email, phoneNumber;
