@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".activity.registrar.ui.homeroom_teacher.AssignHomeroomTeacherFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/assign_homeroom_teacher_to_classroom"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rclrview_homeroom_tchr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_weight="1" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/classroom"/>
+
+        <Spinner
+            android:id="@+id/spnr_classrooms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/teacher"/>
+
+        <Spinner
+            android:id="@+id/spnr_tchrs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <Button
+        android:id="@+id/btn_assign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/assign" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
