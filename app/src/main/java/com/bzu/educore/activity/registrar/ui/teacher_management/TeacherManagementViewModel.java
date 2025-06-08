@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bzu.educore.activity.registrar.ui.homeroom_teacher.HomeroomTeacherAssigning;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
@@ -24,6 +25,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<DummyTeacher>> teachers;
     private final MutableLiveData<List<Subject>> subjects;
+    private final MutableLiveData<List<HomeroomTeacherAssigning>> assigns;
     private final MutableLiveData<Integer> currentIndex;
     private final MutableLiveData<Integer> teacherId;
     private final MutableLiveData<Boolean> deletionSuccess;
@@ -33,6 +35,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         super(application);
         teachers = new MutableLiveData<>();
         subjects = new MutableLiveData<>();
+        assigns = new MutableLiveData<>();
         currentIndex = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
         teacherId = new MutableLiveData<>();
@@ -45,6 +48,10 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     public LiveData<List<Subject>> getSubjects() {
         return subjects;
+    }
+
+    public LiveData<List<HomeroomTeacherAssigning>> getHomeroomTeacherAssigns() {
+        return assigns;
     }
 
     public LiveData<Integer> getCurrentIndex() {
@@ -113,6 +120,31 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
+
+    public void fetchTeacherClassroomAssigns() {
+        repo.getAllItems(
+                UrlManager.GET_TEACHER_CLASSROOM_ASSIGNS,
+                response -> {
+                    List<HomeroomTeacherAssigning> assigningList = new ArrayList<>();
+                    for (int i = 0; i < response.length(); i++)
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            int teacherId = obj.getInt("teacherId");
+                            int classroomGrade = obj.getInt("gradeNum");
+                            String teacherName = obj.getString("teacherName");
+                            String classroomSection = obj.getString("section");
+                            HomeroomTeacherAssigning assign = new HomeroomTeacherAssigning(teacherId, teacherName, classroomGrade, classroomSection);
+                            assigningList.add(assign);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    assigns.postValue(assigningList);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();

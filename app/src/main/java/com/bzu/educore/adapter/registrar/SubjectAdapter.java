@@ -59,6 +59,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
         }
     }
 
+    // TODO: remove it and use the one in listener package
     public interface OnItemClickListener {
         void onItemClick(Subject subject);
     }
