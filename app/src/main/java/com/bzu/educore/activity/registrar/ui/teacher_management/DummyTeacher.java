@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import androidx.annotation.NonNull;
+
 import com.bzu.educore.model.school.Subject;
 
 import java.time.LocalDate;
@@ -14,4 +16,10 @@ public class DummyTeacher {
     private String fname, lname, email, phoneNumber;
     private Subject subjectTaught;
     private LocalDate dateOfBirth;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return fname + " - " + id;
+    }
 }
