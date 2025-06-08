@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.bzu.educore.activity.registrar.ui.student_registration.StudentRegistrationFragment"
+        android:name="com.bzu.educore.activity.registrar.ui.student_management.ModifyStudentFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_student_registration" />
+        tools:layout="@layout/fragment_modify_student" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.bzu.educore.activity.registrar.ui.teacher_registration.TeacherRegistrationFragment"
+        android:name="com.bzu.educore.activity.registrar.ui.teacher_management.ModifyTeacherFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_teacher_registration" />
+        tools:layout="@layout/fragment_modify_teacher" />
 </navigation>

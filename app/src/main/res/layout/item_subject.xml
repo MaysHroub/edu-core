@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/txt_subj_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="subject title" />
+
+        <TextView
+            android:id="@+id/txtview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_subj_title"
+            android:text="@string/grade"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/txt_subj_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/txtview1"
+            android:layout_alignBottom="@+id/txtview1"
+            android:text="10"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/txtview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_subj_title"
+            android:layout_toEndOf="@id/txt_subj_grade"
+            android:layout_marginStart="48dp"
+            android:text="@string/semester"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/txt_subj_semester"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_subj_title"
+            android:layout_toEndOf="@id/txtview2"
+            android:layout_marginStart="8dp"
+            android:text="First"
+            android:layout_marginTop="16dp"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

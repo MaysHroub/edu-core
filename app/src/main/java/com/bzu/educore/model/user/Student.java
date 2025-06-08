@@ -16,11 +16,13 @@ import lombok.experimental.SuperBuilder;
 
 public class Student extends Person{
     private String grade_number,class_id;
+    private String id;
     public Student(String id, Integer age, String name, String email, LocalDate dateOfBirth,
                    String grade_number, String class_id) {
-        super(id, age, name, email, dateOfBirth);
+        super(age, name, email, dateOfBirth);
         this.grade_number = grade_number;
         this.class_id = class_id;
+        this.id=id;
     }
 
 }

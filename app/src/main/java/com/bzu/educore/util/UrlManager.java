@@ -14,4 +14,19 @@ public class UrlManager {
     public static final String URL_GET_ALL_CLASSROOMS = BASE_URL + "get_all_classrooms.php";
     public static final String URL_ADD_NEW_TEACHER = BASE_URL + "add_new_teacher.php";
     public static final String URL_GET_ALL_SUBJECTS = BASE_URL + "get_all_subjects.php";
+    public static final String URL_UPDATE_SUBJECT = BASE_URL + "update_subject.php";
+    public static final String URL_DELETE_SUBJECT = BASE_URL + "delete_subject.php";
+    public static final String URL_GET_ALL_GRADES = BASE_URL + "get_all_grades.php";
+    public static final String URL_GET_ALL_STUDENTS = BASE_URL + "get_all_students.php";
+    public static final String URL_UPDATE_STUDENT = BASE_URL + "update_student.php";
+    public static final String URL_DELETE_STUDENT = BASE_URL + "delete_student.php";
+    public static final String URL_GENERATE_STD_ID = BASE_URL + "generate_student_id.php";
+    public static final String URL_GENERATE_TCHR_ID = BASE_URL + "generate_teacher_id.php";
+    public static final String URL_UPDATE_TEACHER = BASE_URL + "update_teacher.php";
+    public static final String URL_DELETE_TEACHER = BASE_URL + "delete_teacher.php";
+    public static final String URL_GET_ALL_TEACHERS = BASE_URL + "get_all_teachers.php";
+    public static final String URL_GET_UNASSIGNED_CLASSROOMS = BASE_URL + "get_unassigned_classrooms.php";
+    public static final String GET_TEACHER_CLASSROOM_ASSIGNS = BASE_URL + "get_teacher_classroom_assigns.php";
+    public static final String URL_UPDATE_CLASSROOM = BASE_URL + "update_classroom.php";
+
 }
