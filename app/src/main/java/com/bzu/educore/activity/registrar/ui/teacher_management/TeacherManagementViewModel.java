@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bzu.educore.activity.registrar.ui.homeroom_teacher.HomeroomTeacherAssigning;
+import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
@@ -25,6 +26,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<DummyTeacher>> teachers;
     private final MutableLiveData<List<Subject>> subjects;
+    private final MutableLiveData<List<DummyClassroom>> classrooms;
     private final MutableLiveData<List<HomeroomTeacherAssigning>> assigns;
     private final MutableLiveData<Integer> currentIndex;
     private final MutableLiveData<Integer> teacherId;
@@ -36,6 +38,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         teachers = new MutableLiveData<>();
         subjects = new MutableLiveData<>();
         assigns = new MutableLiveData<>();
+        classrooms = new MutableLiveData<>();
         currentIndex = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
         teacherId = new MutableLiveData<>();
@@ -48,6 +51,10 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     public LiveData<List<Subject>> getSubjects() {
         return subjects;
+    }
+
+    public LiveData<List<DummyClassroom>> getClassrooms() {
+        return classrooms;
     }
 
     public LiveData<List<HomeroomTeacherAssigning>> getHomeroomTeacherAssigns() {
@@ -191,6 +198,29 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                             e.printStackTrace();
                         }
                     subjects.postValue(subjectList);
+                },
+                error -> {
+                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                }
+        );
+    }
+
+    public void fetchAllClassrooms() {
+        repo.getAllItems(
+                UrlManager.URL_GET_ALL_CLASSROOMS,
+                response -> {
+                    Gson gson = new Gson();
+                    List<DummyClassroom> classroomList = new ArrayList<>();
+
+                    for (int i = 0; i < response.length(); i++)
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            DummyClassroom classroom = gson.fromJson(obj.toString(), DummyClassroom.class);
+                            classroomList.add(classroom);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    classrooms.postValue(classroomList);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
