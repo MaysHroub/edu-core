@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment.task_management;
+package com.bzu.educore.activity.teacher.ui.task_management;
 
 import android.os.Bundle;
 import android.text.Editable;

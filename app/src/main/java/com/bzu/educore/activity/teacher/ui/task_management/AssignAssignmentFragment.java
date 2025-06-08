@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment.task_management;
+package com.bzu.educore.activity.teacher.ui.task_management;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.fragment.BaseFragment;
+import com.bzu.educore.activity.teacher.ui.BaseFragment;
 import com.bzu.educore.model.task.Assignment;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.VolleySingleton;

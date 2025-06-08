@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.fragment.student_management.TeacherDashboardFragment;
+import com.bzu.educore.activity.teacher.ui.student_management.TeacherDashboardFragment;
 
 public class TeacherMainActivity extends AppCompatActivity {
 

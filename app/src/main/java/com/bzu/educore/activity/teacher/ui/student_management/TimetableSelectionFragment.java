@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment.student_management;
+package com.bzu.educore.activity.teacher.ui.student_management;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,8 +16,8 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
-import com.bzu.educore.activity.teacher.fragment.task_management.AnnounceExamFragment;
-import com.bzu.educore.activity.teacher.fragment.task_management.AssignAssignmentFragment;
+import com.bzu.educore.activity.teacher.ui.task_management.AnnounceExamFragment;
+import com.bzu.educore.activity.teacher.ui.task_management.AssignAssignmentFragment;
 import com.bzu.educore.adapter.teacher.TimetableSelectionAdapter;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
