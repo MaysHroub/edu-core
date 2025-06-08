@@ -37,7 +37,7 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
                 new ViewModelProvider(this).get(TeacherManagementViewModel.class);
         binding = FragmentViewAllTeachersBinding.inflate(inflater, container, false);
 
-        teacherManagementViewModel.getTeacherId().observe(getViewLifecycleOwner(), teachers -> {
+        teacherManagementViewModel.getTeachers().observe(getViewLifecycleOwner(), teachers -> {
             List<Person> users = new ArrayList<>(teachers);
             UserAdapter adapter = new UserAdapter(users, this);
             binding.layoutViewAllUsrs.rclrviewUsrs.setAdapter(adapter);

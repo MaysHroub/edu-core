@@ -11,7 +11,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.bzu.educore.model.school.Subject;
-import com.bzu.educore.repository.registrar.SubjectRepository;
+import com.bzu.educore.repository.registrar.MainRepository;
+import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -25,11 +26,11 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Integer>> grades;
     private final MutableLiveData<Subject> currentSubject;
     private final MutableLiveData<Boolean> deletionSuccess;
-    private final SubjectRepository subjectRepo;
+    private final MainRepository repo;
 
     public SubjectManagementViewModel(@NonNull Application application) {
         super(application);
-        subjectRepo = new SubjectRepository(application);
+        repo = MainRepository.getInstance();
         subjects = new MutableLiveData<>();
         grades = new MutableLiveData<>();
         currentSubject = new MutableLiveData<>();
@@ -58,7 +59,8 @@ public class SubjectManagementViewModel extends AndroidViewModel {
 
 
     public void updateSubject(Subject modifiedSubject) {
-        subjectRepo.updateSubject(
+        repo.updateItem(
+                UrlManager.URL_UPDATE_SUBJECT,
                 modifiedSubject,
                 response -> {
                     Toast.makeText(getApplication(), "Modifications are saved!", LENGTH_SHORT).show();
@@ -70,7 +72,8 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     }
 
     public void fetchAllSubjects() {
-        subjectRepo.getAllSubjects(
+        repo.getAllItems(
+                UrlManager.URL_GET_ALL_SUBJECTS,
                 response -> {
                     Gson gson = new Gson();
                     List<Subject> subjectList = new ArrayList<>();
@@ -92,7 +95,8 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     }
 
     public void fetchAllGrades() {
-        subjectRepo.getAllGrades(
+        repo.getAllItems(
+                UrlManager.URL_GET_ALL_GRADES,
                 response -> {
                     Gson gson = new Gson();
                     List<Integer> gradeList = new ArrayList<>();
@@ -114,7 +118,8 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     }
 
     public void deleteCurrentSubject() {
-        subjectRepo.deleteSubjectById(
+        repo.deleteItemById(
+                UrlManager.URL_DELETE_SUBJECT,
                 currentSubject.getValue().getId(),
                 response -> {
                     Toast.makeText(getApplication(), "Deleted Successfully!", LENGTH_SHORT).show();
