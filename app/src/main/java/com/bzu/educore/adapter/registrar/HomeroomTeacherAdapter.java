@@ -13,12 +13,15 @@ import com.bzu.educore.activity.registrar.ui.homeroom_teacher.HomeroomTeacherAss
 
 import java.util.List;
 
+import lombok.Getter;
+
+@Getter
 public class HomeroomTeacherAdapter extends RecyclerView.Adapter<HomeroomTeacherAdapter.ViewHolder> {
 
-    private final List<HomeroomTeacherAssigning> homeroomTeacherAssigning;
+    private final List<HomeroomTeacherAssigning> assigns;
 
-    public HomeroomTeacherAdapter(List<HomeroomTeacherAssigning> homeroomTeacherAssigning) {
-        this.homeroomTeacherAssigning = homeroomTeacherAssigning;
+    public HomeroomTeacherAdapter(List<HomeroomTeacherAssigning> assigns) {
+        this.assigns = assigns;
     }
 
 
@@ -31,13 +34,13 @@ public class HomeroomTeacherAdapter extends RecyclerView.Adapter<HomeroomTeacher
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HomeroomTeacherAssigning assigning = homeroomTeacherAssigning.get(position);
+        HomeroomTeacherAssigning assigning = assigns.get(position);
         holder.bind(assigning);
     }
 
     @Override
     public int getItemCount() {
-        return homeroomTeacherAssigning.size();
+        return assigns.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,8 +53,8 @@ public class HomeroomTeacherAdapter extends RecyclerView.Adapter<HomeroomTeacher
         }
 
         public void bind(HomeroomTeacherAssigning assigning) {
-            txtTeacher.setText(assigning.getTeacher().toString());
-            txtClassroom.setText(assigning.getClassroom().toString());
+            txtTeacher.setText(String.format("%s - %d", assigning.getTeacherName(), assigning.getTeacherId()));
+            txtClassroom.setText(String.format("%d - %s", assigning.getClassroomGrade(), assigning.getClassroomSection()));
         }
     }
 
