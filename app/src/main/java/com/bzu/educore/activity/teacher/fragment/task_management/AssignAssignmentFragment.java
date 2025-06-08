@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.fragment.task;
+package com.bzu.educore.activity.teacher.fragment.task_management;
 
 import android.app.Activity;
 import android.content.Intent;
