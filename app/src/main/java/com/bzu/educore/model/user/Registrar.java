@@ -11,8 +11,9 @@ import lombok.Setter;
 @Setter
 
 public class Registrar extends Person{
-    public Registrar(String id, Integer age, String name, String email, LocalDate dateOfBirth) {
-        super(id, age, name, email, dateOfBirth);
+    private Integer id;
+    public Registrar(Integer id, Integer age, String name, String email, LocalDate dateOfBirth) {
+        super(age, name, email, dateOfBirth);
     }
 
 }

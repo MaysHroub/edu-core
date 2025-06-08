@@ -58,11 +58,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         public void bind(Person user, int position, OnItemClickListener listener) {
-            txtId.setText(user.getId());
             txtName.setText(user.getName());
             itemView.setOnClickListener(v -> listener.onItemClick(position));
-            if (user instanceof DummyStudent)
+            if (user instanceof DummyStudent) {
                 imgUser.setImageResource(R.drawable.student_icon);
+                txtId.setText(((DummyStudent)user).getId());
+            }
             else
                 imgUser.setImageResource(R.drawable.teacher);
         }

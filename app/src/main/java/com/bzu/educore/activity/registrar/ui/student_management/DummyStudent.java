@@ -12,8 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DummyStudent extends Person {
-
-    private Integer id;
+    private int id;
     private String fname, lname, email;
     private DummyClassroom classroom;
     private LocalDate dateOfBirth;

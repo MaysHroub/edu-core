@@ -13,8 +13,9 @@ import lombok.Setter;
 @Setter
 public class Teacher extends Person {
     private String phone_number;
-    public Teacher(String id, Integer age, String name, String email, LocalDate dateOfBirth, String phone_number) {
-        super(id, age, name, email, dateOfBirth);
+    private Integer id;
+    public Teacher( Integer age, String name, String email, LocalDate dateOfBirth, String phone_number) {
+        super( age, name, email, dateOfBirth);
         this.phone_number = phone_number;
     }
 

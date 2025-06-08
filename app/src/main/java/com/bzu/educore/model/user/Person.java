@@ -15,11 +15,9 @@ import lombok.ToString;
 // TODO: rename Person to User
 public abstract class Person {
     private Integer age;
-    private String id;
     private String name,email;
     private LocalDate dateOfBirth;
-    public Person(String id, Integer age, String name, String email, LocalDate dateOfBirth) {
-        this.id = id;
+    public Person(Integer age, String name, String email, LocalDate dateOfBirth) {
         this.age = age;
         this.name = name;
         this.email = email;
