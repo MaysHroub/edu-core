@@ -114,7 +114,7 @@ public class SearchTasksFragment extends Fragment {
         loadSpinner(spinnerSubject, Constants.GET_SUBJECTS_URL, Constants.ALL_SUBJECTS, Constants.JSON_TITLE, false);
         loadSpinner(spinnerGrade, Constants.GET_GRADES_URL, Constants.ALL_GRADES, Constants.JSON_GRADE_NUMBER, true);
 
-        List<String> types = Arrays.asList(Constants.ALL_TYPES, Constants.TYPE_ASSIGNMENT, Constants.TYPE_EXAM);
+        List<String> types = Arrays.asList(Constants.ALL_TYPES, "Assignment","Quiz","First","Second","Midterm","Final");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(adapter);
