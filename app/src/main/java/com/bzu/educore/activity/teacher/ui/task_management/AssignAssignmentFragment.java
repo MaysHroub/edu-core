@@ -138,27 +138,21 @@ public class AssignAssignmentFragment extends Fragment {
                 deadlinePicker.getDayOfMonth()
         );
 
-        Assignment assignment = new Assignment(
-                null,
-                subjectId,
-                classGradeId,
-                null,
-                teacherId,
-                "assignment",
-                uploadedFileUrl,
-                deadlineDate,
-                null,
-                maxScore
-        );
-
         try {
-            JSONObject data = assignment.toJson();
+            JSONObject data = new JSONObject();
+            data.put("subject_id", subjectId);
+            data.put("class_id", classGradeId);
+            data.put("teacher_id", teacherId);
+            data.put("type", "assignment"); // Fixed: Pass task type
+            data.put("max_score", maxScore);
             data.put("title", title);
             data.put("description", description);
+            data.put("question_file_url", uploadedFileUrl);
+            data.put("deadline", deadlineDate.toString()); // Fixed: Format deadline properly
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    Constants.BASE_URL + "assignment.php",
+                    Constants.BASE_URL + "publish_assignment.php",
                     data,
                     response -> {
                         FragmentHelper.showToast(this,"Assignment published successfully!");

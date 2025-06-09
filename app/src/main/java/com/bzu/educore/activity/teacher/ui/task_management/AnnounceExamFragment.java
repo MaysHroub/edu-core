@@ -100,24 +100,20 @@ public class AnnounceExamFragment extends Fragment {
                 examDatePicker.getDayOfMonth()
         );
 
-        Task newTask = new Task(
-                null,
-                subjectId,
-                classGradeId,
-                selectedDate,
-                teacherId,
-                "exam",
-                maxScore
-        );
-
         try {
-            JSONObject data = newTask.toJson();
+            JSONObject data = new JSONObject();
+            data.put("subject_id", subjectId);
+            data.put("class_id", classGradeId);
+            data.put("teacher_id", teacherId);
+            data.put("type", "exam"); // Fixed: Pass task type explicitly
+            data.put("max_score", maxScore);
+            data.put("date", selectedDate.toString()); // Fixed: Format date properly
             data.put("title", titleStr);
             data.put("description", descStr);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    Constants.BASE_URL + "exam.php",
+                    Constants.BASE_URL + "publish_exam.php",
                     data,
                     response -> {
                         FragmentHelper.showToast(this, "Exam announced successfully!");
