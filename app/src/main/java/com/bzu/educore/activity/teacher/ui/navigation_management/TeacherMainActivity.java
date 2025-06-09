@@ -21,18 +21,19 @@ public class TeacherMainActivity extends AppCompatActivity {
             ft.commit();
         }
     }
+    // Helper method to swap fragments dynamically
 
     public void loadFragment(Fragment fragment, boolean addToStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
 
-        if (addToStack) {
+        if (addToStack) { // If true. it saves this transaction in the back stack so the user can navigate back
             ft.addToBackStack(null);
         }
         ft.commit();
     }
-
+    // a method to handle back navigation inside fragments.
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();

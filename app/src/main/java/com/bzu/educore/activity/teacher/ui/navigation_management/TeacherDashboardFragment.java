@@ -39,7 +39,6 @@ public class TeacherDashboardFragment extends Fragment {
         cardCreateAssignment.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("mode", "assignment");
-
             TimetableSelectionFragment fragment = new TimetableSelectionFragment();
             fragment.setArguments(bundle);
             // Use two-argument loadFragment: (fragment, addToBackStack)
