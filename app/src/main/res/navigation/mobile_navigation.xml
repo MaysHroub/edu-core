@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@id/statisticsFragment">
+    android:id="@+id/mobile_navigation">
 
     <fragment
         android:id="@+id/nav_students"
@@ -14,12 +13,6 @@
             android:id="@+id/action_viewAllStudentsFragment_to_modifyStudentFragment"
             app:destination="@id/modifyStudentFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/statisticsFragment"
-        android:name="com.bzu.educore.activity.registrar.ui.stats.StatisticsFragment"
-        android:label="fragment_statistics"
-        tools:layout="@layout/fragment_statistics" />
 
     <fragment
         android:id="@+id/nav_classrooms"
@@ -47,7 +40,7 @@
         android:label="fragment_view_all_teachers"
         tools:layout="@layout/fragment_view_all_teachers" >
         <action
-            android:id="@+id/action_viewAllTeachersFragment2_to_modifyTeacherFragment"
+            android:id="@+id/action_viewAllTeachersFragment_to_modifyTeacherFragment"
             app:destination="@id/modifyTeacherFragment" />
     </fragment>
 
@@ -59,6 +52,9 @@
         <argument
             android:name="classroom"
             app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom" />
+        <action
+            android:id="@+id/action_assignHomeroomTeacherFragment_to_view_all_classrooms"
+            app:destination="@id/nav_classrooms" />
     </fragment>
 
     <fragment
@@ -70,6 +66,9 @@
             android:name="student"
             android:defaultValue="@null"
             app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyStudent" />
+        <action
+            android:id="@+id/action_modifyStudentFragment_to_view_all_students"
+            app:destination="@id/nav_students" />
     </fragment>
 
     <fragment
@@ -80,6 +79,9 @@
         <argument
             android:name="subject"
             app:argType="com.bzu.educore.model.school.Subject" />
+        <action
+            android:id="@+id/action_modifySubjectFragment_to_view_all_subjects"
+            app:destination="@id/nav_subjects" />
     </fragment>
 
     <fragment
@@ -90,6 +92,9 @@
         <argument
             android:name="teacher"
             app:argType="com.bzu.educore.activity.registrar.ui.teacher_management.DummyTeacher" />
+        <action
+            android:id="@+id/action_modifyTeacherFragment_to_view_all_teachers"
+            app:destination="@id/nav_teachers" />
     </fragment>
 
 </navigation>
