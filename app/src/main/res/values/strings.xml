@@ -50,4 +50,9 @@
     <string name="assign">Assign</string>
     <string name="assign_homeroom_teacher_to_classroom">Assign Homeroom Teacher to Classroom</string>
     <string name="classrooms">Classrooms</string>
+    <string name="teachers">Teachers</string>
+    <string name="students">Students</string>
+    <string name="profile">Profile</string>
+    <string name="subjects">Subjects</string>
+    <string name="schedules">Schedules</string>
 </resources>
