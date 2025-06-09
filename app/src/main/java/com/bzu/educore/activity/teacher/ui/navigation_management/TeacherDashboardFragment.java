@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.ui.BaseFragment;
 import com.bzu.educore.activity.teacher.ui.student_management.AttendanceRecordingFragment;
 import com.bzu.educore.activity.teacher.ui.task_management.TimetableSelectionFragment;
 import com.bzu.educore.activity.teacher.ui.student_management.SearchTasksFragment;
 
-public class TeacherDashboardFragment extends BaseFragment {
+public class TeacherDashboardFragment extends Fragment {
 
     @Nullable
     @Override

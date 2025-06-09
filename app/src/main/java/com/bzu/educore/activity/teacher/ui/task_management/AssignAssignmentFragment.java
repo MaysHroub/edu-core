@@ -1,6 +1,7 @@
 package com.bzu.educore.activity.teacher.ui.task_management;
 
 import android.app.Activity;
+import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,25 +12,22 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.ui.BaseFragment;
 import com.bzu.educore.model.task.Assignment;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.bzu.educore.util.teacher.FragmentHelper;
 
 import java.time.LocalDate;
 
-public class AssignAssignmentFragment extends BaseFragment {
+public class AssignAssignmentFragment extends Fragment {
 
     private static final int FILE_PICKER_REQUEST = 100;
 
@@ -103,7 +101,7 @@ public class AssignAssignmentFragment extends BaseFragment {
             Uri fileUri = data.getData();
             uploadedFileUrl = fileUri.toString();
             uploadButton.setText("File Selected ✓");
-            showToast("File selected");
+            FragmentHelper.showToast(this,"File selected");
         }
     }
 
@@ -113,7 +111,7 @@ public class AssignAssignmentFragment extends BaseFragment {
         String maxScoreStr = maxScoreEditText.getText().toString().trim();
 
         if (!InputValidator.validateEditTexts(titleEditText, descEditText, maxScoreEditText)) {
-            showToast("All fields are required");
+            FragmentHelper.showToast(this,"All fields are required");
             return;
         }
 
@@ -130,7 +128,7 @@ public class AssignAssignmentFragment extends BaseFragment {
         }
 
         if (uploadedFileUrl.isEmpty()) {
-            showToast("Please select a file");
+            FragmentHelper.showToast(this,"Please select a file");
             return;
         }
 
@@ -163,16 +161,16 @@ public class AssignAssignmentFragment extends BaseFragment {
                     Constants.BASE_URL + "assignment.php",
                     data,
                     response -> {
-                        showToast("Assignment published successfully!");
+                        FragmentHelper.showToast(this,"Assignment published successfully!");
                         requireActivity().getSupportFragmentManager().popBackStack();
                     },
-                    error -> showErrorToast("Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
+                    error -> FragmentHelper.showErrorToast(this,"Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
             );
 
             VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
 
         } catch (JSONException e) {
-            showErrorToast("Failed to create request: " + e.getMessage());
+            FragmentHelper.showErrorToast(this,"Failed to create request: " + e.getMessage());
         }
     }
 }

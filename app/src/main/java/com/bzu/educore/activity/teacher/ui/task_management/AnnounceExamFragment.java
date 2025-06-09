@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.ui.BaseFragment;
 import com.bzu.educore.model.task.Task;
+import com.bzu.educore.util.teacher.FragmentHelper;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDate;
 
-public class AnnounceExamFragment extends BaseFragment {
+public class AnnounceExamFragment extends Fragment {
 
     private EditText examTitleEditText;
     private EditText examDescriptionEditText;
@@ -61,7 +62,7 @@ public class AnnounceExamFragment extends BaseFragment {
         classGradeTextView = view.findViewById(R.id.tvClassGradeName);
         examTitleEditText = view.findViewById(R.id.examTitleEditText);
         examDescriptionEditText = view.findViewById(R.id.examDescriptionEditText);
-        examMaxScoreEditText = view.findViewById(R.id.etMaxScore);           // New field
+        examMaxScoreEditText = view.findViewById(R.id.etMaxScore);
         examDatePicker = view.findViewById(R.id.examDatePicker);
         publishButton = view.findViewById(R.id.publishAnnouncementButton);
 
@@ -69,14 +70,12 @@ public class AnnounceExamFragment extends BaseFragment {
     }
 
     private void getArgumentsData() {
-        Bundle args = getArguments();
-        if (args != null) {
-            subjectId = args.getInt("subject_id", -1);
-            classGradeId = args.getInt("class_grade_id", -1);
-            teacherId = args.getInt("teacher_id", -1);
-            subjectName = args.getString("subject_name", "Unknown Subject");
-            classGradeName = args.getString("class_grade_name", "Unknown Class");
-        }
+        // Using FragmentHelper instead of BaseFragment methods
+        subjectId = FragmentHelper.getIntArgument(this, "subject_id", -1);
+        classGradeId = FragmentHelper.getIntArgument(this, "class_grade_id", -1);
+        teacherId = FragmentHelper.getIntArgument(this, "teacher_id", -1);
+        subjectName = FragmentHelper.getStringArgument(this, "subject_name", "Unknown Subject");
+        classGradeName = FragmentHelper.getStringArgument(this, "class_grade_name", "Unknown Class");
     }
 
     private void updateUI() {
@@ -84,28 +83,21 @@ public class AnnounceExamFragment extends BaseFragment {
         classGradeTextView.setText(classGradeName);
     }
 
-    // inside publishExam()
     private void publishExam() {
         String titleStr = examTitleEditText.getText().toString().trim();
         String descStr = examDescriptionEditText.getText().toString().trim();
         String maxScoreStr = examMaxScoreEditText.getText().toString().trim();
 
-        if (!InputValidator.validateEditTexts(examTitleEditText, examDescriptionEditText, examMaxScoreEditText)) {
-            showToast("All fields are required");
+        // Using FragmentHelper validation
+        if (!FragmentHelper.validateRequiredFields(this, titleStr, descStr, maxScoreStr)) {
             return;
         }
 
-        double maxScore;
-        try {
-            maxScore = Double.parseDouble(maxScoreStr);
-            if (maxScore <= 0) {
-                examMaxScoreEditText.setError("Must be > 0");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            examMaxScoreEditText.setError("Invalid number");
+        if (!FragmentHelper.validatePositiveNumber(this, maxScoreStr, "Max score")) {
             return;
         }
+
+        double maxScore = Double.parseDouble(maxScoreStr);
 
         LocalDate selectedDate = LocalDate.of(
                 examDatePicker.getYear(),
@@ -133,16 +125,16 @@ public class AnnounceExamFragment extends BaseFragment {
                     Constants.BASE_URL + "exam.php",
                     data,
                     response -> {
-                        showToast("Exam announced successfully!");
-                        requireActivity().getSupportFragmentManager().popBackStack();
+                        FragmentHelper.showToast(this, "Exam announced successfully!");
+                        FragmentHelper.navigateBack(this);
                     },
-                    error -> showErrorToast("Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
+                    error -> FragmentHelper.handleNetworkError(this, error, "Failed to announce exam")
             );
 
             VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
 
         } catch (JSONException e) {
-            showErrorToast("Failed to create request: " + e.getMessage());
+            FragmentHelper.handleError(this, e, "Failed to create request");
         }
     }
 }
