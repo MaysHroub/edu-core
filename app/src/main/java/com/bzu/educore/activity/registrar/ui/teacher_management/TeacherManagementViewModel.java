@@ -25,7 +25,6 @@ public class TeacherManagementViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<DummyTeacher>> teachers;
     private final MutableLiveData<List<Subject>> subjects;
-    private final MutableLiveData<Integer> currentIndex;
     private final MutableLiveData<Integer> teacherId;
     private final MutableLiveData<Boolean> deletionSuccess;
     private MainRepository repo;
@@ -34,7 +33,6 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         super(application);
         teachers = new MutableLiveData<>();
         subjects = new MutableLiveData<>();
-        currentIndex = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
         teacherId = new MutableLiveData<>();
         repo = MainRepository.getInstance();
@@ -48,16 +46,8 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         return subjects;
     }
 
-    public LiveData<Integer> getCurrentIndex() {
-        return currentIndex;
-    }
-
     public LiveData<Integer> getTeacherId() {
         return teacherId;
-    }
-
-    public void setCurrentIndex(int index) {
-        currentIndex.setValue(index);
     }
 
     public LiveData<Boolean> getDeletionSuccess() {

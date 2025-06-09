@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
 import com.bzu.educore.util.DialogUtils;
@@ -26,7 +28,7 @@ public class ModifyStudentFragment extends Fragment {
     private FragmentModifyStudentBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
     private LocalDate dob;
-    private int index;
+    private DummyStudent student;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -36,15 +38,15 @@ public class ModifyStudentFragment extends Fragment {
         binding = FragmentModifyStudentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        index = studentManagementViewModel.getCurrentIndex().getValue();
+        DummyStudent student = ModifyStudentFragmentArgs.fromBundle(getArguments()).getStudent();
 
         fillClassroomSpinner();
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
         binding.btnDeleteStd.setOnClickListener(v -> deleteStudent());
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
-        binding.imgBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        binding.imgBack.setOnClickListener(v -> navigateBack());
 
-        if (index == -1)
+        if (student == null)
             generateCredentials();
         else {
             fillViewWithData();
@@ -55,7 +57,6 @@ public class ModifyStudentFragment extends Fragment {
     }
 
     private void fillViewWithData() {
-        DummyStudent student = studentManagementViewModel.getStudents().getValue().get(index);
         binding.edttxtStdId.setText(student.getId()+"");
         binding.edttxtStdEmail.setText(student.getEmail());
         binding.edttxtStdFname.setText(student.getFname());
@@ -101,11 +102,10 @@ public class ModifyStudentFragment extends Fragment {
         String generatedEmail = binding.edttxtStdEmail.getText().toString();
 
         // TODO: replace dummy-student with actual student class
-        DummyStudent student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
-
-        if (index == -1)
+        if (student == null) {
+            student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
             studentManagementViewModel.registerStudent(student);
-        else
+        } else
             studentManagementViewModel.updateStudent(student);
     }
 
@@ -119,7 +119,7 @@ public class ModifyStudentFragment extends Fragment {
                     studentManagementViewModel.deleteStudentById(studentId);
                     studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
                         if (!success) return;
-                        requireActivity().getSupportFragmentManager().popBackStack();
+                        navigateBack();
                     });
                 }
         );
@@ -143,6 +143,11 @@ public class ModifyStudentFragment extends Fragment {
         );
 
         datePickerDialog.show();
+    }
+
+    private void navigateBack() {
+        NavDirections action = ModifyStudentFragmentDirections.actionModifyStudentFragmentToViewAllStudents();
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
     @Override

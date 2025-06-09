@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +15,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.bzu.educore.databinding.FragmentSubjectModifyBinding;
+import com.bzu.educore.databinding.FragmentModifySubjectBinding;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 
 public class ModifySubjectFragment extends Fragment {
 
-    private FragmentSubjectModifyBinding binding;
+    private FragmentModifySubjectBinding binding;
     private SubjectManagementViewModel subjectManagementViewModel;
+    private Subject subject;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentSubjectModifyBinding.inflate(inflater, container, false);
+        binding = FragmentModifySubjectBinding.inflate(inflater, container, false);
         subjectManagementViewModel = new ViewModelProvider(this).get(SubjectManagementViewModel.class);
+
+        subject = ModifySubjectFragmentArgs.fromBundle(getArguments()).getSubject();
 
         fillSpnrSemester();
         fillSpnrGrades();
@@ -38,8 +43,6 @@ public class ModifySubjectFragment extends Fragment {
                 Toast.makeText(requireContext(), "Title can't be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Subject subject = subjectManagementViewModel.getCurrentSubject().getValue();
-            assert subject != null;
             subject.setTitle(binding.edtxtSubjTitle.getText().toString());
             subject.setGradeNumber((Integer) binding.spnrSubjGrade.getSelectedItem());
             subject.setSemesterNumber((Integer) binding.spnrSubjSemester.getSelectedItem());
@@ -52,29 +55,32 @@ public class ModifySubjectFragment extends Fragment {
                     "Delete Subject",
                     "Are you sure you want to delete it?",
                     () -> {
-                        subjectManagementViewModel.deleteCurrentSubject();
+                        subjectManagementViewModel.deleteSubjectById(subject.getId());
                         subjectManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
                             if (!success) return;
-                            requireActivity().getSupportFragmentManager().popBackStack();
+                            navigateBack();
                         });
                     }
             );
         });
 
         binding.imgBack.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager().popBackStack();
+            navigateBack();
         });
 
         return binding.getRoot();
     }
 
+    private void navigateBack() {
+        NavDirections action = ModifySubjectFragmentDirections.actionModifySubjectFragmentToViewAllSubjects();
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+
     private void fillViewWithSubjectData() {
-        subjectManagementViewModel.getCurrentSubject().observe(getViewLifecycleOwner(), subject -> {
-            binding.edtxtSubjId.setText(subject.getId());
-            binding.edtxtSubjTitle.setText(subject.getTitle());
-            binding.spnrSubjSemester.setSelection(subject.getSemesterNumber() == 1 ? 0 : 1, true);
-            binding.spnrSubjGrade.setSelection(subject.getGradeNumber() - (Integer) binding.spnrSubjGrade.getAdapter().getItem(0), true);
-        });
+        binding.edtxtSubjId.setText(subject.getId());
+        binding.edtxtSubjTitle.setText(subject.getTitle());
+        binding.spnrSubjSemester.setSelection(subject.getSemesterNumber() == 1 ? 0 : 1, true);
+        binding.spnrSubjGrade.setSelection(subject.getGradeNumber() - (Integer) binding.spnrSubjGrade.getAdapter().getItem(0), true);
     }
 
     private void fillSpnrGrades() {

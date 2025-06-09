@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,12 +47,8 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
         teacherManagementViewModel.fetchAllTeachers();
 
         binding.layoutViewAllUsrs.fltbtnAddUsr.setOnClickListener(v -> {
-            ModifyTeacherFragment fragment = new ModifyTeacherFragment();
-            teacherManagementViewModel.setCurrentIndex(-1);
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
-            transaction.addToBackStack(null); // so the user can navigate back
-            transaction.commit();
+            NavDirections action = ViewAllTeachersFragmentDirections.actionViewAllTeachersFragmentToModifyTeacherFragment();
+            Navigation.findNavController(requireView()).navigate(action);
         });
 
         teacherManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
@@ -69,12 +67,11 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
 
     @Override
     public void onItemClick(int position) {
-        ModifyTeacherFragment fragment = new ModifyTeacherFragment();
-        teacherManagementViewModel.setCurrentIndex(position);
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
-        transaction.addToBackStack(null); // so the user can navigate back
-        transaction.commit();
+        ViewAllTeachersFragmentDirections.ActionViewAllTeachersFragmentToModifyTeacherFragment action =
+                ViewAllTeachersFragmentDirections.actionViewAllTeachersFragmentToModifyTeacherFragment();
+        DummyTeacher teacher = teacherManagementViewModel.getTeachers().getValue().get(position);
+        action.setTeacher(teacher);
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
 }
