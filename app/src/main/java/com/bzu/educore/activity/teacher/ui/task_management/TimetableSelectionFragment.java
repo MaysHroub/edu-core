@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.ui.navigation_management.TeacherMainActivity;
+import com.bzu.educore.activity.teacher.TeacherMainActivity;
 import com.bzu.educore.adapter.teacher.TimetableSelectionAdapter;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
