@@ -13,8 +13,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
+import com.bzu.educore.activity.registrar.ui.subject_management.ModifySubjectFragmentDirections;
 import com.bzu.educore.databinding.FragmentModifyTeacherBinding;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.DialogUtils;
@@ -28,7 +31,7 @@ public class ModifyTeacherFragment extends Fragment {
     private FragmentModifyTeacherBinding binding;
     private TeacherManagementViewModel teacherManagementViewModel;
     private LocalDate dob;
-    private int index;
+    private DummyTeacher teacher;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -38,14 +41,15 @@ public class ModifyTeacherFragment extends Fragment {
         binding = FragmentModifyTeacherBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        teacher = ModifyTeacherFragmentArgs.fromBundle(getArguments()).getTeacher();
+
         fillSubjectsSpinner();
         binding.btnTchrSave.setOnClickListener(v -> saveTeacher());
         binding.btnTchrDelete.setOnClickListener(v -> deleteTeacher());
         binding.btnTchrDob.setOnClickListener(v -> showDatePickerDialog());
+        binding.imgBack.setOnClickListener(v -> navigateBack());
 
-        index = teacherManagementViewModel.getCurrentIndex().getValue();
-
-        if (index == -1)
+        if (teacher == null)
             generateCredentials();
         else {
             fillViewWithData();
@@ -69,10 +73,10 @@ public class ModifyTeacherFragment extends Fragment {
         int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
-        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, phoneNumber, subject, dob);
-        if (index == -1)
+        if (teacher == null) {
+            teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, phoneNumber, subject, dob);
             teacherManagementViewModel.registerTeacher(teacher);
-        else
+        } else
             teacherManagementViewModel.updateTeacher(teacher);
     }
 
@@ -86,14 +90,13 @@ public class ModifyTeacherFragment extends Fragment {
                     teacherManagementViewModel.deleteTeacherById(teacherId);
                     teacherManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
                         if (!success) return;
-                        requireActivity().getSupportFragmentManager().popBackStack();
+                        navigateBack();
                     });
                 }
         );
     }
 
     private void fillViewWithData() {
-        DummyTeacher teacher = teacherManagementViewModel.getTeachers().getValue().get(index);
         binding.edttxtTchrId.setText(teacher.getId()+"");
         binding.edttxtTchrEmail.setText(teacher.getEmail());
         binding.edttxtTchrFname.setText(teacher.getFname());
@@ -144,6 +147,11 @@ public class ModifyTeacherFragment extends Fragment {
         );
 
         datePickerDialog.show();
+    }
+
+    private void navigateBack() {
+        NavDirections action = ModifyTeacherFragmentDirections.actionModifyTeacherFragmentToViewAllTeachers();
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
     @Override
