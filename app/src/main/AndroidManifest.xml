@@ -17,21 +17,19 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-            </intent-filter>
+            android:name=".activity.MainActivity">
         </activity>
-        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
-        <activity
-            android:name=".activity.teacher.TeacherMainActivity"
+
+        <activity android:name=".activity.registrar.RegistrarMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.teacher.TeacherMainActivity">
 
         </activity>
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
