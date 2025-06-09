@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher.ui.student_management;
+package com.bzu.educore.activity.teacher.ui.navigation_management;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,9 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.TeacherMainActivity;
 import com.bzu.educore.activity.teacher.ui.BaseFragment;
-import com.bzu.educore.activity.teacher.ui.task_management.SearchTasksFragment;
+import com.bzu.educore.activity.teacher.ui.student_management.AttendanceRecordingFragment;
+import com.bzu.educore.activity.teacher.ui.task_management.TimetableSelectionFragment;
+import com.bzu.educore.activity.teacher.ui.student_management.SearchTasksFragment;
 
 public class TeacherDashboardFragment extends BaseFragment {
 
@@ -64,7 +65,7 @@ public class TeacherDashboardFragment extends BaseFragment {
             int dummyTeacherId = 14;
             int dummyClassId   = 1;
 
-            AbsenceFragment frag = AbsenceFragment.newInstance(dummyTeacherId, dummyClassId);
+            AttendanceRecordingFragment frag = AttendanceRecordingFragment.newInstance(dummyTeacherId, dummyClassId);
             ((TeacherMainActivity) requireActivity()).loadFragment(frag, true);
         });
 

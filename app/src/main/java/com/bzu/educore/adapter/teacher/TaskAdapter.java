@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.StudentListActivity;
+import com.bzu.educore.activity.teacher.ui.student_management.StudentSubmissionsActivity;
 import com.bzu.educore.model.task.Task;
 
 import java.util.List;
@@ -89,7 +89,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvDeadline.setText("Due: " + task.getDeadline());
 
             btnViewSubmissions.setOnClickListener(v -> {
-                Intent intent = new Intent(context, StudentListActivity.class);
+                Intent intent = new Intent(context, StudentSubmissionsActivity.class);
                 intent.putExtra("taskId", task.getId());
                 intent.putExtra("type", "assignment");
                 context.startActivity(intent);
@@ -119,7 +119,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvExamDate.setText("Exam Date: " + task.getDate());
 
             btnViewSubmissions.setOnClickListener(v -> {
-                Intent intent = new Intent(context, StudentListActivity.class);
+                Intent intent = new Intent(context, StudentSubmissionsActivity.class);
                 intent.putExtra("taskId", task.getId());
                 intent.putExtra("type", "exam");
                 context.startActivity(intent);

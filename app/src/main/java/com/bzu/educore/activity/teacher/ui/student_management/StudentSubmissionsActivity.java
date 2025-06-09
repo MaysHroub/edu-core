@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher;
+package com.bzu.educore.activity.teacher.ui.student_management;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,7 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.*;
 
-public class StudentListActivity extends AppCompatActivity {
+public class StudentSubmissionsActivity extends AppCompatActivity {
 
     private RecyclerView rvStudents;
     private Button btnPublish;

@@ -18,7 +18,7 @@ import org.json.*;
 import java.time.LocalDate;
 import java.util.*;
 
-public class AbsenceFragment extends Fragment {
+public class AttendanceRecordingFragment extends Fragment {
 
     private RecyclerView rvStudents;
     private Button btnDate, btnSubmit;
@@ -28,8 +28,8 @@ public class AbsenceFragment extends Fragment {
 
     private int classId, teacherId, year, month, day;
 
-    public static AbsenceFragment newInstance(int teacherId, int classId) {
-        AbsenceFragment f = new AbsenceFragment();
+    public static AttendanceRecordingFragment newInstance(int teacherId, int classId) {
+        AttendanceRecordingFragment f = new AttendanceRecordingFragment();
         Bundle args = new Bundle();
         args.putInt("teacherId", teacherId);
         args.putInt("classId", classId);

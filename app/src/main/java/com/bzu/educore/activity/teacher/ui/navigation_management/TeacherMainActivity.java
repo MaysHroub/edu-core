@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.teacher;
+package com.bzu.educore.activity.teacher.ui.navigation_management;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.bzu.educore.R;
-import com.bzu.educore.activity.teacher.ui.student_management.TeacherDashboardFragment;
 
 public class TeacherMainActivity extends AppCompatActivity {
 

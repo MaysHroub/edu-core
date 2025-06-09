@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity
-            android:name=".activity.teacher.TeacherMainActivity"
+            android:name=".activity.teacher.ui.navigation_management.TeacherMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activity.teacher.StudentListActivity"/>
+        <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
 
     </application>
 
