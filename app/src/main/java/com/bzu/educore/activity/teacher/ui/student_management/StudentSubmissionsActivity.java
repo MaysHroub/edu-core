@@ -13,7 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.adapter.teacher.UnifiedStudentAdapter;
+import com.bzu.educore.adapter.teacher.StudentSubmissionAdapter;
 import com.bzu.educore.model.task.StudentSubmission;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
@@ -27,7 +27,7 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
     private RecyclerView rvStudents;
     private Button btnPublish;
     private EditText etSearch;
-    private UnifiedStudentAdapter adapter;
+    private StudentSubmissionAdapter adapter;
     private final List<StudentSubmission> studentList = new ArrayList<>();
     private final List<StudentSubmission> filtered = new ArrayList<>();
     private int taskId;
@@ -51,12 +51,12 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
             return;
         }
 
-        UnifiedStudentAdapter.DisplayMode mode =
+        StudentSubmissionAdapter.DisplayMode mode =
                 "assignment".equalsIgnoreCase(type)
-                        ? UnifiedStudentAdapter.DisplayMode.ASSIGNMENT_MODE
-                        : UnifiedStudentAdapter.DisplayMode.EXAM_MODE;
+                        ? StudentSubmissionAdapter.DisplayMode.ASSIGNMENT_MODE
+                        : StudentSubmissionAdapter.DisplayMode.EXAM_MODE;
 
-        adapter = new UnifiedStudentAdapter(
+        adapter = new StudentSubmissionAdapter(
                 this, filtered, mode, maxMark
         );
 

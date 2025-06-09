@@ -131,8 +131,8 @@ public class SearchTasksFragment extends Fragment {
                             String item = obj.getString(jsonKey);
                             if (prefixGrade) item = Constants.GRADE_PREFIX + item;
                             items.add(item);
-                        } catch (JSONException e) {
-                            Toast.makeText(getContext(), Constants.ERROR_PARSE_SPINNER, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException ignored) {
+                            // silently skip invalid item
                         }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
@@ -206,8 +206,8 @@ public class SearchTasksFragment extends Fragment {
                         obj.getString("type")
                 );
                 taskList.add(task);
-            } catch (JSONException e) {
-                Toast.makeText(getContext(), Constants.ERROR_PARSE_TASKS, Toast.LENGTH_SHORT).show();
+            } catch (JSONException ignored) {
+                // skip malformed task silently
             }
         }
         taskAdapter.notifyDataSetChanged();

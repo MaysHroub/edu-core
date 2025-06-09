@@ -9,12 +9,12 @@ import com.bzu.educore.model.user.*;
 
 import java.util.*;
 
-public class AbsenceAdapter extends RecyclerView.Adapter<AbsenceAdapter.VH> {
+public class StudentAbsenceAdapter extends RecyclerView.Adapter<StudentAbsenceAdapter.VH> {
 
     private final List<Student> students;
     private final Map<String, Absence> absenceMap;
 
-    public AbsenceAdapter(List<Student> students, Map<String, Absence> absenceMap) {
+    public StudentAbsenceAdapter(List<Student> students, Map<String, Absence> absenceMap) {
         this.students = students;
         this.absenceMap = absenceMap;
     }

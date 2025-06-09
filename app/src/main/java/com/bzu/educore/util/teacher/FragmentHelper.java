@@ -28,12 +28,6 @@ public class FragmentHelper {
         }
     }
 
-    public static void showLongToast(Fragment fragment, String message) {
-        Context context = fragment.getContext();
-        if (context != null && message != null) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        }
-    }
 
     // Argument extraction helpers
     public static int getIntArgument(Fragment fragment, String key, int defaultValue) {
@@ -46,10 +40,6 @@ public class FragmentHelper {
         return args != null ? args.getString(key, defaultValue) : defaultValue;
     }
 
-    public static boolean getBooleanArgument(Fragment fragment, String key, boolean defaultValue) {
-        Bundle args = fragment.getArguments();
-        return args != null ? args.getBoolean(key, defaultValue) : defaultValue;
-    }
 
     // Navigation helpers
     public static void navigateBack(Fragment fragment) {

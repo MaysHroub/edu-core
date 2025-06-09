@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.*;
 import com.android.volley.Request;
 import com.android.volley.toolbox.*;
 import com.bzu.educore.R;
-import com.bzu.educore.adapter.teacher.AbsenceAdapter;
+import com.bzu.educore.adapter.teacher.StudentAbsenceAdapter;
 import com.bzu.educore.model.user.*;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
@@ -24,7 +24,7 @@ public class AttendanceRecordingFragment extends Fragment {
     private Button btnDate, btnSubmit;
     private final List<Student> studentList = new ArrayList<>();
     private final Map<String, Absence> absenceMap = new HashMap<>();
-    private AbsenceAdapter adapter;
+    private StudentAbsenceAdapter adapter;
 
     private int classId, teacherId, year, month, day;
 
@@ -67,7 +67,7 @@ public class AttendanceRecordingFragment extends Fragment {
         btnDate.setText(fmtDate());
         btnDate.setOnClickListener(_btn -> pickDate());
 
-        adapter = new AbsenceAdapter(studentList, absenceMap);
+        adapter = new StudentAbsenceAdapter(studentList, absenceMap);
         rvStudents.setLayoutManager(new LinearLayoutManager(getContext()));
         rvStudents.setAdapter(adapter);
 

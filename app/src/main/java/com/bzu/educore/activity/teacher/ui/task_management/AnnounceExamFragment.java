@@ -8,23 +8,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.model.task.Task;
 import com.bzu.educore.util.teacher.FragmentHelper;
-import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.VolleySingleton;
 import com.bzu.educore.util.teacher.Constants;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.time.LocalDate;
 
 public class AnnounceExamFragment extends Fragment {

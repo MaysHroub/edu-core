@@ -21,7 +21,7 @@ import com.bzu.educore.util.teacher.MarkValidator;
 import com.bzu.educore.util.teacher.StatusUtils;
 import java.util.List;
 
-public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAdapter.StudentViewHolder> {
+public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmissionAdapter.StudentViewHolder> {
 
     public enum DisplayMode { ASSIGNMENT_MODE, EXAM_MODE }
 
@@ -30,7 +30,7 @@ public class UnifiedStudentAdapter extends RecyclerView.Adapter<UnifiedStudentAd
     private final DisplayMode displayMode;
     private final double maxMark;
 
-    public UnifiedStudentAdapter(
+    public StudentSubmissionAdapter(
             Context context,
             List<StudentSubmission> students,
             DisplayMode displayMode,
