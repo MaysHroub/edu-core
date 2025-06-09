@@ -17,14 +17,14 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name=".activity.registrar.RegistrarMainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity
             android:name=".activity.teacher.TeacherMainActivity"
             android:exported="true">
