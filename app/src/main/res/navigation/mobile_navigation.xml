@@ -65,6 +65,7 @@
         <argument
             android:name="student"
             android:defaultValue="@null"
+            app:nullable="true"
             app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyStudent" />
         <action
             android:id="@+id/action_modifyStudentFragment_to_view_all_students"
@@ -78,6 +79,8 @@
         tools:layout="@layout/fragment_modify_subject" >
         <argument
             android:name="subject"
+            android:defaultValue="@null"
+            app:nullable="true"
             app:argType="com.bzu.educore.model.school.Subject" />
         <action
             android:id="@+id/action_modifySubjectFragment_to_view_all_subjects"
@@ -91,6 +94,8 @@
         tools:layout="@layout/fragment_modify_teacher" >
         <argument
             android:name="teacher"
+            android:defaultValue="@null"
+            app:nullable="true"
             app:argType="com.bzu.educore.activity.registrar.ui.teacher_management.DummyTeacher" />
         <action
             android:id="@+id/action_modifyTeacherFragment_to_view_all_teachers"
