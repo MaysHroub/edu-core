@@ -55,24 +55,40 @@
         android:id="@+id/assignHomeroomTeacherFragment"
         android:name="com.bzu.educore.activity.registrar.ui.homeroom_teacher.AssignHomeroomTeacherFragment"
         android:label="fragment_assign_homeroom_teacher"
-        tools:layout="@layout/fragment_assign_homeroom_teacher" />
+        tools:layout="@layout/fragment_assign_homeroom_teacher" >
+        <argument
+            android:name="classroom"
+            app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom" />
+    </fragment>
 
     <fragment
         android:id="@+id/modifyStudentFragment"
         android:name="com.bzu.educore.activity.registrar.ui.student_management.ModifyStudentFragment"
         android:label="fragment_modify_student"
-        tools:layout="@layout/fragment_modify_student" />
+        tools:layout="@layout/fragment_modify_student" >
+        <argument
+            android:name="student"
+            app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyStudent" />
+    </fragment>
 
     <fragment
         android:id="@+id/modifySubjectFragment"
         android:name="com.bzu.educore.activity.registrar.ui.subject_management.ModifySubjectFragment"
         android:label="fragment_modify_subject"
-        tools:layout="@layout/fragment_modify_subject" />
+        tools:layout="@layout/fragment_modify_subject" >
+        <argument
+            android:name="subject"
+            app:argType="com.bzu.educore.model.school.Subject" />
+    </fragment>
 
     <fragment
         android:id="@+id/modifyTeacherFragment"
         android:name="com.bzu.educore.activity.registrar.ui.teacher_management.ModifyTeacherFragment"
         android:label="fragment_modify_teacher"
-        tools:layout="@layout/fragment_modify_teacher" />
+        tools:layout="@layout/fragment_modify_teacher" >
+        <argument
+            android:name="teacher"
+            app:argType="com.bzu.educore.activity.registrar.ui.teacher_management.DummyTeacher" />
+    </fragment>
 
 </navigation>
