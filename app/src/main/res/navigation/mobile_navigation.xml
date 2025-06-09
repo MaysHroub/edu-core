@@ -9,7 +9,7 @@
         android:id="@+id/nav_students"
         android:name="com.bzu.educore.activity.registrar.ui.student_management.ViewAllStudentsFragment"
         android:label="fragment_view_all_students"
-        tools:layout="@layout/fragment_view_all_students" >
+        tools:layout="@layout/fragment_view_all_students">
         <action
             android:id="@+id/action_viewAllStudentsFragment_to_modifyStudentFragment"
             app:destination="@id/modifyStudentFragment" />
@@ -68,6 +68,7 @@
         tools:layout="@layout/fragment_modify_student" >
         <argument
             android:name="student"
+            android:defaultValue="@null"
             app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyStudent" />
     </fragment>
 
