@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,29 +42,25 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
         studentManagementViewModel.fetchAllStudents();
 
         binding.layoutViewAllUsrs.fltbtnAddUsr.setOnClickListener(v -> {
-            ModifyStudentFragment fragment = new ModifyStudentFragment();
-            studentManagementViewModel.setCurrentIndex(-1);
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
-            transaction.addToBackStack(null); // so the user can navigate back
-            transaction.commit();
+            NavDirections action = ViewAllStudentsFragmentDirections.actionViewAllStudentsFragmentToModifyStudentFragment();
+            Navigation.findNavController(requireView()).navigate(action);
         });
 
         studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success)
-                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyItemRemoved(studentManagementViewModel.getCurrentIndex().getValue());
+                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyDataSetChanged();
         });
 
         return binding.getRoot();
     }
 
+    // TODO: replace position with generic type
     @Override
     public void onItemClick(int position) {
-        ModifyStudentFragment fragment = new ModifyStudentFragment();
-        studentManagementViewModel.setCurrentIndex(position);
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
-        transaction.addToBackStack(null); // so the user can navigate back
-        transaction.commit();
+        DummyStudent student = studentManagementViewModel.getStudents().getValue().get(position);
+        ViewAllStudentsFragmentDirections.ActionViewAllStudentsFragmentToModifyStudentFragment action =
+                ViewAllStudentsFragmentDirections.actionViewAllStudentsFragmentToModifyStudentFragment();
+        action.setStudent(student);
+        Navigation.findNavController(requireView()).navigate(action);
     }
 }
