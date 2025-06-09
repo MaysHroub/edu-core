@@ -30,17 +30,17 @@ public class RegistrarMainActivity extends AppCompatActivity {
         binding = ActivityRegistrarMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setSupportActionBar(binding.appBarRegistrarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_teachers, R.id.nav_students, R.id.nav_subjects, R.id.nav_classrooms, R.id.nav_schedules, R.id.nav_profile)
                 .setOpenableLayout(drawer)
                 .build();
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_registrar_main);
-        if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
-            NavigationUI.setupWithNavController(navigationView, navController);
-        }
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_registrar_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
     }
 
     @Override
