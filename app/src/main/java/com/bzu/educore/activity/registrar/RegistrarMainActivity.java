@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.Menu;
 
 import com.bzu.educore.R;
+import com.bzu.educore.repository.registrar.MainRepository;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -41,6 +42,8 @@ public class RegistrarMainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_registrar_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        MainRepository.init(this);
     }
 
     @Override

@@ -18,10 +18,10 @@ import org.json.JSONObject;
 public class MainRepository {
 
     private static MainRepository instance;
-    private final Context context;
+    private final Context appContext;
 
     private MainRepository(Context context) {
-        this.context = context;
+        appContext = context.getApplicationContext(); // retrieve application context to avoid memory leaks
     }
 
     public static void init(Context context) {
@@ -36,12 +36,12 @@ public class MainRepository {
 
     public void getAllItems(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, listener, errorListener);
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public void getData(String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public <T> void addItem(String url, T item, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
@@ -59,7 +59,7 @@ public class MainRepository {
                 jsonObject,
                 listener,
                 errorListener);
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public <T> void updateItem(String url, T modifiedItem, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
@@ -78,7 +78,7 @@ public class MainRepository {
                 listener,
                 errorListener
         );
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public void deleteItemById(String url, Integer itemId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
@@ -89,7 +89,7 @@ public class MainRepository {
                 listener,
                 errorListener
         );
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
 }
