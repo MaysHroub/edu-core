@@ -1,5 +1,6 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.model.user.Person;
 
@@ -13,9 +14,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class DummyTeacher extends Person implements Serializable {
-    private Integer id;
-    private String fname, lname, email, phoneNumber;
+public class DummyTeacher extends User implements Serializable {
+
+    private String phoneNumber;
     private Subject subjectTaught;
-    private LocalDate dateOfBirth;
+
+    public DummyTeacher(Integer id, String fname, String lname, String email, String password,
+                        LocalDate dateOfBirth, String phoneNumber, Subject subjectTaught) {
+        super(id, fname, lname, email, password, dateOfBirth);
+        this.phoneNumber = phoneNumber;
+        this.subjectTaught = subjectTaught;
+    }
 }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bzu.educore.R;
+import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.adapter.registrar.UserAdapter;
 import com.bzu.educore.databinding.FragmentViewAllStudentsBinding;
 import com.bzu.educore.listener.OnItemClickListener;
@@ -35,7 +36,7 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
         binding = FragmentViewAllStudentsBinding.inflate(inflater, container, false);
 
         studentManagementViewModel.getStudents().observe(getViewLifecycleOwner(), students -> {
-            List<Person> users = new ArrayList<>(students);
+            List<User> users = new ArrayList<>(students);
             UserAdapter adapter = new UserAdapter(users, this);
             binding.layoutViewAllUsrs.rclrviewUsrs.setAdapter(adapter);
         });

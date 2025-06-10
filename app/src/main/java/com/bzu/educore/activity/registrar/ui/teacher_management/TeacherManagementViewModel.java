@@ -3,6 +3,7 @@ package com.bzu.educore.activity.registrar.ui.teacher_management;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -129,6 +130,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     teachers.postValue(teacherList);
                 },
                 error -> {
+                    Log.e("teacher", "fetchAllTeachers: " + error);
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
                 }
         );

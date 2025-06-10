@@ -74,7 +74,7 @@ public class ModifyTeacherFragment extends Fragment {
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
         if (teacher == null) {
-            teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, phoneNumber, subject, dob);
+            teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, null, dob, phoneNumber, subject);
             teacherManagementViewModel.registerTeacher(teacher);
         } else
             teacherManagementViewModel.updateTeacher(teacher);

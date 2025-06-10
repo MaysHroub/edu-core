@@ -103,7 +103,7 @@ public class ModifyStudentFragment extends Fragment {
 
         // TODO: replace dummy-student with actual student class
         if (student == null) {
-            student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
+            student = new DummyStudent(generatedId, fname, lname, generatedEmail, null, dob, classroom);
             studentManagementViewModel.registerStudent(student);
         } else
             studentManagementViewModel.updateStudent(student);

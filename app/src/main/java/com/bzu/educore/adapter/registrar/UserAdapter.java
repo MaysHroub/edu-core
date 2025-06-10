@@ -10,19 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
+import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
 import com.bzu.educore.listener.OnItemClickListener;
-import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.model.user.Person;
 
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
-    private final List<Person> users;
+    private final List<User> users;
     private final OnItemClickListener listener;
 
-    public UserAdapter(List<Person> users, OnItemClickListener listener) {
+    public UserAdapter(List<User> users, OnItemClickListener listener) {
         this.users = users;
         this.listener = listener;
     }
@@ -37,7 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Person user = users.get(position);
+        User user = users.get(position);
         holder.bind(user, position, listener);
     }
 
@@ -57,8 +57,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             imgUser = view.findViewById(R.id.img_user);
         }
 
-        public void bind(Person user, int position, OnItemClickListener listener) {
-            txtName.setText(user.getName());
+        public void bind(User user, int position, OnItemClickListener listener) {
+            txtName.setText(user.getFname());
             itemView.setOnClickListener(v -> listener.onItemClick(position));
             if (user instanceof DummyStudent) {
                 imgUser.setImageResource(R.drawable.student_icon);
