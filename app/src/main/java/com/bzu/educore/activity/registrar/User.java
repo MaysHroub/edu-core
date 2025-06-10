@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.registrar;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +17,8 @@ public class User {
 
     private Integer id;
     private String fname, lname, email, password;
+
+    @SerializedName("date_of_birth")
     private LocalDate dateOfBirth;
 
 }

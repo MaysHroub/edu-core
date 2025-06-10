@@ -123,6 +123,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                         try {
                             JSONObject obj = response.getJSONObject(i);
                             DummyTeacher teacher = gson.fromJson(obj.toString(), DummyTeacher.class);
+                            Log.d("dob", "fetchAllTeachers: " + teacher.getPhoneNumber());
                             teacherList.add(teacher);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -130,7 +131,6 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     teachers.postValue(teacherList);
                 },
                 error -> {
-                    Log.e("teacher", "fetchAllTeachers: " + error);
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
                 }
         );

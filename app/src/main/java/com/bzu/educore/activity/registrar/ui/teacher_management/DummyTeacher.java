@@ -3,6 +3,7 @@ package com.bzu.educore.activity.registrar.ui.teacher_management;
 import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.model.user.Person;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DummyTeacher extends User implements Serializable {
 
+    @SerializedName("phone_number")
     private String phoneNumber;
     private Subject subjectTaught;
 
