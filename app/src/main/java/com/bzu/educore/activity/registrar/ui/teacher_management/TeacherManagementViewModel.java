@@ -1,5 +1,6 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import static android.content.ContentValues.TAG;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Application;
@@ -156,7 +157,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    subjects.postValue(subjectList);
+                    subjects.setValue(subjectList);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();

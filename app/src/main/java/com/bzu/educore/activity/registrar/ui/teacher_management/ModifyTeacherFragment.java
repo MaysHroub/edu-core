@@ -1,9 +1,11 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import static android.content.ContentValues.TAG;
 import static android.view.View.VISIBLE;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +106,10 @@ public class ModifyTeacherFragment extends Fragment {
         binding.edttxtTchrPhone.setText(teacher.getPhoneNumber());
         String date = teacher.getDateOfBirth().getYear() + "-" + teacher.getDateOfBirth().getMonthValue() + "-" + teacher.getDateOfBirth().getDayOfMonth();
         binding.btnTchrDob.setText(date);
-        int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(teacher.getSubjectTaught());
-        binding.spnrTchrSubject.setSelection(pos);
+        teacherManagementViewModel.getSubjects().observe(getViewLifecycleOwner(), subjects -> {
+             int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(teacher.getSubjectTaught());
+             binding.spnrTchrSubject.setSelection(pos);
+        });
     }
 
     private void generateCredentials() {
