@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,7 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
             List<User> users = new ArrayList<>(teachers);
             UserAdapter adapter = new UserAdapter(users, this);
             binding.layoutViewAllUsrs.rclrviewUsrs.setAdapter(adapter);
+            binding.layoutViewAllUsrs.rclrviewUsrs.setLayoutManager(new LinearLayoutManager(requireContext()));
         });
         teacherManagementViewModel.fetchAllTeachers();
 
