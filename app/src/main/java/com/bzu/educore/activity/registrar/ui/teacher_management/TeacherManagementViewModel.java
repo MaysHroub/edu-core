@@ -15,10 +15,13 @@ import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,14 +119,16 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         repo.getAllItems(
                 UrlManager.URL_GET_ALL_TEACHERS,
                 response -> {
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
+                                    (json, type, context) -> LocalDate.parse(json.getAsString()))
+                            .create();
                     List<DummyTeacher> teacherList = new ArrayList<>();
 
                     for (int i = 0; i < response.length(); i++)
                         try {
                             JSONObject obj = response.getJSONObject(i);
                             DummyTeacher teacher = gson.fromJson(obj.toString(), DummyTeacher.class);
-                            Log.d("dob", "fetchAllTeachers: " + teacher.getPhoneNumber());
                             teacherList.add(teacher);
                         } catch (JSONException e) {
                             e.printStackTrace();
