@@ -1,7 +1,7 @@
 package com.bzu.educore.util;
 
 public class UrlManager {
-    private static final String BASE_URL = "http://localhost/edu-core/";
+    private static final String BASE_URL = "http://10.0.2.2/edu-core/";
     private static final String TEACHERS = "teachers/",
             STUDENTS = "students/",
             SUBJECTS = "subjects/",
