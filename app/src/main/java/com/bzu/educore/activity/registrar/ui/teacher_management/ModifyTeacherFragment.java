@@ -76,7 +76,7 @@ public class ModifyTeacherFragment extends Fragment {
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
         if (teacher == null) {
-            teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, null, dob, phoneNumber, subject);
+            teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, null, dob, phoneNumber, subject.getId());
             teacherManagementViewModel.registerTeacher(teacher);
         } else
             teacherManagementViewModel.updateTeacher(teacher);
@@ -107,7 +107,7 @@ public class ModifyTeacherFragment extends Fragment {
         String date = teacher.getDateOfBirth().getYear() + "-" + teacher.getDateOfBirth().getMonthValue() + "-" + teacher.getDateOfBirth().getDayOfMonth();
         binding.btnTchrDob.setText(date);
         teacherManagementViewModel.getSubjects().observe(getViewLifecycleOwner(), subjects -> {
-             int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(teacher.getSubjectTaught());
+             int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(new Subject(teacher.getSubjectTaughtId()));
              binding.spnrTchrSubject.setSelection(pos);
         });
     }

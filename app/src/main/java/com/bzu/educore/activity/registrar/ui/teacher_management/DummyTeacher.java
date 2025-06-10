@@ -19,12 +19,14 @@ public class DummyTeacher extends User implements Serializable {
 
     @SerializedName("phone_number")
     private String phoneNumber;
-    private Subject subjectTaught;
+
+    @SerializedName("subject_id")
+    private Integer subjectTaughtId;
 
     public DummyTeacher(Integer id, String fname, String lname, String email, String password,
-                        LocalDate dateOfBirth, String phoneNumber, Subject subjectTaught) {
+                        LocalDate dateOfBirth, String phoneNumber, Integer subjectTaughtId) {
         super(id, fname, lname, email, password, dateOfBirth);
         this.phoneNumber = phoneNumber;
-        this.subjectTaught = subjectTaught;
+        this.subjectTaughtId = subjectTaughtId;
     }
 }

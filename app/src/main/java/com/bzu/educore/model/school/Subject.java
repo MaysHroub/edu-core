@@ -31,6 +31,10 @@ public class Subject implements Serializable {
     private Integer semesterNumber;
 
 
+    public Subject(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return String.format("%s-G%d-S%d", title, gradeNumber, semesterNumber);
