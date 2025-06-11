@@ -3,6 +3,7 @@ package com.bzu.educore.repository.registrar;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -10,10 +11,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bzu.educore.util.VolleySingleton;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainRepository {
 
@@ -63,9 +72,13 @@ public class MainRepository {
     }
 
     public <T> void updateItem(String url, T modifiedItem, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, type, context) ->
+                        new JsonPrimitive(src.toString()))  // LocalDate -> "2024-06-11"
+                .create();
         String jsonStr = gson.toJson(modifiedItem);
-        JSONObject jsonObject = null;
+        Log.d("UPDATE_JSON", jsonStr);
+        JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(jsonStr);
         } catch (JSONException e) {

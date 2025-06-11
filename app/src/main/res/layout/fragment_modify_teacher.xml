@@ -92,6 +92,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="TCHR ID"
+        android:enabled="false"
         android:inputType="none" />
 
     <TextView
@@ -106,6 +107,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="TCHR EMAIL"
+        android:enabled="false"
         android:inputType="none" />
 
     <androidx.appcompat.widget.LinearLayoutCompat

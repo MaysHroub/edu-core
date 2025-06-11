@@ -75,11 +75,12 @@ public class ModifyTeacherFragment extends Fragment {
         int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
+        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, null, dob, phoneNumber, subject.getId());
         if (teacher == null) {
-            teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, null, dob, phoneNumber, subject.getId());
             teacherManagementViewModel.registerTeacher(teacher);
-        } else
+        } else {
             teacherManagementViewModel.updateTeacher(teacher);
+        }
     }
 
     private void deleteTeacher() {
@@ -110,6 +111,7 @@ public class ModifyTeacherFragment extends Fragment {
              int pos = teacherManagementViewModel.getSubjects().getValue().indexOf(new Subject(teacher.getSubjectTaughtId()));
              binding.spnrTchrSubject.setSelection(pos);
         });
+        dob = teacher.getDateOfBirth();
     }
 
     private void generateCredentials() {

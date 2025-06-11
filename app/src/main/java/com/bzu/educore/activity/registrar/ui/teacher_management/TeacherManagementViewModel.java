@@ -67,7 +67,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Teacher is added successfully!", LENGTH_SHORT).show();
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -80,7 +80,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Teacher is updated successfully!", LENGTH_SHORT).show();
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", Toast.LENGTH_SHORT).show();
                 }
         );
     }
@@ -94,7 +94,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     deletionSuccess.postValue(true);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -111,7 +111,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     }
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -137,7 +137,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     teachers.postValue(teacherList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -160,7 +160,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     subjects.setValue(subjectList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
