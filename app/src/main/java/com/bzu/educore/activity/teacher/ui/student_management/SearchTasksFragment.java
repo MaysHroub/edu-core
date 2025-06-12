@@ -1,5 +1,6 @@
 package com.bzu.educore.activity.teacher.ui.student_management;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,8 +21,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.TaskAdapter;
 import com.bzu.educore.model.task.Task;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +30,15 @@ import org.json.JSONObject;
 
 import java.util.*;
 
+import lombok.Getter;
+
 public class SearchTasksFragment extends Fragment {
+
+    // Add teacher ID support
+    private static final String ARG_TEACHER_ID = "teacher_id";
+    // Getter method to access teacher ID if needed by other methods
+    @Getter
+    private int teacherId;
 
     private EditText etSearch;
     private Button btnClearSearch, btnSearch, btnClearFilters;
@@ -41,6 +50,23 @@ public class SearchTasksFragment extends Fragment {
 
     private TaskAdapter taskAdapter;
     private final List<Task> taskList = new ArrayList<>();
+
+    // Factory method to create fragment with teacher ID
+    public static SearchTasksFragment newInstance(int teacherId) {
+        SearchTasksFragment fragment = new SearchTasksFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TEACHER_ID, teacherId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            teacherId = getArguments().getInt(ARG_TEACHER_ID, -1);
+        }
+    }
 
     @Nullable
     @Override
@@ -111,17 +137,25 @@ public class SearchTasksFragment extends Fragment {
     }
 
     private void loadSpinners() {
-        loadSpinner(spinnerSubject, Constants.GET_SUBJECTS_URL, Constants.ALL_SUBJECTS, Constants.JSON_TITLE, false);
-        loadSpinner(spinnerGrade, Constants.GET_GRADES_URL, Constants.ALL_GRADES, Constants.JSON_GRADE_NUMBER, true);
+        // Load spinners with teacher-specific data if needed
+        loadSpinner(spinnerSubject, UrlManager.URL_GET_SUBJECTS, "All Subjects", "title", false);
+        loadSpinner(spinnerGrade, UrlManager.URL_GET_GRADES, "All Grades", "grade_number", true);
 
-        List<String> types = Arrays.asList(Constants.ALL_TYPES, Constants.TYPE_ASSIGNMENT, Constants.TYPE_EXAM);
+        List<String> types = Arrays.asList("All Types", "Assignment","Quiz","First","Second","Midterm","Final");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(adapter);
     }
 
     private void loadSpinner(Spinner spinner, String url, String defaultItem, String jsonKey, boolean prefixGrade) {
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        // If you need teacher-specific data for spinners, modify the URL here
+        String finalUrl = url;
+        if (teacherId != -1) {
+            // Example: Add teacher ID as parameter if your API supports it
+            // finalUrl = url + (url.contains("?") ? "&" : "?") + "teacher_id=" + teacherId;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, finalUrl, null,
                 response -> {
                     List<String> items = new ArrayList<>();
                     items.add(defaultItem);
@@ -129,7 +163,7 @@ public class SearchTasksFragment extends Fragment {
                         try {
                             JSONObject obj = response.getJSONObject(i);
                             String item = obj.getString(jsonKey);
-                            if (prefixGrade) item = Constants.GRADE_PREFIX + item;
+                            if (prefixGrade) item = "Grade" + item;
                             items.add(item);
                         } catch (JSONException ignored) {
                             // silently skip invalid item
@@ -140,7 +174,7 @@ public class SearchTasksFragment extends Fragment {
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(adapter);
                 },
-                error -> Toast.makeText(getContext(), Constants.ERROR_LOAD_SPINNER, Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show()
         );
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
@@ -155,7 +189,7 @@ public class SearchTasksFragment extends Fragment {
                     showLoading(false);
                 },
                 error -> {
-                    Toast.makeText(getContext(), Constants.ERROR_SEARCH_FAILED, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Search has failed", Toast.LENGTH_SHORT).show();
                     clearResults();
                     showLoading(false);
                 }
@@ -165,20 +199,25 @@ public class SearchTasksFragment extends Fragment {
     }
 
     private String buildSearchUrl() {
-        StringBuilder url = new StringBuilder(Constants.SEARCH_TASKS_URL);
+        StringBuilder url = new StringBuilder(UrlManager.URL_SEARCH_TASKS);
         List<String> params = new ArrayList<>();
 
         String text = etSearch.getText().toString().trim();
         if (!text.isEmpty()) params.add("search=" + text);
 
-        String subject = getSelectedValue(spinnerSubject, Constants.ALL_SUBJECTS);
+        String subject = getSelectedValue(spinnerSubject, "All Subjects");
         if (subject != null) params.add("subject=" + subject);
 
-        String grade = getSelectedValue(spinnerGrade, Constants.ALL_GRADES);
-        if (grade != null) params.add("grade=" + grade.replace(Constants.GRADE_PREFIX, ""));
+        String grade = getSelectedValue(spinnerGrade, "All Grades");
+        if (grade != null) params.add("grade=" + grade.replace("Grade", ""));
 
-        String type = getSelectedValue(spinnerType, Constants.ALL_TYPES);
+        String type = getSelectedValue(spinnerType, "All Types");
         if (type != null) params.add("type=" + type.toLowerCase());
+
+        // Add teacher ID to search parameters
+        if (teacherId != -1) {
+            params.add("teacher_id=" + teacherId);
+        }
 
         if (!params.isEmpty()) url.append("?").append(TextUtils.join("&", params));
         return url.toString();
@@ -223,16 +262,18 @@ public class SearchTasksFragment extends Fragment {
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         btnSearch.setEnabled(!show);
-        btnSearch.setText(show ? Constants.TEXT_SEARCHING : Constants.TEXT_SEARCH);
+        btnSearch.setText(show ? "Searching..." : "Search");
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateUI() {
         int count = taskList.size();
-        tvResultCount.setText(count + (count == 1 ? Constants.TEXT_ITEM_SINGULAR : Constants.TEXT_ITEM_PLURAL));
+        tvResultCount.setText(count + (count == 1 ? "Item" : "Items"));
 
         boolean isEmpty = taskList.isEmpty();
         layoutEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerViewTasks.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         tvResultCount.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
+
 }

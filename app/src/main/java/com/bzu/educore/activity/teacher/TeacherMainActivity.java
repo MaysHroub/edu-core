@@ -8,37 +8,47 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.ui.navigation_management.TeacherDashboardFragment;
 
+import lombok.Getter;
+
+@Getter
 public class TeacherMainActivity extends AppCompatActivity {
+
+    // Getter method to access teacher ID from fragments
+    private int teacherId; // Store teacher ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_main);
 
+        // Get teacher ID from login intent
+        teacherId = 14;
+
         if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment_container, new TeacherDashboardFragment());
+
+            // Pass teacher ID to dashboard fragment
+            TeacherDashboardFragment dashboardFragment = TeacherDashboardFragment.newInstance(teacherId);
+            ft.replace(R.id.fragment_container, dashboardFragment);
             ft.commit();
         }
     }
-    // Helper method to swap fragments dynamically
 
     public void loadFragment(Fragment fragment, boolean addToStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
 
-        if (addToStack) { // If true. it saves this transaction in the back stack so the user can navigate back
+        if (addToStack) {
             ft.addToBackStack(null);
         }
         ft.commit();
     }
-    // a method to handle back navigation inside fragments.
+
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
-
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
         } else {
