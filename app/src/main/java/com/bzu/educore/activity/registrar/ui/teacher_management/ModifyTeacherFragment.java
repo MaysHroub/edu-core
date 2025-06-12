@@ -76,7 +76,6 @@ public class ModifyTeacherFragment extends Fragment {
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
         DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, "1234", dob, phoneNumber, subject.getId());
-        Log.d(TAG, "saveTeacher: " + teacher);
         if (this.teacher == null) {
             teacherManagementViewModel.registerTeacher(teacher);
             teacherManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
@@ -97,8 +96,8 @@ public class ModifyTeacherFragment extends Fragment {
                     int teacherId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
                     teacherManagementViewModel.deleteTeacherById(teacherId);
                     teacherManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
-                        if (!success) return;
-                        navigateBack();
+                        if (success)
+                            navigateBack();
                     });
                 }
         );

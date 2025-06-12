@@ -3,6 +3,7 @@ package com.bzu.educore.activity.registrar.ui.student_management;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -27,7 +28,8 @@ public class StudentManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<DummyClassroom>> classrooms;
     private final MutableLiveData<List<DummyStudent>> students;
     private final MutableLiveData<Boolean> deletionSuccess;
-    private final MutableLiveData<Integer> studentId;
+    private final MutableLiveData<Boolean> additionSuccess;
+    private final MutableLiveData<Integer> nextStudentId;
     private final MainRepository repo;
 
     public StudentManagementViewModel(Application application) {
@@ -36,7 +38,8 @@ public class StudentManagementViewModel extends AndroidViewModel {
         classrooms = new MutableLiveData<>();
         students = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
-        studentId = new MutableLiveData<>();
+        additionSuccess = new MutableLiveData<>();
+        nextStudentId = new MutableLiveData<>();
     }
 
     public LiveData<List<DummyClassroom>> getClassrooms() {
@@ -51,8 +54,12 @@ public class StudentManagementViewModel extends AndroidViewModel {
         return deletionSuccess;
     }
 
-    public LiveData<Integer> getStudentId() {
-        return studentId;
+    public LiveData<Boolean> getAdditionSuccess() {
+        return additionSuccess;
+    }
+
+    public LiveData<Integer> getNextStudentId() {
+        return nextStudentId;
     }
 
     public void generateStudentId() {
@@ -60,8 +67,8 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 UrlManager.URL_GENERATE_STD_ID,
                 response -> {
                     try {
-                        int generatedId = response.getInt("id");
-                        studentId.postValue(generatedId);
+                        int generatedId = response.getInt("next_student_id");
+                        nextStudentId.postValue(generatedId);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -77,10 +84,13 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 UrlManager.URL_ADD_NEW_STUDENT,
                 student,
                 response -> {
+                    Log.d("TAG", "registerStudent: " + response.toString());
                     Toast.makeText(getApplication(), "Student is added successfully!", LENGTH_SHORT).show();
+                    additionSuccess.postValue(true);
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    additionSuccess.postValue(false);
                 }
         );
     }
@@ -108,6 +118,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 },
                 error -> {
                     Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    deletionSuccess.postValue(false);
                 }
         );
     }

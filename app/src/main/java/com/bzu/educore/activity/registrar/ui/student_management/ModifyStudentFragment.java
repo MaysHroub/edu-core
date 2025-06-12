@@ -38,13 +38,12 @@ public class ModifyStudentFragment extends Fragment {
         binding = FragmentModifyStudentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        DummyStudent student = ModifyStudentFragmentArgs.fromBundle(getArguments()).getStudent();
+        student = ModifyStudentFragmentArgs.fromBundle(getArguments()).getStudent();
 
         fillClassroomSpinner();
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
         binding.btnDeleteStd.setOnClickListener(v -> deleteStudent());
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
-        binding.imgBack.setOnClickListener(v -> navigateBack());
 
         if (student == null)
             generateCredentials();
@@ -63,12 +62,15 @@ public class ModifyStudentFragment extends Fragment {
         binding.edttxtStdLname.setText(student.getLname());
         String date = student.getDateOfBirth().getYear() + "-" + student.getDateOfBirth().getMonthValue() + "-" + student.getDateOfBirth().getDayOfMonth();
         binding.btnStdDob.setText(date);
-        int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(student.getClassroom());
-        binding.spnrStdClassroom.setSelection(pos);
+        studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
+            int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(new DummyClassroom(student.getClassId()));
+            binding.spnrStdClassroom.setSelection(pos);
+        });
+        dob = student.getDateOfBirth();
     }
 
     private void generateCredentials() {
-        studentManagementViewModel.getStudentId().observe(getViewLifecycleOwner(), studentId -> {
+        studentManagementViewModel.getNextStudentId().observe(getViewLifecycleOwner(), studentId -> {
             String generatedEmail = String.format("%d@student.educore.edu", studentId);
             binding.edttxtStdId.setText(studentId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
@@ -98,13 +100,18 @@ public class ModifyStudentFragment extends Fragment {
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
-        int generatedId = Integer.parseInt(binding.edttxtStdId.getText().toString());
-        String generatedEmail = binding.edttxtStdEmail.getText().toString();
+        int stdId = Integer.parseInt(binding.edttxtStdId.getText().toString());
+        String stdEmail = binding.edttxtStdEmail.getText().toString();
+
+        DummyStudent student = new DummyStudent(stdId, fname, lname, stdEmail, "1234", dob, classroom.getId());
 
         // TODO: replace dummy-student with actual student class
-        if (student == null) {
-            student = new DummyStudent(generatedId, fname, lname, generatedEmail, null, dob, classroom);
+        if (this.student == null) {
             studentManagementViewModel.registerStudent(student);
+            studentManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
+                if (success)
+                    binding.btnSaveStd.setEnabled(false);
+            });
         } else
             studentManagementViewModel.updateStudent(student);
     }
@@ -118,8 +125,8 @@ public class ModifyStudentFragment extends Fragment {
                     int studentId = Integer.parseInt(binding.edttxtStdId.getText().toString());
                     studentManagementViewModel.deleteStudentById(studentId);
                     studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
-                        if (!success) return;
-                        navigateBack();
+                        if (success)
+                            navigateBack();
                     });
                 }
         );

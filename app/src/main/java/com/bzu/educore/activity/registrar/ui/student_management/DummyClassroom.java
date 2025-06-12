@@ -26,6 +26,10 @@ public class DummyClassroom implements Serializable {
     @SerializedName("homeroom_teacher_id")
     private Integer homeroomTeacherId;
 
+    public DummyClassroom(Integer id) {
+        this.id = id;
+    }
+
     @NonNull
     @Override
     public String toString() {
