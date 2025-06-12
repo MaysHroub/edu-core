@@ -1,7 +1,7 @@
 package com.bzu.educore.util;
 
 public class UrlManager {
-    private static final String BASE_URL = "http://localhost/edu-core/";
+    private static final String BASE_URL = "http://10.0.2.2/edu-core/";
 
     public static final String URL_GET_SUBJECT_COUNT = BASE_URL + "get_subject_count.php";
     public static final String URL_GET_STUDENT_COUNT = BASE_URL + "get_student_count.php";
@@ -30,16 +30,16 @@ public class UrlManager {
     public static final String URL_UPDATE_CLASSROOM = BASE_URL + "update_classroom.php";
 
     // ---- Teacher URLS -----
-    public static final String URL_GET_ASSIGNMENT_STUDENTS = BASE_URL + "get_assignment_students";
-    public static final String URL_GET_CLASS_STUDENTS = BASE_URL + "get_class_students";
-    public static final String URL_GET_EXAM_STUDENTS = BASE_URL + "get_exam_students";
-    public static final String URL_GET_GRADES = BASE_URL + "get_grades";
-    public static final String URL_GET_SUBJECTS = BASE_URL + "get_subjects";
-    public static final String URL_GET_TIMETABLE_BY_TEACHER = BASE_URL + "get_timetable_by_teacher";
-    public static final String URL_PUBLISH_ASSIGNMENT = BASE_URL + "publish_assignment";
-    public static final String URL_PUBLISH_EXAM = BASE_URL + "publish_exam";
-    public static final String URL_PUBLISH_MARKS = BASE_URL + "publish_marks";
-    public static final String URL_SEARCH_TASKS = BASE_URL + "search_tasks";
-    public static final String URL_SUBMIT_ABSENCE = BASE_URL + "submit_absence";
+    public static final String URL_GET_ASSIGNMENT_STUDENTS = BASE_URL + "get_assignment_students.php";
+    public static final String URL_GET_CLASS_STUDENTS = BASE_URL + "get_class_students.php";
+    public static final String URL_GET_EXAM_STUDENTS = BASE_URL + "get_exam_students.php";
+    public static final String URL_GET_GRADES = BASE_URL + "get_grades.php";
+    public static final String URL_GET_SUBJECTS = BASE_URL + "get_subjects.php";
+    public static final String URL_GET_TIMETABLE_BY_TEACHER = BASE_URL + "get_timetable_by_teacher.php";
+    public static final String URL_PUBLISH_ASSIGNMENT = BASE_URL + "publish_assignment.php";
+    public static final String URL_PUBLISH_EXAM = BASE_URL + "publish_exam.php";
+    public static final String URL_PUBLISH_MARKS = BASE_URL + "publish_marks.php";
+    public static final String URL_SEARCH_TASKS = BASE_URL + "search_tasks.php";
+    public static final String URL_SUBMIT_ABSENCE = BASE_URL + "submit_absence.php";
 
 }
