@@ -31,8 +31,8 @@ public class MarkValidator {
 
         try {
             double value = Double.parseDouble(input);
-            if (value < Constants.MIN_MARK || value > maxMark) {
-                return ValidationResult.invalid("Mark must be between " + Constants.MIN_MARK + " and " + maxMark);
+            if (value < 0 || value > maxMark) {
+                return ValidationResult.invalid("Mark must be between " + 0 + " and " + maxMark);
             }
             return ValidationResult.valid(value);
         } catch (NumberFormatException e) {
@@ -41,6 +41,6 @@ public class MarkValidator {
     }
 
     public static ValidationResult validateMark(String input) {
-        return validateMark(input, Constants.MAX_MARK);
+        return validateMark(input, 100);
     }
 }

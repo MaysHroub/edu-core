@@ -11,8 +11,8 @@ import com.android.volley.toolbox.*;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.StudentAbsenceAdapter;
 import com.bzu.educore.model.user.*;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 
 import org.json.*;
 import java.time.LocalDate;
@@ -87,7 +87,7 @@ public class AttendanceRecordingFragment extends Fragment {
     }
 
     private void fetchStudents() {
-        String url = Constants.BASE_URL + "get_class_students.php?classId=" + classId;
+        String url = UrlManager.URL_GET_CLASS_STUDENTS + "?classId=" + classId;
 
         JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null,
                 resp -> {
@@ -110,7 +110,7 @@ public class AttendanceRecordingFragment extends Fragment {
                         }
                     }
                     adapter.notifyDataSetChanged();
-                    showToast("Loaded " + studentList.size() + " students");
+                    // Removed: showToast("Loaded " + studentList.size() + " students");
                 },
                 err -> {
                     String msg = "Failed to load students";
@@ -123,7 +123,6 @@ public class AttendanceRecordingFragment extends Fragment {
 
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(req);
     }
-
     private void submitAttendance() {
         JSONArray arr = new JSONArray();
         LocalDate sel = LocalDate.of(year, month + 1, day);
@@ -154,7 +153,7 @@ public class AttendanceRecordingFragment extends Fragment {
             return;
         }
 
-        String url = Constants.BASE_URL + "submit_absence.php";
+        String url = UrlManager.URL_SUBMIT_ABSENCE;
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, body,
                 resp -> showToast(resp.optString("message", "Saved")),
                 err -> showToast("Submit failed")

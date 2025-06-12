@@ -17,9 +17,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
 import com.bzu.educore.adapter.teacher.TimetableSelectionAdapter;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +53,7 @@ public class TimetableSelectionFragment extends Fragment {
     }
 
     private void fetchTimetable() {
-        String url = Constants.BASE_URL+ "get_timetable_by_teacher.php";
+        String url = UrlManager.URL_GET_TIMETABLE_BY_TEACHER;
 
         JSONObject requestBody = new JSONObject();
         try {

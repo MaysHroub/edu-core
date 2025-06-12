@@ -1,12 +1,15 @@
 package com.bzu.educore.activity.teacher.ui.task_management;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,29 +17,31 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.model.task.Task;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.teacher.FragmentHelper;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.time.LocalDate;
+import java.util.Calendar;
 
 public class AnnounceExamFragment extends Fragment {
 
     private EditText examTitleEditText;
     private EditText examDescriptionEditText;
     private EditText examMaxScoreEditText;
-    private DatePicker examDatePicker;
+    private Button btnSelectDate;
     private TextView subjectTextView;
     private TextView classGradeTextView;
     private Button publishButton;
+    private Spinner examTypeSpinner;
 
     private int subjectId;
     private int classGradeId;
     private int teacherId;
     private String subjectName;
     private String classGradeName;
+    private LocalDate selectedDate;
 
     @Nullable
     @Override
@@ -58,10 +63,44 @@ public class AnnounceExamFragment extends Fragment {
         examTitleEditText = view.findViewById(R.id.examTitleEditText);
         examDescriptionEditText = view.findViewById(R.id.examDescriptionEditText);
         examMaxScoreEditText = view.findViewById(R.id.etMaxScore);
-        examDatePicker = view.findViewById(R.id.examDatePicker);
+        btnSelectDate = view.findViewById(R.id.btnSelectDate);
         publishButton = view.findViewById(R.id.publishAnnouncementButton);
+        examTypeSpinner = view.findViewById(R.id.examTypeSpinner);
 
         publishButton.setOnClickListener(v -> publishExam());
+        btnSelectDate.setOnClickListener(v -> showDatePicker());
+
+        // Initialize selected date to today
+        selectedDate = LocalDate.now();
+        updateDateButton();
+
+        String[] examTypes = {"Quiz","First","Second","Midterm","Final"};
+        ArrayAdapter<String> examAdapter = new ArrayAdapter<>(
+                getContext(), android.R.layout.simple_spinner_item, examTypes);
+        examAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        examTypeSpinner.setAdapter(examAdapter);
+    }
+
+    private void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1, selectedDate.getDayOfMonth());
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, dayOfMonth) -> {
+                    selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
+                    updateDateButton();
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+
+        datePickerDialog.show();
+    }
+
+    private void updateDateButton() {
+        btnSelectDate.setText(selectedDate.toString());
     }
 
     private void getArgumentsData() {
@@ -82,9 +121,10 @@ public class AnnounceExamFragment extends Fragment {
         String titleStr = examTitleEditText.getText().toString().trim();
         String descStr = examDescriptionEditText.getText().toString().trim();
         String maxScoreStr = examMaxScoreEditText.getText().toString().trim();
+        String examType = examTypeSpinner.getSelectedItem().toString();
 
         // Using FragmentHelper validation
-        if (!FragmentHelper.validateRequiredFields(this, titleStr, descStr, maxScoreStr)) {
+        if (!FragmentHelper.validateRequiredFields(this, titleStr, descStr, maxScoreStr, examType)) {
             return;
         }
 
@@ -94,26 +134,20 @@ public class AnnounceExamFragment extends Fragment {
 
         double maxScore = Double.parseDouble(maxScoreStr);
 
-        LocalDate selectedDate = LocalDate.of(
-                examDatePicker.getYear(),
-                examDatePicker.getMonth() + 1,
-                examDatePicker.getDayOfMonth()
-        );
-
         try {
             JSONObject data = new JSONObject();
             data.put("subject_id", subjectId);
             data.put("class_id", classGradeId);
             data.put("teacher_id", teacherId);
-            data.put("type", "exam"); // Fixed: Pass task type explicitly
             data.put("max_score", maxScore);
-            data.put("date", selectedDate.toString()); // Fixed: Format date properly
+            data.put("date", selectedDate.toString());
             data.put("title", titleStr);
+            data.put("exam_type", examType);
             data.put("description", descStr);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    Constants.BASE_URL + "publish_exam.php",
+                    UrlManager.URL_PUBLISH_EXAM,
                     data,
                     response -> {
                         FragmentHelper.showToast(this, "Exam announced successfully!");

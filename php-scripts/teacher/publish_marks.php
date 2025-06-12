@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Include DB connection
-require_once 'db_connect.php';
+require_once 'connection.php';
 
 // Read the incoming JSON payload
 $input = json_decode(file_get_contents("php://input"), true);
@@ -46,15 +46,11 @@ if (empty($marks)) {
 }
 
 // Start transaction for data consistency
-$conn->autocommit(FALSE);
+$pdo->beginTransaction();
 
 try {
     // Prepare statement for REPLACE INTO TaskResult
-    $stmt = $conn->prepare("REPLACE INTO TaskResult (task_id, student_id, mark, feedback) VALUES (?, ?, ?, ?)");
-
-    if (!$stmt) {
-        throw new Exception("Failed to prepare statement: " . $conn->error);
-    }
+    $stmt = $pdo->prepare("REPLACE INTO TaskResult (task_id, student_id, mark, feedback) VALUES (?, ?, ?, ?)");
 
     $success_count = 0;
     $error_details = [];
@@ -84,22 +80,18 @@ try {
             continue;
         }
 
-        // Bind parameters (i = integer, s = string, d = double)
-        $stmt->bind_param("isds", $task_id, $student_id, $mark, $feedback);
-        
-        if ($stmt->execute()) {
+        try {
+            $stmt->execute([$task_id, $student_id, $mark, $feedback]);
             $success_count++;
-        } else {
-            $error_details[] = "Entry $index: Database error - " . $stmt->error;
+        } catch (PDOException $e) {
+            $error_details[] = "Entry $index: Database error - " . $e->getMessage();
         }
     }
-
-    $stmt->close();
 
     // Check if we had any successful saves
     if ($success_count > 0) {
         // Commit the transaction
-        $conn->commit();
+        $pdo->commit();
         
         if (!empty($error_details)) {
             // Partial success
@@ -120,7 +112,7 @@ try {
         }
     } else {
         // No successful saves, rollback
-        $conn->rollback();
+        $pdo->rollback();
         echo json_encode([
             "success" => false, 
             "message" => "Failed to save any marks",
@@ -131,7 +123,7 @@ try {
 
 } catch (Exception $e) {
     // Rollback transaction on any exception
-    $conn->rollback();
+    $pdo->rollback();
     error_log("publish_marks.php error: " . $e->getMessage());
     
     http_response_code(500);
@@ -139,9 +131,5 @@ try {
         "success" => false, 
         "message" => "Server error: " . $e->getMessage()
     ]);
-} finally {
-    // Restore autocommit and close connection
-    $conn->autocommit(TRUE);
-    $conn->close();
 }
 ?>

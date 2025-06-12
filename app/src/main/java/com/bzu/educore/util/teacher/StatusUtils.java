@@ -7,11 +7,11 @@ public class StatusUtils {
     public static String formatStatus(String status) {
         if (status == null) return "Unknown";
         switch (status.toLowerCase()) {
-            case Constants.STATUS_SUBMITTED:
+            case "submitted":
                 return "Submitted ✓";
-            case Constants.STATUS_OVERDUE:
+            case "overdue":
                 return "Overdue ⚠";
-            case Constants.STATUS_PENDING:
+            case "pending":
                 return "Pending ⏳";
             default:
                 return status;
@@ -21,11 +21,11 @@ public class StatusUtils {
     public static int getStatusColor(String status) {
         if (status == null) return Color.GRAY;
         switch (status.toLowerCase()) {
-            case Constants.STATUS_SUBMITTED:
+            case "submitted":
                 return Color.parseColor("#4CAF50"); // Green
-            case Constants.STATUS_OVERDUE:
+            case "overdue":
                 return Color.parseColor("#F44336"); // Red
-            case Constants.STATUS_PENDING:
+            case "pending":
                 return Color.parseColor("#FFA000"); // Orange
             default:
                 return Color.GRAY;
@@ -33,11 +33,11 @@ public class StatusUtils {
     }
 
     public static boolean canMarkSubmission(String status) {
-        return Constants.STATUS_SUBMITTED.equalsIgnoreCase(status);
+        return "submitted".equalsIgnoreCase(status);
     }
 
     public static boolean canViewSubmission(String status) {
-        return Constants.STATUS_SUBMITTED.equalsIgnoreCase(status);
+        return "submitted".equalsIgnoreCase(status);
     }
 }
 

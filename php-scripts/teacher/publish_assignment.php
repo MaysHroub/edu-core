@@ -4,7 +4,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once 'db_connect.php';
+require_once 'connection.php';
 
 try {
     // Decode JSON from the request body
@@ -20,7 +20,7 @@ try {
     $subjectId = isset($input['subject_id']) ? intval($input['subject_id']) : null;
     $classId = isset($input['class_id']) ? intval($input['class_id']) : null;
     $teacherId = isset($input['teacher_id']) ? intval($input['teacher_id']) : null;
-    $type = isset($input['type']) ? $input['type'] : 'assignment';
+    $type = isset($input['type']) ? $input['type'] : 'Assignment';
     $maxScore = isset($input['max_score']) ? floatval($input['max_score']) : null;
     $title = isset($input['title']) ? $input['title'] : "";
     $description = isset($input['description']) ? $input['description'] : "";
@@ -35,48 +35,69 @@ try {
     }
 
     // Start transaction
-    $conn->begin_transaction();
+    $pdo->beginTransaction();
 
     try {
         // Insert into Task table with description
-        $stmt = $conn->prepare("INSERT INTO Task (subject_id, class_id, teacher_id, type, max_score, description, title) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iiisdss", $subjectId, $classId, $teacherId, $type, $maxScore, $description, $title);
+        $stmt = $pdo->prepare("INSERT INTO Task (subject_id, class_id, teacher_id, type, max_score, description, title) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$subjectId, $classId, $teacherId, $type, $maxScore, $description, $title]);
         
-        if (!$stmt->execute()) {
-            throw new Exception("Failed to insert task");
-        }
+        $taskId = $pdo->lastInsertId();
 
-        $taskId = $conn->insert_id;
+        // Update file URL to include assignment ID (move file to proper folder)
+        $oldFileUrl = $questionFileUrl;
+        $newFileUrl = updateFilePathWithAssignmentId($oldFileUrl, $taskId);
 
-        // Insert into Assignment table
-        $stmt2 = $conn->prepare("INSERT INTO Assignment (id, question_file_url, deadline) VALUES (?, ?, ?)");
-        $stmt2->bind_param("iss", $taskId, $questionFileUrl, $deadline);
-        
-        if (!$stmt2->execute()) {
-            throw new Exception("Failed to insert assignment");
-        }
+        // Insert into Assignment table with updated file URL
+        $stmt2 = $pdo->prepare("INSERT INTO Assignment (id, question_file_url, deadline) VALUES (?, ?, ?)");
+        $stmt2->execute([$taskId, $newFileUrl, $deadline]);
 
         // Commit transaction
-        $conn->commit();
+        $pdo->commit();
         
         echo json_encode([
             "success" => true, 
             "task_id" => $taskId,
+            "assignment_id" => $taskId,
             "message" => "Assignment published successfully"
         ]);
 
     } catch (Exception $e) {
         // Rollback transaction on error
-        $conn->rollback();
+        $pdo->rollback();
         throw $e;
     }
-
-    $stmt->close();
-    if (isset($stmt2)) $stmt2->close();
-    $conn->close();
 
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => "Server error: " . $e->getMessage()]);
+}
+
+function updateFilePathWithAssignmentId($oldUrl, $assignmentId) {
+    // If file was uploaded to temp folder, move it to assignment-specific folder
+    if (strpos($oldUrl, 'uploads/assignments/temp/') === 0) {
+        $fileName = basename($oldUrl);
+        $newDir = 'uploads/assignments/' . $assignmentId . '/';
+        $newUrl = $newDir . $fileName;
+        
+        // Create new directory
+        if (!file_exists($newDir)) {
+            mkdir($newDir, 0777, true);
+        }
+        
+        // Move file
+        if (file_exists($oldUrl)) {
+            rename($oldUrl, $newUrl);
+            // Remove temp directory if empty
+            $tempDir = dirname($oldUrl);
+            if (is_dir($tempDir) && count(scandir($tempDir)) == 2) { // Only . and ..
+                rmdir($tempDir);
+            }
+        }
+        
+        return $newUrl;
+    }
+    
+    return $oldUrl; // Return original if not in temp folder
 }
 ?>
