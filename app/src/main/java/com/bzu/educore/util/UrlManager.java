@@ -1,8 +1,9 @@
 package com.bzu.educore.util;
 
 public class UrlManager {
-    private static final String BASE_URL = "http://localhost/edu-core/";
+    private static final String BASE_URL = "http://10.0.2.2/edu-core/";
 
+    public static final String URL_LOGIN = BASE_URL + "login.php";
     public static final String URL_GET_SUBJECT_COUNT = BASE_URL + "get_subject_count.php";
     public static final String URL_GET_STUDENT_COUNT = BASE_URL + "get_student_count.php";
     public static final String URL_GET_TEACHER_COUNT = BASE_URL + "get_teacher_count.php";

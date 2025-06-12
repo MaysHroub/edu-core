@@ -19,4 +19,13 @@ public class DialogUtils {
                 .show();
     }
 
+    public static void showErrorDialog(Context context, String title, String message) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setCancelable(true)
+                .show();
+    }
+
 }
