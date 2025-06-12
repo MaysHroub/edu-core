@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.*;
 
+import lombok.Getter;
+
 public class StudentSubmissionsActivity extends AppCompatActivity {
 
     private RecyclerView rvStudents;
@@ -30,6 +32,8 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
     private StudentSubmissionAdapter adapter;
     private final List<StudentSubmission> studentList = new ArrayList<>();
     private final List<StudentSubmission> filtered = new ArrayList<>();
+    // Add this method to your StudentSubmissionsActivity class
+    @Getter
     private int taskId;
     private String type;
     private double maxMark;
