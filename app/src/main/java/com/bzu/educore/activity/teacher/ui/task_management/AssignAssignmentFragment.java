@@ -17,10 +17,9 @@ import androidx.annotation.Nullable;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.model.task.Assignment;
 import com.bzu.educore.util.InputValidator;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.bzu.educore.util.teacher.FragmentHelper;
@@ -152,7 +151,7 @@ public class AssignAssignmentFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    Constants.BASE_URL + "publish_assignment.php",
+                    UrlManager.URL_PUBLISH_ASSIGNMENT,
                     data,
                     response -> {
                         FragmentHelper.showToast(this,"Assignment published successfully!");

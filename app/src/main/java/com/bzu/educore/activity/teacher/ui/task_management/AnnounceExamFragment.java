@@ -17,10 +17,9 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.model.task.Task;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.teacher.FragmentHelper;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.time.LocalDate;
@@ -148,7 +147,7 @@ public class AnnounceExamFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    Constants.BASE_URL + "publish_exam.php",
+                    UrlManager.URL_PUBLISH_EXAM,
                     data,
                     response -> {
                         FragmentHelper.showToast(this, "Exam announced successfully!");

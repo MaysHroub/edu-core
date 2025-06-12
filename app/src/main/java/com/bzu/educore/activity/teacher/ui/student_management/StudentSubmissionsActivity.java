@@ -15,8 +15,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.adapter.teacher.StudentSubmissionAdapter;
 import com.bzu.educore.model.task.StudentSubmission;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +44,7 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
 
         taskId = getIntent().getIntExtra("taskId", -1);
         type   = getIntent().getStringExtra("type");
-        maxMark= getIntent().getDoubleExtra("maxMark", Constants.MAX_MARK);
+        maxMark= getIntent().getDoubleExtra("maxMark", 100);
         if (taskId<0 || type==null) {
             Toast.makeText(this, "Invalid task data", Toast.LENGTH_SHORT).show();
             finish();
@@ -121,7 +121,7 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
         btnPublish.setText("Publishing...");
         JsonObjectRequest req = new JsonObjectRequest(
                 Request.Method.POST,
-                Constants.PUBLISH_MARKS_URL,
+                UrlManager.URL_PUBLISH_MARKS,
                 body,
                 resp -> {
                     btnPublish.setEnabled(true);
@@ -152,8 +152,8 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
 
     private void fetchStudentList() {
         String url = type.equalsIgnoreCase("assignment")
-                ? Constants.BASE_URL + "get_assignment_students.php?taskId="+taskId
-                : Constants.BASE_URL + "get_exam_students.php?taskId="+taskId;
+                ? UrlManager.URL_GET_ASSIGNMENT_STUDENTS + "?taskId="+taskId
+                : UrlManager.URL_GET_EXAM_STUDENTS + "?taskId="+taskId;
 
         JsonArrayRequest req = new JsonArrayRequest(
                 Request.Method.GET, url, null,
