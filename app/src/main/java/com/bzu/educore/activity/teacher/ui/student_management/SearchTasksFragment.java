@@ -29,7 +29,15 @@ import org.json.JSONObject;
 
 import java.util.*;
 
+import lombok.Getter;
+
 public class SearchTasksFragment extends Fragment {
+
+    // Add teacher ID support
+    private static final String ARG_TEACHER_ID = "teacher_id";
+    // Getter method to access teacher ID if needed by other methods
+    @Getter
+    private int teacherId;
 
     private EditText etSearch;
     private Button btnClearSearch, btnSearch, btnClearFilters;
@@ -41,6 +49,23 @@ public class SearchTasksFragment extends Fragment {
 
     private TaskAdapter taskAdapter;
     private final List<Task> taskList = new ArrayList<>();
+
+    // Factory method to create fragment with teacher ID
+    public static SearchTasksFragment newInstance(int teacherId) {
+        SearchTasksFragment fragment = new SearchTasksFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TEACHER_ID, teacherId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            teacherId = getArguments().getInt(ARG_TEACHER_ID, -1);
+        }
+    }
 
     @Nullable
     @Override
@@ -111,6 +136,7 @@ public class SearchTasksFragment extends Fragment {
     }
 
     private void loadSpinners() {
+        // Load spinners with teacher-specific data if needed
         loadSpinner(spinnerSubject, Constants.GET_SUBJECTS_URL, Constants.ALL_SUBJECTS, Constants.JSON_TITLE, false);
         loadSpinner(spinnerGrade, Constants.GET_GRADES_URL, Constants.ALL_GRADES, Constants.JSON_GRADE_NUMBER, true);
 
@@ -121,7 +147,14 @@ public class SearchTasksFragment extends Fragment {
     }
 
     private void loadSpinner(Spinner spinner, String url, String defaultItem, String jsonKey, boolean prefixGrade) {
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        // If you need teacher-specific data for spinners, modify the URL here
+        String finalUrl = url;
+        if (teacherId != -1) {
+            // Example: Add teacher ID as parameter if your API supports it
+            // finalUrl = url + (url.contains("?") ? "&" : "?") + "teacher_id=" + teacherId;
+        }
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, finalUrl, null,
                 response -> {
                     List<String> items = new ArrayList<>();
                     items.add(defaultItem);
@@ -180,6 +213,11 @@ public class SearchTasksFragment extends Fragment {
         String type = getSelectedValue(spinnerType, Constants.ALL_TYPES);
         if (type != null) params.add("type=" + type.toLowerCase());
 
+        // Add teacher ID to search parameters
+        if (teacherId != -1) {
+            params.add("teacher_id=" + teacherId);
+        }
+
         if (!params.isEmpty()) url.append("?").append(TextUtils.join("&", params));
         return url.toString();
     }
@@ -235,4 +273,5 @@ public class SearchTasksFragment extends Fragment {
         recyclerViewTasks.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         tvResultCount.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
+
 }

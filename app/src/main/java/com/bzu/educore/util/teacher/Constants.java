@@ -27,20 +27,13 @@ public class Constants {
     // Prefixes
     public static final String GRADE_PREFIX = "Grade ";
 
-    // Task Types
-    public static final String TYPE_ASSIGNMENT = "Assignment";
-    public static final String TYPE_EXAM = "Exam";
-
-    // UI Texts
+    // Task Type
     public static final String TEXT_SEARCH = "Search";
     public static final String TEXT_SEARCHING = "Searching...";
     public static final String TEXT_ITEM_SINGULAR = " item";
     public static final String TEXT_ITEM_PLURAL = " items";
 
     // Error Messages
-    public static final String ERROR_PARSE_SPINNER = "Error parsing spinner data";
     public static final String ERROR_LOAD_SPINNER = "Failed to load spinner data";
     public static final String ERROR_SEARCH_FAILED = "Search failed";
-    public static final String ERROR_PARSE_TASKS = "Error parsing tasks";
-
 }
