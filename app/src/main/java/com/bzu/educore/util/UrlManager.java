@@ -43,4 +43,6 @@ public class UrlManager {
     public static final String URL_SUBMIT_ABSENCE = BASE_URL + "submit_absence.php";
     public static final String URL_UPLOAD_FILE = BASE_URL + "upload_file.php";
     public static final String URL_VIEW_SUBMISSION = BASE_URL + "view_submission.php";
+
+    public static final String URL_GET_HOMEROOM_CLASS = BASE_URL+ "get_homeroom_class.php";
 }

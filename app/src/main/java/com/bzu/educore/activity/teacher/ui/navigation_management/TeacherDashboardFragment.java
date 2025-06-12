@@ -4,15 +4,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
 import com.bzu.educore.activity.teacher.ui.student_management.AttendanceRecordingFragment;
 import com.bzu.educore.activity.teacher.ui.task_management.TimetableSelectionFragment;
 import com.bzu.educore.activity.teacher.ui.student_management.SearchTasksFragment;
+import com.bzu.educore.util.UrlManager;
+import com.bzu.educore.util.VolleySingleton;
+import org.json.JSONException;
 
 public class TeacherDashboardFragment extends Fragment {
 
@@ -77,9 +83,47 @@ public class TeacherDashboardFragment extends Fragment {
         });
 
         cardAttendance.setOnClickListener(v -> {
-            int dummyClassId = 1;
-            AttendanceRecordingFragment frag = AttendanceRecordingFragment.newInstance(teacherId, dummyClassId);
-            ((TeacherMainActivity) requireActivity()).loadFragment(frag, true);
+            // Fetch homeroom class ID and then navigate to attendance
+            fetchHomeroomClassAndNavigate();
         });
+    }
+
+    private void fetchHomeroomClassAndNavigate() {
+        String url = UrlManager.URL_GET_HOMEROOM_CLASS + "?teacher_id=" + teacherId;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success) {
+                            int classId = response.getInt("class_id");
+                            int studentCount = response.getInt("student_count");
+
+                            // Navigate to attendance recording with the homeroom class ID
+                            AttendanceRecordingFragment fragment = AttendanceRecordingFragment.newInstance(teacherId, classId);
+                            ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
+
+                            // Optionally show student count
+                            showToast("Loading attendance for " + studentCount + " students");
+                        } else {
+                            String message = response.getString("message");
+                            showToast(message);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        showToast("Error parsing response");
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    showToast("Failed to load homeroom class information");
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
