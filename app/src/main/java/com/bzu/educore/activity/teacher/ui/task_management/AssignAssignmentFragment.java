@@ -20,6 +20,7 @@ import com.bzu.educore.R;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
+import com.bzu.educore.util.FileUploadUtil; // You'll need to create this utility class
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.bzu.educore.util.teacher.FragmentHelper;
@@ -35,6 +36,7 @@ public class AssignAssignmentFragment extends Fragment {
     private DatePicker deadlinePicker;
     private Button uploadButton, publishButton;
     private String uploadedFileUrl = "";
+    private Uri selectedFileUri = null;
 
     private int subjectId, classGradeId, teacherId;
     private String subjectName, classGradeName;
@@ -64,7 +66,7 @@ public class AssignAssignmentFragment extends Fragment {
         publishButton = view.findViewById(R.id.btnPublishAssignment);
 
         uploadButton.setOnClickListener(v -> openFilePicker());
-        publishButton.setOnClickListener(v -> publishAssignment());
+        publishButton.setOnClickListener(v -> uploadFileAndPublish());
     }
 
     private void getArgumentsData() {
@@ -97,20 +99,20 @@ public class AssignAssignmentFragment extends Fragment {
         if (requestCode == FILE_PICKER_REQUEST
                 && resultCode == Activity.RESULT_OK
                 && data != null) {
-            Uri fileUri = data.getData();
-            uploadedFileUrl = fileUri.toString();
+            selectedFileUri = data.getData();
             uploadButton.setText("File Selected ✓");
-            FragmentHelper.showToast(this,"File selected");
+            FragmentHelper.showToast(this, "File selected");
         }
     }
 
-    private void publishAssignment() {
+    private void uploadFileAndPublish() {
+        // First validate form data
         String title = titleEditText.getText().toString().trim();
         String description = descEditText.getText().toString().trim();
         String maxScoreStr = maxScoreEditText.getText().toString().trim();
 
         if (!InputValidator.validateEditTexts(titleEditText, descEditText, maxScoreEditText)) {
-            FragmentHelper.showToast(this,"All fields are required");
+            FragmentHelper.showToast(this, "All fields are required");
             return;
         }
 
@@ -126,10 +128,37 @@ public class AssignAssignmentFragment extends Fragment {
             return;
         }
 
-        if (uploadedFileUrl.isEmpty()) {
-            FragmentHelper.showToast(this,"Please select a file");
+        if (selectedFileUri == null) {
+            FragmentHelper.showToast(this, "Please select a file");
             return;
         }
+
+        // Disable publish button to prevent multiple clicks
+        publishButton.setEnabled(false);
+        publishButton.setText("Publishing...");
+
+        // Upload file first, then publish assignment
+        FileUploadUtil.uploadFile(requireContext(), selectedFileUri, new FileUploadUtil.UploadCallback() {
+            @Override
+            public void onSuccess(String fileUrl) {
+                uploadedFileUrl = fileUrl;
+                publishAssignment();
+            }
+
+            @Override
+            public void onError(String error) {
+                FragmentHelper.showErrorToast(AssignAssignmentFragment.this, "File upload failed: " + error);
+                publishButton.setEnabled(true);
+                publishButton.setText("Publish Assignment");
+            }
+        });
+    }
+
+    private void publishAssignment() {
+        String title = titleEditText.getText().toString().trim();
+        String description = descEditText.getText().toString().trim();
+        String maxScoreStr = maxScoreEditText.getText().toString().trim();
+        double maxScore = Double.parseDouble(maxScoreStr);
 
         LocalDate deadlineDate = LocalDate.of(
                 deadlinePicker.getYear(),
@@ -142,28 +171,34 @@ public class AssignAssignmentFragment extends Fragment {
             data.put("subject_id", subjectId);
             data.put("class_id", classGradeId);
             data.put("teacher_id", teacherId);
-            data.put("type", "assignment"); // Fixed: Pass task type
+            data.put("type", "Assignment"); // Note: Capital A to match database ENUM
             data.put("max_score", maxScore);
             data.put("title", title);
             data.put("description", description);
             data.put("question_file_url", uploadedFileUrl);
-            data.put("deadline", deadlineDate.toString()); // Fixed: Format deadline properly
+            data.put("deadline", deadlineDate.toString());
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
                     UrlManager.URL_PUBLISH_ASSIGNMENT,
                     data,
                     response -> {
-                        FragmentHelper.showToast(this,"Assignment published successfully!");
+                        FragmentHelper.showToast(this, "Assignment published successfully!");
                         requireActivity().getSupportFragmentManager().popBackStack();
                     },
-                    error -> FragmentHelper.showErrorToast(this,"Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"))
+                    error -> {
+                        FragmentHelper.showErrorToast(this, "Error: " + (error.getMessage() != null ? error.getMessage() : "Unknown"));
+                        publishButton.setEnabled(true);
+                        publishButton.setText("Publish Assignment");
+                    }
             );
 
             VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
 
         } catch (JSONException e) {
-            FragmentHelper.showErrorToast(this,"Failed to create request: " + e.getMessage());
+            FragmentHelper.showErrorToast(this, "Failed to create request: " + e.getMessage());
+            publishButton.setEnabled(true);
+            publishButton.setText("Publish Assignment");
         }
     }
 }

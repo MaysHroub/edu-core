@@ -41,5 +41,6 @@ public class UrlManager {
     public static final String URL_PUBLISH_MARKS = BASE_URL + "publish_marks.php";
     public static final String URL_SEARCH_TASKS = BASE_URL + "search_tasks.php";
     public static final String URL_SUBMIT_ABSENCE = BASE_URL + "submit_absence.php";
+    public static final String URL_UPLOAD_FILE = BASE_URL + "upload_file.php";
 
 }
