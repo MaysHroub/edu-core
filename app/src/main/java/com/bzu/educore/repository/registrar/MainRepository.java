@@ -54,8 +54,12 @@ public class MainRepository {
     }
 
     public <T> void addItem(String url, T item, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, type, context) ->
+                        new JsonPrimitive(src.toString()))  // LocalDate -> "2024-06-11"
+                .create();
         String stdJson = gson.toJson(item);
+        Log.d("JSON", stdJson);
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(stdJson);

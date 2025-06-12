@@ -86,4 +86,5 @@
     <string name="profile">Profile</string>
     <string name="subjects">Subjects</string>
     <string name="schedules">Schedules</string>
+    <string name="none">None</string>
 </resources>

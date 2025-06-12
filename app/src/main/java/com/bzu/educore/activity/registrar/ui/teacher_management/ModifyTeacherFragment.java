@@ -75,12 +75,17 @@ public class ModifyTeacherFragment extends Fragment {
         int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
-        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, null, dob, phoneNumber, subject.getId());
-        if (teacher == null) {
+        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, "1234", dob, phoneNumber, subject.getId());
+        Log.d(TAG, "saveTeacher: " + teacher);
+        if (this.teacher == null) {
             teacherManagementViewModel.registerTeacher(teacher);
-        } else {
+            teacherManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
+                if (success)
+                    binding.btnTchrSave.setEnabled(false);
+            });
+        } else
             teacherManagementViewModel.updateTeacher(teacher);
-        }
+
     }
 
     private void deleteTeacher() {
@@ -119,6 +124,7 @@ public class ModifyTeacherFragment extends Fragment {
             String generatedEmail = String.format("%d@teacher.educore.edu", teacherId);
             binding.edttxtTchrId.setText(teacherId+"");
             binding.edttxtTchrEmail.setText(generatedEmail);
+            Log.d(TAG, "generateCredentials: " + generatedEmail);
         });
         teacherManagementViewModel.generateTeacherId();
     }

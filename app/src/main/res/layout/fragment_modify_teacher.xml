@@ -19,7 +19,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        tools:srcCompat="@drawable/teacher" />
+        app:srcCompat="@drawable/teacher" />
 
     <EditText
         android:id="@+id/edttxt_tchr_fname"
@@ -59,7 +59,7 @@
         style="?android:spinnerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/june_14_2025"
+        android:text="@string/none"
         android:textColor="@color/black" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
