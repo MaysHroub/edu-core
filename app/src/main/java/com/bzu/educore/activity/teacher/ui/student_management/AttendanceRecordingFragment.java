@@ -87,7 +87,7 @@ public class AttendanceRecordingFragment extends Fragment {
     }
 
     private void fetchStudents() {
-        String url = UrlManager.URL_GET_CLASS_STUDENTS+ "?classId=" + classId;
+        String url = UrlManager.URL_GET_CLASS_STUDENTS + "?classId=" + classId;
 
         JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null,
                 resp -> {
@@ -110,7 +110,7 @@ public class AttendanceRecordingFragment extends Fragment {
                         }
                     }
                     adapter.notifyDataSetChanged();
-                    showToast("Loaded " + studentList.size() + " students");
+                    // Removed: showToast("Loaded " + studentList.size() + " students");
                 },
                 err -> {
                     String msg = "Failed to load students";
@@ -123,7 +123,6 @@ public class AttendanceRecordingFragment extends Fragment {
 
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(req);
     }
-
     private void submitAttendance() {
         JSONArray arr = new JSONArray();
         LocalDate sel = LocalDate.of(year, month + 1, day);

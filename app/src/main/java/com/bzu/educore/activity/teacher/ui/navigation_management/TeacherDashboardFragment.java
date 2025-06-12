@@ -24,8 +24,6 @@ public class TeacherDashboardFragment extends Fragment {
 
     private static final String ARG_TEACHER_ID = "teacher_id";
     private int teacherId;
-
-    // Factory method to create fragment with teacher ID
     public static TeacherDashboardFragment newInstance(int teacherId) {
         TeacherDashboardFragment fragment = new TeacherDashboardFragment();
         Bundle args = new Bundle();
@@ -97,14 +95,8 @@ public class TeacherDashboardFragment extends Fragment {
                         boolean success = response.getBoolean("success");
                         if (success) {
                             int classId = response.getInt("class_id");
-                            int studentCount = response.getInt("student_count");
-
-                            // Navigate to attendance recording with the homeroom class ID
                             AttendanceRecordingFragment fragment = AttendanceRecordingFragment.newInstance(teacherId, classId);
                             ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
-
-                            // Optionally show student count
-                            showToast("Loading attendance for " + studentCount + " students");
                         } else {
                             String message = response.getString("message");
                             showToast(message);
