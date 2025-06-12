@@ -81,7 +81,7 @@ public class TeacherDashboardFragment extends Fragment {
         });
 
         cardAttendance.setOnClickListener(v -> {
-            // Fetch homeroom class ID and then navigate to attendance
+            // Fetch homeroom class ID asnd then navigate to attendance
             fetchHomeroomClassAndNavigate();
         });
     }
@@ -92,29 +92,26 @@ public class TeacherDashboardFragment extends Fragment {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        boolean success = response.getBoolean("success");
-                        if (success) {
+                        if (response.has("class_id") && !response.isNull("class_id")) {
                             int classId = response.getInt("class_id");
                             AttendanceRecordingFragment fragment = AttendanceRecordingFragment.newInstance(teacherId, classId);
                             ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
                         } else {
-                            String message = response.getString("message");
-                            showToast(message);
+                            showToast("You are not assigned as a homeroom teacher to any class.");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        showToast("Error parsing response");
+                        showToast("Error parsing server response.");
                     }
                 },
                 error -> {
                     error.printStackTrace();
-                    showToast("Failed to load homeroom class information");
+                    showToast("Network error: could not fetch homeroom class.");
                 }
         );
 
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
-
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }

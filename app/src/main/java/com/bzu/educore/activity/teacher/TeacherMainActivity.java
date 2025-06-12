@@ -22,7 +22,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_teacher_main);
 
         // Get teacher ID from login intent
-        teacherId = getIntent().getIntExtra("TEACHER_ID", -1);
+        teacherId = 14;
 
         if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
