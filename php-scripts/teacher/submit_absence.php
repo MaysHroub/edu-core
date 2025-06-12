@@ -1,6 +1,7 @@
 <?php
+// submit_absence.php
 header('Content-Type: application/json');
-require_once 'db_connect.php';
+require_once 'connection.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -15,37 +16,36 @@ if (!$teacher_id || !$class_id || !is_array($absences)) {
 }
 
 try {
-    $conn->begin_transaction();
+    $pdo->beginTransaction();
 
     // delete existing for that date/class
     $date = $absences[0]['date'] ?? date('Y-m-d');
-    $del = $conn->prepare(
+    $del = $pdo->prepare(
       "DELETE a
          FROM Absence a
          JOIN Student s ON a.student_id = s.id
         WHERE s.class_id = ? AND a.date = ?"
     );
-    $del->bind_param('is', $class_id, $date);
-    $del->execute();
+    $del->execute([$class_id, $date]);
 
     // insert new
-    $ins = $conn->prepare(
+    $ins = $pdo->prepare(
       "INSERT INTO Absence (student_id, date, status)
        VALUES (?, ?, ?)"
     );
     foreach ($absences as $rec) {
-        $ins->bind_param('sss',
+        $ins->execute([
             $rec['student_id'],
             $rec['date'],
             $rec['status']
-        );
-        $ins->execute();
+        ]);
     }
 
-    $conn->commit();
+    $pdo->commit();
     echo json_encode(['success'=>true,'message'=>'Attendance saved']);
 } catch (Exception $e) {
-    $conn->rollback();
+    $pdo->rollback();
     http_response_code(500);
     echo json_encode(['error'=>$e->getMessage()]);
 }
+?>
