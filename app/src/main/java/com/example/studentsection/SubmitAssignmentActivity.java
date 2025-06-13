@@ -34,7 +34,7 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
     private Uri selectedFileUri = null;
     private int selectedAssignmentId = -1;
     private RequestQueue queue;
-    private String studentId = "20230001"; // Temporary until SharedPreferences is used
+    private String studentId = "20250001"; // Temporary until SharedPreferences is used
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +66,36 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
     }
 
     private void loadAssignments() {
-        String url = "http://192.168.172.3/school_system/student/get_assignments.php?student_id=" + studentId;
+        // Fixed URL - removed the incorrect path structure
+        String url = "http://10.0.2.2/edu-core/student/get_assignments.php?student_id=" + studentId;
+
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
-                    List<AssignmentData> list = new Gson().fromJson(response, new TypeToken<List<AssignmentData>>(){}.getType());
-                    ArrayAdapter<AssignmentData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-                    assignmentList.setAdapter(adapter);
+                    try {
+                        // Add logging to debug the response
+                        Log.d("AssignmentResponse", "Response: " + response);
+
+                        // Check if response contains error
+                        if (response.contains("error")) {
+                            Toast.makeText(this, "Error: " + response, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        List<AssignmentData> list = new Gson().fromJson(response, new TypeToken<List<AssignmentData>>(){}.getType());
+                        ArrayAdapter<AssignmentData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+                        assignmentList.setAdapter(adapter);
+
+                    } catch (Exception e) {
+                        Log.e("ParseError", "Error parsing JSON: " + e.getMessage());
+                        Log.e("ParseError", "Response was: " + response);
+                        Toast.makeText(this, "Error parsing assignments data", Toast.LENGTH_SHORT).show();
+                    }
                 },
-                error -> Toast.makeText(this, "Error loading assignments", Toast.LENGTH_SHORT).show());
+                error -> {
+                    Log.e("NetworkError", "Error loading assignments: " + error.getMessage());
+                    Toast.makeText(this, "Error loading assignments: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+
         queue.add(request);
     }
 
@@ -98,17 +120,26 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
             InputStream inputStream = getContentResolver().openInputStream(selectedFileUri);
             byte[] fileBytes = new byte[inputStream.available()];
             inputStream.read(fileBytes);
+            inputStream.close(); // Close the input stream
 
             String fileName = getFileName(selectedFileUri);
             String fileExtension = MimeTypeMap.getFileExtensionFromUrl(fileName);
 
             String encodedFile = Base64.encodeToString(fileBytes, Base64.DEFAULT);
 
-            String url = "http://192.168.172.3/school_system/student/submit_assignment.php";
+            String url = "http://10.0.2.2/edu-core/student/submit_assignment.php";
 
             StringRequest request = new StringRequest(Request.Method.POST, url,
-                    response -> Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show(),
-                    error -> Toast.makeText(this, "Upload error", Toast.LENGTH_SHORT).show()) {
+                    response -> {
+                        Log.d("UploadResponse", "Response: " + response);
+                        Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show();
+                        // Refresh the assignments list after successful upload
+                        loadAssignments();
+                    },
+                    error -> {
+                        Log.e("UploadError", "Upload error: " + error.getMessage());
+                        Toast.makeText(this, "Upload failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }) {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> map = new HashMap<>();
@@ -123,8 +154,8 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
             queue.add(request);
 
         } catch (Exception e) {
-            Toast.makeText(this, "File error", Toast.LENGTH_SHORT).show();
-            Log.e("upload", e.toString());
+            Toast.makeText(this, "File processing error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("FileError", "File processing error: " + e.toString());
         }
     }
 

@@ -33,7 +33,7 @@ try {
     // Now fetch all students in that class with their submission data
     $sql = "SELECT 
                 s.id AS student_id,
-                s.name AS student_name,
+                CONCAT(s.fname, ' ', s.lname) AS student_name,
                 tr.mark,
                 tr.feedback,
                 asub.submission_date,

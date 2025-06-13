@@ -29,7 +29,7 @@ try {
     // Now fetch all students in that class
     $sql = "SELECT 
                 s.id AS student_id,
-                s.name AS student_name,
+                CONCAT(s.fname, ' ', s.lname) AS student_name,
                 tr.mark,
                 tr.feedback
             FROM Student s
@@ -60,5 +60,3 @@ try {
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
 }
 ?>
-
-<?php
