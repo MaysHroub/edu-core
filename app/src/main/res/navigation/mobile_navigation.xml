@@ -115,4 +115,10 @@
         android:label="Profile"
         tools:layout="@layout/fragment_registrar_profile" />
 
+    <fragment
+        android:id="@+id/nav_schedules"
+        android:name="com.bzu.educore.activity.registrar.ui.schedules.SchedulesFragment"
+        android:label="Schedules"
+        tools:layout="@layout/fragment_schedules" />
+
 </navigation>
