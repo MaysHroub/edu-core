@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bzu.educore.R;
 import com.example.studentsection.model.EventData;
 import java.util.List;
 
