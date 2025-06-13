@@ -72,18 +72,27 @@ public class ModifyTeacherFragment extends Fragment {
                 lname = binding.edttxtTchrLname.getText().toString(),
                 phoneNumber = binding.edttxtTchrPhone.getText().toString();
         Subject subject = (Subject) binding.spnrTchrSubject.getSelectedItem();
-        int generatedId = Integer.parseInt(binding.edttxtTchrId.getText().toString());
         String generatedEmail = binding.edttxtTchrEmail.getText().toString();
         // TODO: replace dummy-teacher with actual teacher class
-        DummyTeacher teacher = new DummyTeacher(generatedId, fname, lname, generatedEmail, "1234", dob, phoneNumber, subject.getId());
-        if (this.teacher == null) {
-            teacherManagementViewModel.registerTeacher(teacher);
+        if (teacher == null) {
+            DummyTeacher teacherTemp = new DummyTeacher(fname, lname, generatedEmail, "1234", dob, phoneNumber, subject.getId());
+            teacherManagementViewModel.registerTeacher(teacherTemp);
             teacherManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
-                if (success)
-                    binding.btnTchrSave.setEnabled(false);
+                if (!success) return;
+                generateCredentials();
+                binding.edttxtTchrFname.setText("");
+                binding.edttxtTchrLname.setText("");
+                binding.edttxtTchrPhone.setText("");
+                binding.spnrTchrSubject.setSelection(0);
             });
-        } else
+        } else {
+            teacher.setFname(fname);
+            teacher.setLname(lname);
+            teacher.setDateOfBirth(dob);
+            teacher.setPhoneNumber(phoneNumber);
+            teacher.setSubjectTaughtId(subject.getId());
             teacherManagementViewModel.updateTeacher(teacher);
+        }
 
     }
 

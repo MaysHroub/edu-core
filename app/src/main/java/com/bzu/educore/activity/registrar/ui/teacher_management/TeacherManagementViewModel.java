@@ -75,6 +75,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     additionSuccess.postValue(true);
                 },
                 error -> {
+                    Log.e(TAG, "registerTeacher: ", error);
                     Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                     additionSuccess.postValue(false);
                 }

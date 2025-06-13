@@ -100,20 +100,26 @@ public class ModifyStudentFragment extends Fragment {
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
-        int stdId = Integer.parseInt(binding.edttxtStdId.getText().toString());
         String stdEmail = binding.edttxtStdEmail.getText().toString();
 
-        DummyStudent student = new DummyStudent(stdId, fname, lname, stdEmail, "1234", dob, classroom.getId());
 
         // TODO: replace dummy-student with actual student class
-        if (this.student == null) {
-            studentManagementViewModel.registerStudent(student);
+        if (student == null) {
+            DummyStudent studentTemp = new DummyStudent(fname, lname, stdEmail, "1234", dob, classroom.getId());
+            studentManagementViewModel.registerStudent(studentTemp);
             studentManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
-                if (success)
-                    binding.btnSaveStd.setEnabled(false);
+                if (!success) return;
+                generateCredentials();
+                binding.edttxtStdFname.setText("");
+                binding.edttxtStdLname.setText("");
+                binding.spnrStdClassroom.setSelection(0);
             });
-        } else
+        } else {
+            student.setFname(fname);
+            student.setLname(lname);
+            student.setClassId(classroom.getId());
             studentManagementViewModel.updateStudent(student);
+        }
     }
 
     private void deleteStudent() {
