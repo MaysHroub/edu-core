@@ -1,4 +1,4 @@
-package com.example.studentsection;
+package com.bzu.educore.activity.student;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,9 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bzu.educore.R;
-import com.example.studentsection.fragments.StudentHomeFragment;
-import com.example.studentsection.fragments.StudentProfileFragment;
-import com.example.studentsection.fragments.StudentNotificationsFragment;
+import com.bzu.educore.activity.student.ui.StudentHomeFragment;
+import com.bzu.educore.activity.student.ui.StudentProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

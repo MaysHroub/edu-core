@@ -1,4 +1,4 @@
-package com.example.studentsection.fragments;
+package com.bzu.educore.activity.student.ui;
 
 import android.os.Bundle;
 import android.util.Log;

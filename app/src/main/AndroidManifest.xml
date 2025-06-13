@@ -35,7 +35,7 @@
         <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
         <activity
-            android:name="com.example.studentsection.StudentMainActivity"
+            android:name=".activity.student.StudentMainActivity"
             android:exported="false" />
         <activity
             android:name="com.example.studentsection.ViewMarksActivity"

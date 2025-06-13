@@ -18,7 +18,7 @@ import com.bzu.educore.activity.teacher.TeacherMainActivity;
 import com.bzu.educore.util.SharedPreferencesManager;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.example.studentsection.StudentMainActivity;
+import com.bzu.educore.activity.student.StudentMainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
