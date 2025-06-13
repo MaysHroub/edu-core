@@ -78,7 +78,8 @@ public class RegistrarMainActivity extends AppCompatActivity {
                     TextView txtRegName = findViewById(R.id.txt_reg_name),
                             txtRegEmail = findViewById(R.id.txt_reg_email);
 
-                    txtRegEmail.setText(email);
+                    if (txtRegEmail != null)
+                        txtRegEmail.setText(email);
 
                     try {
                         JSONObject registrar = response.getJSONObject("registrar");
