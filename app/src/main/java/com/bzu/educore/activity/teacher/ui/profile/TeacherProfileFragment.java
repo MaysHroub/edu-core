@@ -124,7 +124,6 @@ public class TeacherProfileFragment extends Fragment {
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put("email", currentEmail);
-            requestBody.put("teacher_id", teacherId);
             Log.d(TAG, "Request body: " + requestBody.toString());
         } catch (JSONException e) {
             Log.e(TAG, "Error preparing request body", e);
