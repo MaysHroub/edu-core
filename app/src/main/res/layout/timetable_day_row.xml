@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/timetable_row_background">
+
+    <TextView
+        android:id="@+id/dayName"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_time_slot_bg"
+        android:padding="8dp"
+        android:textColor="@color/timetable_header_text"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/time1Cell"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="8dp"
+        android:textColor="@color/timetable_empty_cell_text"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/time2Cell"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="8dp"
+        android:textColor="@color/timetable_empty_cell_text"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/time3Cell"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="8dp"
+        android:textColor="@color/timetable_empty_cell_text"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/time4Cell"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_break_bg"
+        android:padding="8dp"
+        android:text="Break"
+        android:textColor="@color/timetable_break_text"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/time5Cell"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="8dp"
+        android:textColor="@color/timetable_empty_cell_text"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/time6Cell"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="8dp"
+        android:textColor="@color/timetable_empty_cell_text"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+</LinearLayout> 

@@ -30,7 +30,7 @@ try {
         exit();
     }
 
-    // Get submission file URL from database
+    // Check if submission exists in database
     $sqlSubmission = "SELECT submission_file_url, submission_date 
                       FROM AssignmentSubmission 
                       WHERE id = ? AND student_id = ?";
@@ -44,38 +44,83 @@ try {
         exit();
     }
     
-    $fileUrl = $submissionRow['submission_file_url'];
     $submissionDate = $submissionRow['submission_date'];
     
-    // Check if file URL is empty
-    if (empty($fileUrl)) {
+    // Construct the expected file path using the new structure
+    // uploads/assignments/{task_id}/{student_id}.{extension}
+    $assignmentDir = "uploads/assignments/" . $taskId . "/";
+    
+    // Look for files starting with the student ID
+    $possibleExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt'];
+    $filePath = null;
+    $fileName = null;
+    
+    // Check if the assignment directory exists
+    if (!is_dir($assignmentDir)) {
         http_response_code(404);
-        echo json_encode(["error" => "No file submitted"]);
+        echo json_encode([
+            "error" => "Assignment directory not found",
+            "debug" => [
+                "looking_for_directory" => $assignmentDir
+            ]
+        ]);
         exit();
     }
     
-    // Construct full file path
-    $filePath = $fileUrl; // This should be something like "uploads/assignments/123/filename.pdf"
+    // Try to find the file with different extensions
+    foreach ($possibleExtensions as $ext) {
+        $testPath = $assignmentDir . $studentId . '.' . $ext;
+        if (file_exists($testPath)) {
+            $filePath = $testPath;
+            $fileName = $studentId . '.' . $ext;
+            break;
+        }
+    }
     
-    // Security check: ensure the file path is within the uploads directory
+    // If no file found with standard extensions, scan directory for any file starting with student ID
+    if (!$filePath) {
+        $files = scandir($assignmentDir);
+        foreach ($files as $file) {
+            if ($file != '.' && $file != '..' && strpos($file, $studentId) === 0) {
+                $filePath = $assignmentDir . $file;
+                $fileName = $file;
+                break;
+            }
+        }
+    }
+    
+    // Check if any file was found
+    if (!$filePath || !file_exists($filePath)) {
+        http_response_code(404);
+        echo json_encode([
+            "error" => "Submission file not found on server",
+            "debug" => [
+                "searched_directory" => $assignmentDir,
+                "student_id" => $studentId,
+                "checked_extensions" => $possibleExtensions
+            ]
+        ]);
+        exit();
+    }
+    
+    // Security check - ensure file is within the uploads/assignments directory
     $realPath = realpath($filePath);
     $uploadsPath = realpath('uploads/assignments/');
     
     if (!$realPath || !$uploadsPath || strpos($realPath, $uploadsPath) !== 0) {
         http_response_code(403);
-        echo json_encode(["error" => "Access denied"]);
-        exit();
-    }
-    
-    // Check if file exists
-    if (!file_exists($filePath)) {
-        http_response_code(404);
-        echo json_encode(["error" => "Submission file not found on server"]);
+        echo json_encode([
+            "error" => "Access denied - file outside allowed directory",
+            "debug" => [
+                "filePath" => $filePath,
+                "realPath" => $realPath,
+                "uploadsPath" => $uploadsPath
+            ]
+        ]);
         exit();
     }
     
     // Get file information
-    $fileName = basename($filePath);
     $fileSize = filesize($filePath);
     $mimeType = mime_content_type($filePath);
     
@@ -113,6 +158,7 @@ try {
         "file_size" => $fileSize,
         "file_type" => $mimeType,
         "submission_date" => $submissionDate,
+        "file_path" => $filePath, // For debugging
         "download_url" => "view_submission.php?task_id=" . $taskId . "&student_id=" . urlencode($studentId) . "&download=1",
         "view_url" => "view_submission.php?task_id=" . $taskId . "&student_id=" . urlencode($studentId) . "&view=1"
     ]);

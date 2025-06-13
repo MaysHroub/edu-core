@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/timeSlot"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/timetable_time_slot_bg"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/sundayCell"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/mondayCell"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tuesdayCell"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/wednesdayCell"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/thursdayCell"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@color/timetable_empty_cell_bg"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+</LinearLayout> 
