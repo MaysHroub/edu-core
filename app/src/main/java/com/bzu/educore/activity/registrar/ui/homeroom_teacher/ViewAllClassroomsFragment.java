@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
 import com.bzu.educore.activity.registrar.ui.student_management.ModifyStudentFragment;
 import com.bzu.educore.activity.registrar.ui.student_management.StudentManagementViewModel;
 import com.bzu.educore.activity.registrar.ui.teacher_management.TeacherManagementViewModel;
+import com.bzu.educore.activity.registrar.ui.teacher_management.ViewAllTeachersFragmentDirections;
 import com.bzu.educore.databinding.FragmentAssignHomeroomTeacherBinding;
 import com.bzu.educore.databinding.FragmentViewAllClassroomsBinding;
 
@@ -35,14 +38,8 @@ public class ViewAllClassroomsFragment extends Fragment {
 
         binding.lstClassrooms.setOnItemClickListener((parent, view, position, id) -> {
             DummyClassroom classroom = (DummyClassroom) parent.getItemAtPosition(position);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("classroom", classroom);
-            AssignHomeroomTeacherFragment fragment = new AssignHomeroomTeacherFragment();
-            fragment.setArguments(bundle);
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_content_registrar_main, fragment);
-            transaction.addToBackStack(null); // so the user can navigate back
-            transaction.commit();
+            NavDirections action = ViewAllClassroomsFragmentDirections.actionViewAllClassroomsFragmentToAssignHomeroomTeacherFragment(classroom);
+            Navigation.findNavController(requireView()).navigate(action);
         });
 
         return binding.getRoot();

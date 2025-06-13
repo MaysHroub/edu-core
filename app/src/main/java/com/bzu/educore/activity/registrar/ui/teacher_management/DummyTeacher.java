@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import androidx.annotation.NonNull;
+
 import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.model.user.Person;
@@ -31,5 +33,13 @@ public class DummyTeacher extends User implements Serializable {
         super(fname, lname, email, password, dateOfBirth);
         this.phoneNumber = phoneNumber;
         this.subjectTaughtId = subjectTaughtId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        if (getFname() == null || getLname() == null)
+            return "none";
+        return String.format("%s %s", getFname(), getLname());
     }
 }
