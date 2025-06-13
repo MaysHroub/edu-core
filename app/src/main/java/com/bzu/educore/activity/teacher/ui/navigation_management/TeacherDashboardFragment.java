@@ -13,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
+import com.bzu.educore.activity.teacher.ui.profile.TeacherTimetableFragment;
 import com.bzu.educore.activity.teacher.ui.student_management.AttendanceRecordingFragment;
 import com.bzu.educore.activity.teacher.ui.task_management.TimetableSelectionFragment;
 import com.bzu.educore.activity.teacher.ui.student_management.SearchTasksFragment;
@@ -53,6 +54,8 @@ public class TeacherDashboardFragment extends Fragment {
         CardView cardAnnounceExam = view.findViewById(R.id.cardAnnounceExam);
         CardView cardSubmissions = view.findViewById(R.id.cardViewSubmissions);
         CardView cardAttendance = view.findViewById(R.id.cardViewAttendance);
+        CardView cardTimeTable = view.findViewById(R.id.cardViewTimeTable);
+
 
         cardCreateAssignment.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -63,7 +66,11 @@ public class TeacherDashboardFragment extends Fragment {
             fragment.setArguments(bundle);
             ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
         });
+        cardTimeTable.setOnClickListener(v -> {
+            TeacherTimetableFragment fragment = TeacherTimetableFragment.newInstance(teacherId);
+            ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
 
+        });
         cardAnnounceExam.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("mode", "exam");

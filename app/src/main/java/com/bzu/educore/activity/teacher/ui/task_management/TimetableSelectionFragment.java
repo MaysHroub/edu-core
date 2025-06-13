@@ -26,14 +26,40 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 public class TimetableSelectionFragment extends Fragment {
 
+    // Add constants for argument keys
+    private static final String ARG_MODE = "mode";
+    private static final String ARG_TEACHER_ID = "teacher_id";
+
     private RecyclerView recyclerView;
-    private int teacherId = 125001; // Replace with actual logged-in teacher ID
+    @Getter
+    private int teacherId = -1; // Initialize with -1 to indicate no teacher ID
     private List<JSONObject> timetableList = new ArrayList<>();
     private String mode;
 
     public TimetableSelectionFragment() {}
+
+    // Factory method to create fragment with parameters (optional, for consistency)
+    public static TimetableSelectionFragment newInstance(String mode, int teacherId) {
+        TimetableSelectionFragment fragment = new TimetableSelectionFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_MODE, mode);
+        args.putInt(ARG_TEACHER_ID, teacherId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mode = getArguments().getString(ARG_MODE, "");
+            teacherId = getArguments().getInt(ARG_TEACHER_ID, -1);
+        }
+    }
 
     @Nullable
     @Override
@@ -44,8 +70,10 @@ public class TimetableSelectionFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewTimetable);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        if (getArguments() != null) {
-            mode = getArguments().getString("mode", "");
+        // Validate teacher ID before proceeding
+        if (teacherId == -1) {
+            Toast.makeText(requireContext(), "Teacher ID not provided", Toast.LENGTH_SHORT).show();
+            return view;
         }
 
         fetchTimetable();
@@ -112,7 +140,6 @@ public class TimetableSelectionFragment extends Fragment {
         }
         targetFragment.setArguments(bundle);
 
-        // Now using loadFragment(fragment, true) to match updated TeacherMainActivity
         ((TeacherMainActivity) requireActivity()).loadFragment(targetFragment, true);
     }
 }
