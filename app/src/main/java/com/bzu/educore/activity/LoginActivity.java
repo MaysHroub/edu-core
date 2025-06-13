@@ -15,8 +15,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.registrar.RegistrarMainActivity;
 import com.bzu.educore.activity.teacher.TeacherMainActivity;
+import com.bzu.educore.util.SharedPreferencesManager;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
+import com.example.studentsection.StudentMainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -31,12 +33,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText emailInput, passwordInput;
     private MaterialButton loginButton;
     private View progressBar;
+    private SharedPreferencesManager prefsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        prefsManager = new SharedPreferencesManager(this);
         initializeViews();
         setupLoginButton();
         
@@ -145,6 +149,13 @@ public class LoginActivity extends AppCompatActivity {
             
             if (success) {
                 String userType = response.getString("user_type");
+                String email = emailInput.getText().toString().trim();
+                
+                // Save user data using SharedPreferencesManager
+                prefsManager.saveUserEmail(email);
+                prefsManager.saveUserType(userType);
+                prefsManager.setLoggedIn(true);
+                
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                 navigateToDashboard(userType);
             } else {
@@ -166,9 +177,8 @@ public class LoginActivity extends AppCompatActivity {
                 intent = new Intent(this, RegistrarMainActivity.class);
                 break;
             case "student":
-                // TODO: Create and navigate to StudentMainActivity
-                Toast.makeText(this, "Student dashboard coming soon", Toast.LENGTH_SHORT).show();
-                return;
+                intent = new Intent(this, StudentMainActivity.class);
+                break;
             default:
                 Toast.makeText(this, "Unknown user type", Toast.LENGTH_SHORT).show();
                 return;

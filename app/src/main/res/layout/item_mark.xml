@@ -14,29 +14,21 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/subjectTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/descriptionTextView"
+            android:id="@+id/gradeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/locationTextView"
+            android:id="@+id/semesterTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -44,4 +36,4 @@
             android:textColor="@android:color/darker_gray" />
 
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView> 

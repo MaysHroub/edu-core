@@ -1,4 +1,4 @@
-package com.example.studentsection;
+package com.example.studentsection.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +13,10 @@ import com.example.studentsection.model.Event;
 
 import java.util.List;
 
-
-// this is a custom recyclerview.adapter that creates visual cards (using item_event.xml)
-// binds each event data to a card and displays it in the recyclerview inside vieweventsactivity
-
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
-
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
     private List<Event> eventsList;
 
-    public EventAdapter(List<Event> eventsList) {
+    public EventsAdapter(List<Event> eventsList) {
         this.eventsList = eventsList;
     }
 
@@ -61,9 +56,4 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             locationTextView = itemView.findViewById(R.id.locationTextView);
         }
     }
-
-    private String capitalize(String s) {
-        if (s == null || s.isEmpty()) return s;
-        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-    }
-}
+} 

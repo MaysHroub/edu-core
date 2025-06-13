@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,5 +30,17 @@
         <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
+        <activity
+            android:name="com.example.studentsection.StudentMainActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.studentsection.ViewMarksActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.studentsection.ViewEventsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.studentsection.SubmitAssignmentActivity"
+            android:exported="false" />
     </application>
 </manifest>
