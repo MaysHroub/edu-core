@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.teacher.ui.navigation_management.TeacherDashboardFragment;
+import com.bzu.educore.activity.teacher.ui.profile.TeacherProfileFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import lombok.Getter;
 
@@ -24,14 +26,31 @@ public class TeacherMainActivity extends AppCompatActivity {
         // Get teacher ID from login intent
         teacherId = 14;
 
-        if (savedInstanceState == null) {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
+        // Setup bottom navigation
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            int itemId = item.getItemId();
 
-            // Pass teacher ID to dashboard fragment
-            TeacherDashboardFragment dashboardFragment = TeacherDashboardFragment.newInstance(teacherId);
-            ft.replace(R.id.fragment_container, dashboardFragment);
-            ft.commit();
+            if (itemId == R.id.nav_home) {
+                selectedFragment = TeacherDashboardFragment.newInstance(teacherId);
+            } else if (itemId == R.id.nav_profile) {
+                selectedFragment = TeacherProfileFragment.newInstance(teacherId);
+            } else if (itemId == R.id.nav_notifications) {
+                // TODO: Implement notifications fragment
+                return false;
+            }
+
+            if (selectedFragment != null) {
+                loadFragment(selectedFragment, false);
+                return true;
+            }
+            return false;
+        });
+
+        // Set default fragment
+        if (savedInstanceState == null) {
+            loadFragment(TeacherDashboardFragment.newInstance(teacherId), false);
         }
     }
 
