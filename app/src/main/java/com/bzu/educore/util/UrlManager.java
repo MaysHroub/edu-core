@@ -2,11 +2,13 @@ package com.bzu.educore.util;
 
 public class UrlManager {
     private static final String BASE_URL = "http://10.0.2.2/edu-core/";
+
     private static final String TEACHERS = "teachers/",
             STUDENTS = "students/",
             SUBJECTS = "subjects/",
             CLASSROOMS = "classrooms/",
             GRADES = "grades/";
+  
     public static final String URL_GET_TEACHER_COUNT = BASE_URL + TEACHERS + "get_teacher_count.php";
     public static final String URL_GET_TEACHER_PER_SUBJECT = BASE_URL + TEACHERS + "get_teachers_per_subject.php";
     public static final String URL_GENERATE_TCHR_ID = BASE_URL + TEACHERS + "generate_teacher_id.php";
@@ -40,4 +42,21 @@ public class UrlManager {
 
     public static final String URL_GET_ALL_GRADES = BASE_URL + GRADES + "get_all_grades.php";
 
+    // ---- Teacher URLS -----
+    public static final String URL_GET_ASSIGNMENT_STUDENTS = BASE_URL + "get_assignment_students.php";
+    public static final String URL_GET_CLASS_STUDENTS = BASE_URL + "get_class_students.php";
+    public static final String URL_GET_EXAM_STUDENTS = BASE_URL + "get_exam_students.php";
+    public static final String URL_GET_GRADES = BASE_URL + "get_grades.php";
+    public static final String URL_GET_SUBJECTS = BASE_URL + "get_subjects.php";
+    public static final String URL_GET_TIMETABLE_BY_TEACHER = BASE_URL + "get_timetable_by_teacher.php";
+    public static final String URL_PUBLISH_ASSIGNMENT = BASE_URL + "publish_assignment.php";
+    public static final String URL_PUBLISH_EXAM = BASE_URL + "publish_exam.php";
+    public static final String URL_PUBLISH_MARKS = BASE_URL + "publish_marks.php";
+    public static final String URL_SEARCH_TASKS = BASE_URL + "search_tasks.php";
+    public static final String URL_SUBMIT_ABSENCE = BASE_URL + "submit_absence.php";
+    public static final String URL_UPLOAD_FILE = BASE_URL + "upload_file.php";
+    public static final String URL_VIEW_SUBMISSION = BASE_URL + "view_submission.php";
+    public static final String URL_GET_HOMEROOM_CLASS = BASE_URL + "get_homeroom_class.php";
+  
+    public static final String URL_LOGIN = BASE_URL + "login.php";
 }
