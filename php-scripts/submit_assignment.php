@@ -1,5 +1,6 @@
 <?php
-require_once("includes/connection.php");
+header('Content-Type: application/json');
+require_once 'connection.php';
 
 // extracting data from the post request
 $assignment_id = $_POST['assignment_id']; // id of the assignment being submitted

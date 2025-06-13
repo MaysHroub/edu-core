@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 require_once 'connection.php'; // assumes the connection code is saved as 'connection.php'
 
 if (!isset($_GET['teacher_id'])) {

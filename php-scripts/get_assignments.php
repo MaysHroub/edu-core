@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-require_once("../includes/connection.php");
+require_once 'connection.php';
 
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];

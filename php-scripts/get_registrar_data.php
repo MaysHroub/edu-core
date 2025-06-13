@@ -1,5 +1,6 @@
 <?php
 // Include the database connection file
+header('Content-Type: application/json');
 require_once 'connection.php';  // Assuming you have your connection file here
 
 // Get the input JSON
