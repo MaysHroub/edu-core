@@ -19,7 +19,7 @@
         >
       
         <activity 
-            android:name=".activity.LoginActivity"
+            android:name=".activity.teacher.TeacherMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.registrar.RegistrarMainActivity"/>
-        <activity android:name=".activity.teacher.TeacherMainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
         <activity
             android:name="com.example.studentsection.StudentMainActivity"
@@ -43,5 +43,4 @@
             android:name="com.example.studentsection.SubmitAssignmentActivity"
             android:exported="false" />
     </application>
-
 </manifest>

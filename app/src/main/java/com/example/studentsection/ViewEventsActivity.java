@@ -25,6 +25,9 @@ import java.util.List;
 public class ViewEventsActivity extends AppCompatActivity {
     private RecyclerView recyclerEvents;
     private List<Event> events;
+    private RequestQueue queue;
+    private static final String URL = "http://10.0.2.2/edu-core/get_events.php?student_id=S001";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
