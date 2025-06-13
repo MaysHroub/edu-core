@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once '../connection.php';
+require_once 'connection.php';
 
 // Only allow PUT requests
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {

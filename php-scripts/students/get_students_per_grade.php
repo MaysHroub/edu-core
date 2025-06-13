@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once '../connection.php';
+require_once 'connection.php';
 
 $sql = "
     SELECT ClassGrade.grade_number AS grade, COUNT(*) AS count 

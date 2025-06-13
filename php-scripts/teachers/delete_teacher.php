@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once '../connection.php';
+require_once 'connection.php';
 
 // Check if 'id' is provided in the URL parameters
 if (!isset($_GET['id'])) {

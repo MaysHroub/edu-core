@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once '../connection.php';
+require_once 'connection.php';
 
 $sql = "SELECT COUNT(*) AS count FROM Subject";
 $stmt = $pdo->prepare($sql);   
