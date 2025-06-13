@@ -89,4 +89,5 @@
     <string name="none">None</string>
     <string name="description_about_the_subject">Description about the subject</string>
     <string name="e_g_maths">e.g. Maths</string>
+    <string name="generated_password">Generated Password:</string>
 </resources>

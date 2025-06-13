@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
+import com.bzu.educore.util.PasswordGenerator;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -58,6 +59,7 @@ public class ModifyStudentFragment extends Fragment {
     private void fillViewWithData() {
         binding.edttxtStdId.setText(student.getId()+"");
         binding.edttxtStdEmail.setText(student.getEmail());
+        binding.edttxtStdPass.setText(student.getPassword());
         binding.edttxtStdFname.setText(student.getFname());
         binding.edttxtStdLname.setText(student.getLname());
         String date = student.getDateOfBirth().getYear() + "-" + student.getDateOfBirth().getMonthValue() + "-" + student.getDateOfBirth().getDayOfMonth();
@@ -74,6 +76,7 @@ public class ModifyStudentFragment extends Fragment {
             String generatedEmail = String.format("%d@student.educore.edu", studentId);
             binding.edttxtStdId.setText(studentId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
+            binding.edttxtStdPass.setText(PasswordGenerator.generatePassword());
         });
         studentManagementViewModel.generateStudentId();
     }
@@ -100,12 +103,12 @@ public class ModifyStudentFragment extends Fragment {
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
-        String stdEmail = binding.edttxtStdEmail.getText().toString();
-
+        String stdEmail = binding.edttxtStdEmail.getText().toString(),
+                stdPass = binding.edttxtStdPass.getText().toString();
 
         // TODO: replace dummy-student with actual student class
         if (student == null) {
-            DummyStudent studentTemp = new DummyStudent(fname, lname, stdEmail, "1234", dob, classroom.getId());
+            DummyStudent studentTemp = new DummyStudent(fname, lname, stdEmail, stdPass, dob, classroom.getId());
             studentManagementViewModel.registerStudent(studentTemp);
             studentManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
                 if (!success) return;

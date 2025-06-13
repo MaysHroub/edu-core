@@ -24,6 +24,7 @@ import com.bzu.educore.databinding.FragmentModifyTeacherBinding;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
+import com.bzu.educore.util.PasswordGenerator;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -49,7 +50,6 @@ public class ModifyTeacherFragment extends Fragment {
         binding.btnTchrSave.setOnClickListener(v -> saveTeacher());
         binding.btnTchrDelete.setOnClickListener(v -> deleteTeacher());
         binding.btnTchrDob.setOnClickListener(v -> showDatePickerDialog());
-        binding.imgBack.setOnClickListener(v -> navigateBack());
 
         if (teacher == null)
             generateCredentials();
@@ -72,10 +72,12 @@ public class ModifyTeacherFragment extends Fragment {
                 lname = binding.edttxtTchrLname.getText().toString(),
                 phoneNumber = binding.edttxtTchrPhone.getText().toString();
         Subject subject = (Subject) binding.spnrTchrSubject.getSelectedItem();
-        String generatedEmail = binding.edttxtTchrEmail.getText().toString();
+        String tchrEmail = binding.edttxtTchrEmail.getText().toString(),
+                tchrPass = binding.edttxtTchrPass.getText().toString();
+
         // TODO: replace dummy-teacher with actual teacher class
         if (teacher == null) {
-            DummyTeacher teacherTemp = new DummyTeacher(fname, lname, generatedEmail, "1234", dob, phoneNumber, subject.getId());
+            DummyTeacher teacherTemp = new DummyTeacher(fname, lname, tchrEmail, tchrPass, dob, phoneNumber, subject.getId());
             teacherManagementViewModel.registerTeacher(teacherTemp);
             teacherManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
                 if (!success) return;
@@ -115,6 +117,7 @@ public class ModifyTeacherFragment extends Fragment {
     private void fillViewWithData() {
         binding.edttxtTchrId.setText(teacher.getId()+"");
         binding.edttxtTchrEmail.setText(teacher.getEmail());
+        binding.edttxtTchrPass.setText(teacher.getPassword());
         binding.edttxtTchrFname.setText(teacher.getFname());
         binding.edttxtTchrLname.setText(teacher.getLname());
         binding.edttxtTchrPhone.setText(teacher.getPhoneNumber());
@@ -132,7 +135,7 @@ public class ModifyTeacherFragment extends Fragment {
             String generatedEmail = String.format("%d@teacher.educore.edu", teacherId);
             binding.edttxtTchrId.setText(teacherId+"");
             binding.edttxtTchrEmail.setText(generatedEmail);
-            Log.d(TAG, "generateCredentials: " + generatedEmail);
+            binding.edttxtTchrPass.setText(PasswordGenerator.generatePassword());
         });
         teacherManagementViewModel.generateTeacherId();
     }
