@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +27,13 @@ import com.bzu.educore.activity.teacher.ui.student_management.StudentSubmissions
 import com.bzu.educore.model.task.StudentSubmission;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.MarkValidator;
 import com.bzu.educore.util.teacher.StatusUtils;
 import org.json.JSONException;
 import java.util.List;
 
 public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmissionAdapter.StudentViewHolder> {
+
+    private static final String TAG = "StudentSubmissionAdapter";
 
     public enum DisplayMode { ASSIGNMENT_MODE, EXAM_MODE }
 
@@ -50,6 +52,7 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
         this.students = students;
         this.displayMode = displayMode;
         this.maxMark = maxMark;
+        Log.d(TAG, "Adapter created with maxMark: " + maxMark);
     }
 
     @NonNull
@@ -102,6 +105,18 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
                             String fileType = response.getString("file_type");
                             String viewUrl = response.getString("view_url");
                             String downloadUrl = response.getString("download_url");
+
+                            // Ensure URLs are absolute (include base URL)
+                            // Replace this with your actual server URL
+                            String baseUrl = "http://your-server-ip:port/your-project-folder";
+
+                            // If URLs are relative, make them absolute
+                            if (!viewUrl.startsWith("http")) {
+                                viewUrl = baseUrl + "/" + viewUrl;
+                            }
+                            if (!downloadUrl.startsWith("http")) {
+                                downloadUrl = baseUrl + "/" + downloadUrl;
+                            }
 
                             // Show dialog with options
                             showSubmissionDialog(student.getStudentName(), fileName, fileType, viewUrl, downloadUrl);
@@ -160,11 +175,20 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
 
     private void downloadFile(String downloadUrl, String fileName) {
         try {
+            // Validate that we have a proper HTTP/HTTPS URL
+            if (!downloadUrl.startsWith("http://") && !downloadUrl.startsWith("https://")) {
+                Toast.makeText(context, "Invalid download URL", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadUrl));
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setTitle("Downloading " + fileName);
             request.setDescription("Downloading student submission");
+
+            // Add headers if needed (for authentication, etc.)
+            // request.addRequestHeader("Authorization", "Bearer " + token);
 
             DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             if (manager != null) {
@@ -205,6 +229,7 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
 
         void bind(StudentSubmission s) {
             tvName.setText(s.getStudentName());
+            Log.d(TAG, "Binding student: " + s.getStudentName() + ", current mark: " + s.getMark());
 
             if (displayMode == DisplayMode.ASSIGNMENT_MODE) {
                 // status + date
@@ -242,15 +267,49 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
             etMark.setAlpha(canMark ? 1f : 0.5f);
             etMark.setHint(canMark ? "Mark" : "N/A");
             etMark.setText(s.getMark() != null
-                    ? String.format("%.2f", s.getMark())
+                    ? String.valueOf(s.getMark())  // Changed from format to simple string
                     : "");
+
+            // COMPLETELY REMOVE MarkValidator - Use simple direct validation
             markWatcher = new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence c, int a, int b, int d) {}
-                @Override public void afterTextChanged(Editable e) {}
-                @Override public void onTextChanged(CharSequence c, int a, int b, int d) {
-                    MarkValidator.ValidationResult r =
-                            MarkValidator.validateMark(c.toString(), maxMark);
-                    s.setMark(r.value);
+                @Override
+                public void beforeTextChanged(CharSequence c, int a, int b, int d) {}
+
+                @Override
+                public void onTextChanged(CharSequence c, int a, int b, int d) {}
+
+                @Override
+                public void afterTextChanged(Editable e) {
+                    String input = e.toString().trim();
+                    Log.d(TAG, "Mark input changed to: '" + input + "' for student: " + s.getStudentName());
+
+                    if (input.isEmpty()) {
+                        Log.d(TAG, "Empty input, setting mark to null");
+                        s.setMark(null);
+                        return;
+                    }
+
+                    try {
+                        double value = Double.parseDouble(input);
+                        Log.d(TAG, "Parsed value: " + value + ", maxMark: " + maxMark);
+
+                        if (value < 0) {
+                            Log.d(TAG, "Value below 0, setting to 0");
+                            s.setMark(0.0);
+                        } else if (value > maxMark) {
+                            Log.d(TAG, "Value above maxMark, capping to: " + maxMark);
+                            s.setMark(maxMark);
+                        } else {
+                            Log.d(TAG, "Setting mark to: " + value);
+                            s.setMark(value);
+                        }
+
+                        Log.d(TAG, "Final mark set: " + s.getMark());
+
+                    } catch (NumberFormatException ex) {
+                        Log.e(TAG, "Invalid number format: " + input, ex);
+                        s.setMark(null);
+                    }
                 }
             };
             etMark.addTextChangedListener(markWatcher);
