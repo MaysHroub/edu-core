@@ -2,12 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation">
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_students"
         android:name="com.bzu.educore.activity.registrar.ui.student_management.ViewAllStudentsFragment"
-        android:label="fragment_view_all_students"
+        android:label="Students"
         tools:layout="@layout/fragment_view_all_students">
         <action
             android:id="@+id/action_viewAllStudentsFragment_to_modifyStudentFragment"
@@ -17,7 +18,7 @@
     <fragment
         android:id="@+id/nav_classrooms"
         android:name="com.bzu.educore.activity.registrar.ui.homeroom_teacher.ViewAllClassroomsFragment"
-        android:label="fragment_view_all_classrooms"
+        android:label="Classrooms"
         tools:layout="@layout/fragment_view_all_classrooms" >
         <action
             android:id="@+id/action_viewAllClassroomsFragment_to_assignHomeroomTeacherFragment"
@@ -27,7 +28,7 @@
     <fragment
         android:id="@+id/nav_subjects"
         android:name="com.bzu.educore.activity.registrar.ui.subject_management.ViewAllSubjectsFragment"
-        android:label="fragment_subject_view"
+        android:label="Modify Subject"
         tools:layout="@layout/fragment_view_all_subjects" >
         <action
             android:id="@+id/action_viewAllSubjectsFragment_to_modifySubjectFragment"
@@ -37,7 +38,7 @@
     <fragment
         android:id="@+id/nav_teachers"
         android:name="com.bzu.educore.activity.registrar.ui.teacher_management.ViewAllTeachersFragment"
-        android:label="fragment_view_all_teachers"
+        android:label="Teachers"
         tools:layout="@layout/fragment_view_all_teachers" >
         <action
             android:id="@+id/action_viewAllTeachersFragment_to_modifyTeacherFragment"
@@ -47,7 +48,7 @@
     <fragment
         android:id="@+id/assignHomeroomTeacherFragment"
         android:name="com.bzu.educore.activity.registrar.ui.homeroom_teacher.AssignHomeroomTeacherFragment"
-        android:label="fragment_assign_homeroom_teacher"
+        android:label="Assign Homeroom Teacher"
         tools:layout="@layout/fragment_assign_homeroom_teacher" >
         <argument
             android:name="classroom"
@@ -60,7 +61,7 @@
     <fragment
         android:id="@+id/modifyStudentFragment"
         android:name="com.bzu.educore.activity.registrar.ui.student_management.ModifyStudentFragment"
-        android:label="fragment_modify_student"
+        android:label="Modify Student"
         tools:layout="@layout/fragment_modify_student" >
         <argument
             android:name="student"
@@ -75,7 +76,7 @@
     <fragment
         android:id="@+id/modifySubjectFragment"
         android:name="com.bzu.educore.activity.registrar.ui.subject_management.ModifySubjectFragment"
-        android:label="fragment_modify_subject"
+        android:label="Modify Subject"
         tools:layout="@layout/fragment_modify_subject" >
         <argument
             android:name="subject"
@@ -90,7 +91,7 @@
     <fragment
         android:id="@+id/modifyTeacherFragment"
         android:name="com.bzu.educore.activity.registrar.ui.teacher_management.ModifyTeacherFragment"
-        android:label="fragment_modify_teacher"
+        android:label="Modify Teacher"
         tools:layout="@layout/fragment_modify_teacher" >
         <argument
             android:name="teacher"
@@ -101,5 +102,10 @@
             android:id="@+id/action_modifyTeacherFragment_to_view_all_teachers"
             app:destination="@id/nav_teachers" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.bzu.educore.activity.registrar.ui.stats.StatisticsFragment"
+        android:label="Statistics"
+        tools:layout="@layout/fragment_statistics" />
 
 </navigation>

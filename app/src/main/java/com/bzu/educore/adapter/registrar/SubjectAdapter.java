@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
+import com.bzu.educore.listener.OnItemClickListener;
 import com.bzu.educore.model.school.Subject;
 
 import java.util.List;
@@ -16,9 +17,9 @@ import java.util.List;
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHolder> {
 
     private final List<Subject> subjects;
-    private final OnItemClickListener listener;
+    private final OnItemClickListener<Subject> listener;
 
-    public SubjectAdapter(List<Subject> subjects, OnItemClickListener listener) {
+    public SubjectAdapter(List<Subject> subjects, OnItemClickListener<Subject> listener) {
         this.subjects = subjects;
         this.listener = listener;
     }
@@ -51,7 +52,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
             txtSubjectSemester = view.findViewById(R.id.txt_subj_semester);
         }
 
-        public void bind(Subject subject, OnItemClickListener listener) {
+        public void bind(Subject subject, OnItemClickListener<Subject> listener) {
             txtSubjectTitle.setText(subject.getTitle());
             txtSubjectGrade.setText(subject.getGradeNumber()+"");
             txtSubjectSemester.setText(subject.getSemesterNumber() == 1 ? "First" : "Second");
@@ -59,9 +60,5 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
         }
     }
 
-    // TODO: remove it and use the one in listener package
-    public interface OnItemClickListener {
-        void onItemClick(Subject subject);
-    }
 
 }

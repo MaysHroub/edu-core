@@ -21,6 +21,7 @@ import com.bzu.educore.databinding.FragmentAssignHomeroomTeacherBinding;
 import com.bzu.educore.util.DialogUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AssignHomeroomTeacherFragment extends Fragment {
 
@@ -45,11 +46,9 @@ public class AssignHomeroomTeacherFragment extends Fragment {
         binding = FragmentAssignHomeroomTeacherBinding.inflate(inflater, container, false);
 
         fillTeacherSpinner();
-        binding.txtClassroom.setText(classroom.toString());
+        setAssignedTeacherPos();
 
-        int pos = findAssignedTeacherPos();
-        if (pos != -1)
-            binding.spnrTchrs.setSelection(pos);
+        binding.txtClassroom.setText(classroom.toString());
 
         binding.btnAssign.setOnClickListener(v -> {
             DummyTeacher teacher = (DummyTeacher) binding.spnrTchrs.getSelectedItem();
@@ -57,19 +56,19 @@ public class AssignHomeroomTeacherFragment extends Fragment {
             studentManagementViewModel.updateClassroom(classroom);
         });
 
-        binding.imgBack.setOnClickListener(v ->
-            requireActivity().getSupportFragmentManager().popBackStack()
-        );
-
         return binding.getRoot();
     }
 
-    private int findAssignedTeacherPos() {
-        List<DummyTeacher> teachers = teacherManagementViewModel.getTeachers().getValue();
-        for (int i = 0; i < teachers.size(); i++)
-            if (teachers.get(i).getId() == classroom.getHomeroomTeacherId())
-                return i;
-        return -1;
+    private void setAssignedTeacherPos() {
+        teacherManagementViewModel.getTeachers().observe(getViewLifecycleOwner(), teachers -> {
+            int pos = -1;
+            for (int i = 0; i < teachers.size(); i++)
+                if (Objects.equals(teachers.get(i).getId(), classroom.getHomeroomTeacherId())) {
+                    pos = i;
+                    break;
+                }
+            binding.spnrTchrs.setSelection(pos);
+        });
     }
 
     private void fillTeacherSpinner() {

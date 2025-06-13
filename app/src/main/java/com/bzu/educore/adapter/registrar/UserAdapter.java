@@ -1,5 +1,6 @@
 package com.bzu.educore.adapter.registrar;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
+import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
 import com.bzu.educore.listener.OnItemClickListener;
-import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.model.user.Person;
 
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
-    private final List<Person> users;
-    private final OnItemClickListener listener;
+    private final List<User> users;
+    private final OnItemClickListener<User> listener;
 
-    public UserAdapter(List<Person> users, OnItemClickListener listener) {
+    public UserAdapter(List<User> users, OnItemClickListener<User> listener) {
         this.users = users;
         this.listener = listener;
     }
@@ -37,8 +38,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Person user = users.get(position);
-        holder.bind(user, position, listener);
+        User user = users.get(position);
+        holder.bind(user, listener);
     }
 
     @Override
@@ -57,13 +58,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             imgUser = view.findViewById(R.id.img_user);
         }
 
-        public void bind(Person user, int position, OnItemClickListener listener) {
-            txtName.setText(user.getName());
-            itemView.setOnClickListener(v -> listener.onItemClick(position));
-            if (user instanceof DummyStudent) {
+        public void bind(User user, OnItemClickListener<User> listener) {
+            txtId.setText(String.valueOf(user.getId()));
+            txtName.setText(String.format("%s %s", user.getFname(), user.getLname()));
+            itemView.setOnClickListener(v -> listener.onItemClick(user));
+            if (user instanceof DummyStudent)
                 imgUser.setImageResource(R.drawable.student_icon);
-                txtId.setText(((DummyStudent)user).getId());
-            }
             else
                 imgUser.setImageResource(R.drawable.teacher);
         }
