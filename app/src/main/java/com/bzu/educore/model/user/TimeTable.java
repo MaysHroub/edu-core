@@ -15,6 +15,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class TimeTable implements Serializable {
+
     private Integer teacherId;
     private Integer subjectId;
     private String subjectTitle;   // new
@@ -23,4 +24,5 @@ public class TimeTable implements Serializable {
     private String dayOfWeek;
     private String startTime;
     private String endTime;
+
 }

@@ -167,7 +167,7 @@ public class StudentSubmissionsActivity extends AppCompatActivity {
                         for (int i = 0; i < arr.length(); i++) {
                             JSONObject o = arr.getJSONObject(i);
                             studentList.add(new StudentSubmission(
-                                    o.getString("student_id"),
+                                    o.getInt("student_id"),
                                     o.getString("student_name"),
                                     o.optString("submission_date",""),
                                     o.optString("submission_file_url",""),

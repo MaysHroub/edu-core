@@ -15,7 +15,9 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Authentication implements Serializable {
+
     private String email;
     private String password;
     private String userType;
+
 }

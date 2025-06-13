@@ -23,7 +23,7 @@ public class AttendanceRecordingFragment extends Fragment {
     private RecyclerView rvStudents;
     private Button btnDate, btnSubmit;
     private final List<Student> studentList = new ArrayList<>();
-    private final Map<String, Absence> absenceMap = new HashMap<>();
+    private final Map<Integer, Absence> absenceMap = new HashMap<>();
     private StudentAbsenceAdapter adapter;
 
     private int classId, teacherId, year, month, day;
@@ -96,13 +96,13 @@ public class AttendanceRecordingFragment extends Fragment {
                         try {
                             JSONObject o = resp.getJSONObject(i);
                             studentList.add(new Student(
-                                    o.getString("id"),
-                                    null,
-                                    o.getString("name"),
+                                    o.getInt("id"),
+                                    o.getString("fname"),
+                                    o.getString("lname"),
                                     o.getString("email"),
                                     null,
-                                    o.getString("grade_number"),
-                                    o.getString("class_id")
+                                    null,
+                                    o.getInt("class_id")
                             ));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -110,7 +110,6 @@ public class AttendanceRecordingFragment extends Fragment {
                         }
                     }
                     adapter.notifyDataSetChanged();
-                    // Removed: showToast("Loaded " + studentList.size() + " students");
                 },
                 err -> {
                     String msg = "Failed to load students";

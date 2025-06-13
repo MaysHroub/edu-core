@@ -10,8 +10,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Absence {
-    private int id;
-    private String studentId; // Matches VARCHAR(20) in database
+
+    private Integer id;
+    private Integer studentId; // Matches VARCHAR(20) in database
     private LocalDate date;
     private String status;    // "excused" or "unexcused"
+
 }

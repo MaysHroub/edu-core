@@ -19,6 +19,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class Assignment extends Task implements Serializable {
+
     private String subjectTitle;
     private String teacherName;
     private String pdfFile;
