@@ -69,4 +69,7 @@ public class UrlManager {
     // Student Profile URLs
     public static final String URL_GET_STUDENT_DATA = BASE_URL + "get_student_data.php";
     public static final String URL_EDIT_STUDENT_DATA = BASE_URL + "edit_student_data.php";
+
+    // Registrar Profile URLs
+    public static final String URL_GET_REGISTRAR_DATA = BASE_URL + "get_registrar_data.php";
 }
