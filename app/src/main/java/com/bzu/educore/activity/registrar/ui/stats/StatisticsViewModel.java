@@ -10,8 +10,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.VolleyError;
-import com.bzu.educore.repository.registrar.StatsRepository;
+import com.bzu.educore.repository.registrar.MainRepository;
+import com.bzu.educore.util.UrlManager;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +31,11 @@ import java.util.List;
 public class StatisticsViewModel extends AndroidViewModel {
 
     private final MutableLiveData<Integer> numOfStudents, numOfTeachers, numOfSubjects, numOfClassrooms;
-    private final MutableLiveData<List<PieEntry>> teachersPerSubjectEntries, studentsPerGradeEntries;
+    private final MutableLiveData<List<BarEntry>> teachersPerSubjectEntries;
+    private final MutableLiveData<List<BarEntry>> studentsPerGradeEntries;
+    private List<String> gradeLabels, subjectLabels;
 
-    private final StatsRepository statsRepo;
+    private final MainRepository repo;
 
     public StatisticsViewModel(Application application) {
         super(application);
@@ -35,7 +46,7 @@ public class StatisticsViewModel extends AndroidViewModel {
         teachersPerSubjectEntries = new MutableLiveData<>();
         studentsPerGradeEntries = new MutableLiveData<>();
 
-        statsRepo = new StatsRepository(application);
+        repo = MainRepository.getInstance();
     }
 
     public LiveData<Integer> getNumOfStudents() {
@@ -54,116 +65,140 @@ public class StatisticsViewModel extends AndroidViewModel {
         return numOfClassrooms;
     }
 
-    public LiveData<List<PieEntry>> getTeachersPerSubjectEntries() {
+    public LiveData<List<BarEntry>> getTeachersPerSubjectEntries() {
         return teachersPerSubjectEntries;
     }
 
-    public LiveData<List<PieEntry>> getStudentsPerGradeEntries() {
+    public LiveData<List<BarEntry>> getStudentsPerGradeEntries() {
         return studentsPerGradeEntries;
     }
 
     public void fetchNumOfStudents() {
-        statsRepo.getStudentCount(
+        repo.getData(
+                UrlManager.URL_GET_STUDENT_COUNT,
                 response -> {
                     try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        int count = jsonObject.getInt("count");
+                        int count = response.getInt("count");
                         numOfStudents.postValue(count);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
-                this::handleError
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
         );
     }
 
     public void fetchNumOfTeachers() {
-        statsRepo.getTeacherCount(
+        repo.getData(
+                UrlManager.URL_GET_TEACHER_COUNT,
                 response -> {
                     try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        int count = jsonObject.getInt("count");
+                        int count = response.getInt("count");
                         numOfTeachers.postValue(count);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
-                this::handleError
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
         );
     }
 
     public void fetchNumOfSubjects() {
-        statsRepo.getSubjectCount(
+        repo.getData(
+                UrlManager.URL_GET_SUBJECT_COUNT,
                 response -> {
                     try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        int count = jsonObject.getInt("count");
+                        int count = response.getInt("count");
                         numOfSubjects.postValue(count);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
-                this::handleError
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
         );
     }
 
     public void fetchNumOfClassrooms() {
-        statsRepo.getClassroomCount(
+        repo.getData(
+                UrlManager.URL_GET_CLASSROOM_COUNT,
                 response -> {
                     try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        int count = jsonObject.getInt("count");
+                        int count = response.getInt("count");
                         numOfClassrooms.postValue(count);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
-                this::handleError
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
         );
     }
 
-    public void fetchTeacherPerSubject() {
-        statsRepo.getTeachersPerSubject(
+    public void fetchNumOfTeachersPerSubject() {
+        repo.getAllItems(
+                UrlManager.URL_GET_TEACHER_PER_SUBJECT,
                 response -> {
-                    List<PieEntry> entries = new ArrayList<>();
+                    List<BarEntry> entries = new ArrayList<>();
+                    subjectLabels = new ArrayList<>();
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject obj = response.getJSONObject(i);
                             String subject = obj.getString("title");
+                            subjectLabels.add(subject);
                             int count = obj.getInt("count");
-                            entries.add(new PieEntry(count, subject));
+                            entries.add(new BarEntry(i, count));
                         }
                         teachersPerSubjectEntries.postValue(entries);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
-                this::handleError
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
         );
     }
 
-    public void fetchStudentPerGrade() {
-        statsRepo.getStudentsPerGrade(
+    public void fetchNumOfStudentsPerGrade() {
+        repo.getAllItems(
+                UrlManager.URL_GET_STUDENT_PER_GRADE,
                 response -> {
-                    List<PieEntry> entries = new ArrayList<>();
+                    List<BarEntry> entries = new ArrayList<>();
+                    gradeLabels = new ArrayList<>();
                     try {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject obj = response.getJSONObject(i);
-                            int gradeNumber = obj.getInt("grade_number");
+                            int gradeNumber = obj.getInt("grade");
                             int count = obj.getInt("count");
-                            entries.add(new PieEntry(count, gradeNumber));
+                            entries.add(new BarEntry(i, count));
+                            gradeLabels.add(String.valueOf(gradeNumber));
                         }
+
                         studentsPerGradeEntries.postValue(entries);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
-                this::handleError
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
         );
     }
 
-    private void handleError(VolleyError error) {
-        Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+
+    public List<String> getGradeLabels() {
+        return gradeLabels;
+    }
+
+    public List<String> getSubjectLabels() {
+        return subjectLabels;
     }
 
 }
