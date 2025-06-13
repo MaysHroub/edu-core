@@ -51,6 +51,7 @@ public class TeacherProfileFragment extends Fragment {
     private SharedPreferencesManager prefsManager;
     private String currentEmail;
 
+
     public static TeacherProfileFragment newInstance(int teacherId) {
         TeacherProfileFragment fragment = new TeacherProfileFragment();
         Bundle args = new Bundle();
