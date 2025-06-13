@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -110,7 +111,9 @@ public class SchedulesFragment extends Fragment implements ClassAdapter.OnClassC
 
     @Override
     public void onClassClick(Class classItem) {
-        // TODO: Show timetable for the selected class
-        Toast.makeText(requireContext(), "Selected: " + classItem.getGradeSection(), Toast.LENGTH_SHORT).show();
+        Bundle args = new Bundle();
+        args.putSerializable("classData", classItem);
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_schedulesFragment_to_classDetailsFragment, args);
     }
 } 

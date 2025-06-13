@@ -1,6 +1,8 @@
 package com.bzu.educore.model;
 
-public class Class {
+import java.io.Serializable;
+
+public class Class implements Serializable {
     private String id;
     private String gradeNumber;
     private String section;
@@ -36,10 +38,10 @@ public class Class {
     }
 
     public String getGradeSection() {
-        return "Grade " + gradeNumber + " - Section " + section;
+        return "Grade " + gradeNumber + " " + section;
     }
 
     public String getTeacherName() {
-        return "Homeroom Teacher: " + homeroomTeacherFname + " " + homeroomTeacherLname;
+        return homeroomTeacherFname + " " + homeroomTeacherLname;
     }
 } 
