@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.LinearLayout;
 
 public class ClassDetailsFragment extends Fragment {
     private static final String ARG_CLASS = "classData";
@@ -51,6 +52,16 @@ public class ClassDetailsFragment extends Fragment {
     private TimetableAdapter timetableAdapter;
     private RequestQueue requestQueue;
     private FloatingActionButton fabAddClass;
+
+    // Dialog related views and state
+    private LinearLayout layoutStep1;
+    private LinearLayout layoutStep2;
+    private AutoCompleteTextView dropdownTeacher;
+    private MaterialButton buttonBack;
+    private TextView textStepTitle;
+    private int currentStep = 1; // Start at step 1
+    private String selectedSubjectId = ""; // To store the selected subject ID
+    private List<com.bzu.educore.model.Subject> subjectsList; // Store fetched subjects with IDs
 
     // Define timetable structure
     private final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"};
@@ -213,9 +224,18 @@ public class ClassDetailsFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         // Initialize views
+        textStepTitle = dialog.findViewById(R.id.text_step_title);
+        layoutStep1 = dialog.findViewById(R.id.layout_step_1);
+        layoutStep2 = dialog.findViewById(R.id.layout_step_2);
         AutoCompleteTextView dropdownSubject = dialog.findViewById(R.id.dropdown_subject);
+        dropdownTeacher = dialog.findViewById(R.id.dropdown_teacher);
         MaterialButton buttonCancel = dialog.findViewById(R.id.button_cancel);
+        buttonBack = dialog.findViewById(R.id.button_back);
         MaterialButton buttonNext = dialog.findViewById(R.id.button_next);
+
+        // Reset current step to 1 when dialog is shown
+        currentStep = 1;
+        updateDialogUI();
 
         // Fetch subjects for the class
         fetchSubjectsForClass(dialog, dropdownSubject);
@@ -223,18 +243,66 @@ public class ClassDetailsFragment extends Fragment {
         // Set up cancel button
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
 
+        // Set up back button
+        buttonBack.setOnClickListener(v -> {
+            if (currentStep > 1) {
+                currentStep--;
+                updateDialogUI();
+            }
+        });
+
         // Set up next button
         buttonNext.setOnClickListener(v -> {
-            String selectedSubject = dropdownSubject.getText().toString();
-            if (!selectedSubject.isEmpty()) {
-                // TODO: Move to next step
-                dialog.dismiss();
-            } else {
-                Toast.makeText(requireContext(), "Please select a subject", Toast.LENGTH_SHORT).show();
+            if (currentStep == 1) {
+                // Handle subject selection and move to step 2
+                String selectedSubjectTitle = dropdownSubject.getText().toString();
+                com.bzu.educore.model.Subject selectedSubject = null;
+                for (com.bzu.educore.model.Subject subject : subjectsList) {
+                    if (subject.getTitle().equals(selectedSubjectTitle)) {
+                        selectedSubject = subject;
+                        break;
+                    }
+                }
+
+                if (selectedSubject != null) {
+                    selectedSubjectId = selectedSubject.getId();
+                    currentStep++;
+                    updateDialogUI();
+                    fetchTeachersForSubject(dialog, dropdownTeacher, selectedSubjectId);
+                } else {
+                    Toast.makeText(requireContext(), "Please select a valid subject", Toast.LENGTH_SHORT).show();
+                }
+            } else if (currentStep == 2) {
+                // Handle teacher selection and finalize schedule
+                String selectedTeacher = dropdownTeacher.getText().toString();
+                if (!selectedTeacher.isEmpty()) {
+                    // TODO: Finalize schedule and close dialog
+                    Toast.makeText(requireContext(), "Schedule added (Subject ID: " + selectedSubjectId + ", Teacher: " + selectedTeacher + ")", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(requireContext(), "Please select a teacher", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         dialog.show();
+    }
+
+    private void updateDialogUI() {
+        switch (currentStep) {
+            case 1:
+                textStepTitle.setText("Step 1: Select Subject");
+                layoutStep1.setVisibility(View.VISIBLE);
+                layoutStep2.setVisibility(View.GONE);
+                buttonBack.setVisibility(View.GONE);
+                break;
+            case 2:
+                textStepTitle.setText("Step 2: Select Teacher");
+                layoutStep1.setVisibility(View.GONE);
+                layoutStep2.setVisibility(View.VISIBLE);
+                buttonBack.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     private void fetchSubjectsForClass(Dialog dialog, AutoCompleteTextView dropdownSubject) {
@@ -266,15 +334,18 @@ public class ClassDetailsFragment extends Fragment {
                         // Process response in background
                         new Thread(() -> {
                             try {
-                                List<String> subjectList = new ArrayList<>();
+                                subjectsList = new ArrayList<>(); // Initialize the list
                                 
                                 if (response.has("subjects")) {
                                     JSONArray subjectsArray = response.getJSONArray("subjects");
                                     
                                     for (int i = 0; i < subjectsArray.length(); i++) {
-                                        JSONObject subject = subjectsArray.getJSONObject(i);
-                                        if (subject.has("title")) {
-                                            subjectList.add(subject.getString("title"));
+                                        JSONObject subjectJson = subjectsArray.getJSONObject(i);
+                                        if (subjectJson.has("id") && subjectJson.has("title")) {
+                                            subjectsList.add(new com.bzu.educore.model.Subject(
+                                                subjectJson.getString("id"),
+                                                subjectJson.getString("title")
+                                            ));
                                         }
                                     }
                                 }
@@ -284,11 +355,11 @@ public class ClassDetailsFragment extends Fragment {
                                     dropdownSubject.setEnabled(true);
                                     dropdownSubject.setText("");
 
-                                    if (!subjectList.isEmpty()) {
-                                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                                    if (!subjectsList.isEmpty()) {
+                                        ArrayAdapter<com.bzu.educore.model.Subject> adapter = new ArrayAdapter<>(
                                             requireContext(),
                                             android.R.layout.simple_dropdown_item_1line,
-                                            subjectList
+                                            subjectsList
                                         );
                                         dropdownSubject.setAdapter(adapter);
                                     } else {
@@ -309,6 +380,85 @@ public class ClassDetailsFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     handleError("Error fetching subjects: " + error.toString(), dialog);
+                }
+            });
+
+        requestQueue.add(request);
+    }
+
+    private void fetchTeachersForSubject(Dialog dialog, AutoCompleteTextView dropdownTeacher, String subjectId) {
+        String url = UrlManager.GET_TEACHERS_FOR_SUBJECT_URL;
+
+        Map<String, String> params = new HashMap<>();
+        params.put("subject_id", subjectId);
+
+        Log.d(TAG, "Fetching teachers for subject ID: " + subjectId);
+        Log.d(TAG, "Request URL: " + url);
+        Log.d(TAG, "Request params: " + params.toString());
+
+        // Show loading state
+        dropdownTeacher.setEnabled(false);
+        dropdownTeacher.setText("Loading teachers...");
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params),
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Log.d(TAG, "Received teachers response: " + response.toString());
+                        
+                        // Process response in background
+                        new Thread(() -> {
+                            try {
+                                List<String> teacherList = new ArrayList<>();
+                                
+                                if (response.has("status") && response.getString("status").equals("success")) {
+                                    if (response.has("teachers")) {
+                                        JSONArray teachersArray = response.getJSONArray("teachers");
+                                        
+                                        for (int i = 0; i < teachersArray.length(); i++) {
+                                            JSONObject teacher = teachersArray.getJSONObject(i);
+                                            String teacherName = teacher.getString("fname") + " " + teacher.getString("lname");
+                                            teacherList.add(teacherName);
+                                        }
+                                    }
+                                }
+
+                                // Update UI on main thread
+                                requireActivity().runOnUiThread(() -> {
+                                    dropdownTeacher.setEnabled(true);
+                                    dropdownTeacher.setText("");
+
+                                    if (!teacherList.isEmpty()) {
+                                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                                            requireContext(),
+                                            android.R.layout.simple_dropdown_item_1line,
+                                            teacherList
+                                        );
+                                        dropdownTeacher.setAdapter(adapter);
+                                    } else {
+                                        Toast.makeText(requireContext(), "No teachers available for this subject", Toast.LENGTH_SHORT).show();
+                                        // Optionally, go back to step 1 if no teachers
+                                        currentStep--;
+                                        updateDialogUI();
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                handleError("Error parsing teachers data: " + e.getMessage(), dialog);
+                            }
+                        }).start();
+                    } catch (Exception e) {
+                        handleError("Error processing teachers response: " + e.getMessage(), dialog);
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    handleError("Error fetching teachers: " + error.toString(), dialog);
+                    // Optionally, go back to step 1 on network error
+                    currentStep--;
+                    updateDialogUI();
                 }
             });
 
