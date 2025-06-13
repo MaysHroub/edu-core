@@ -6,23 +6,28 @@
     <color name="accent">#FFC107</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
+    <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="error">#B00020</color>
     <color name="success">#4CAF50</color>
-    <color name="background">#F5F5F5</color>
+    <color name="background">#F0F2FF</color>  <!-- Light blue-gray background -->
     <color name="card_background">#FFFFFF</color>
     <color name="input_background">#FFFFFF</color>
-    <color name="button_text">#FFFFFF</color>
-    <color name="primary_accent">#6C63FF</color>
-    <color name="nav_inactive">#9E9E9E</color>
-    <color name="nav_background">#FFFFFF</color>
-    <color name="ripple_color">#26000000</color>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="teal_700">#FF018786</color>
     <color name="gray">#CCCCCC</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="ripple_color">#33FFFFFF</color>
+
+    <!-- Timetable Colors -->
+    <color name="timetable_header_bg">#1A237E</color>  <!-- Using app's primary color -->
+    <color name="timetable_header_text">#FFFFFF</color>
+    <color name="timetable_time_slot_bg">#534BAE</color>  <!-- Using app's primary_light color -->
+    <color name="timetable_subject_bg">#E8EAF6</color>  <!-- Light indigo -->
+    <color name="timetable_subject_text">#1A237E</color>  <!-- Using app's primary color -->
+    <color name="timetable_break_bg">#C5CAE9</color>  <!-- Medium indigo -->
+    <color name="timetable_break_text">#1A237E</color>  <!-- Using app's primary color -->
+    <color name="timetable_empty_cell_bg">#F5F5F5</color>
+    <color name="timetable_empty_cell_text">#757575</color>
 </resources>
