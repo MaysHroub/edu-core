@@ -87,4 +87,6 @@
     <string name="subjects">Subjects</string>
     <string name="schedules">Schedules</string>
     <string name="none">None</string>
+    <string name="description_about_the_subject">Description about the subject</string>
+    <string name="e_g_maths">e.g. Maths</string>
 </resources>

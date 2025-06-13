@@ -29,6 +29,8 @@ public class UrlManager {
     public static final String URL_GET_ALL_SUBJECTS = BASE_URL + SUBJECTS + "get_all_subjects.php";
     public static final String URL_UPDATE_SUBJECT = BASE_URL + SUBJECTS + "update_subject.php";
     public static final String URL_DELETE_SUBJECT = BASE_URL + SUBJECTS + "delete_subject.php";
+    public static final String URL_ADD_NEW_SUBJECT = BASE_URL + SUBJECTS + "add_new_subject.php";
+
 
 
     public static final String URL_GET_CLASSROOM_COUNT = BASE_URL + CLASSROOMS + "get_classroom_count.php";

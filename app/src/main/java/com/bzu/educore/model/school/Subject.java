@@ -35,6 +35,13 @@ public class Subject implements Serializable {
         this.id = id;
     }
 
+    public Subject(String title, String description, Integer gradeNumber, Integer semesterNumber) {
+        this.title = title;
+        this.description = description;
+        this.gradeNumber = gradeNumber;
+        this.semesterNumber = semesterNumber;
+    }
+
     @Override
     public String toString() {
         return String.format("%s-G%d-S%d", title, gradeNumber, semesterNumber);

@@ -1,4 +1,6 @@
 package com.bzu.educore.model.school;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -15,5 +17,8 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class ClassGrade implements Serializable {
+
+    @SerializedName("grade_number")
     private Integer gradeNumber;
+
 }

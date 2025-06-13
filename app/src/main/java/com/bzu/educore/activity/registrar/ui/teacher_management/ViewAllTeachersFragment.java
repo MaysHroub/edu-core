@@ -32,13 +32,11 @@ import java.util.List;
 public class ViewAllTeachersFragment extends Fragment implements OnItemClickListener<User> {
 
     private FragmentViewAllTeachersBinding binding;
-    private TeacherManagementViewModel teacherManagementViewModel;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        teacherManagementViewModel =
-                new ViewModelProvider(this).get(TeacherManagementViewModel.class);
+        TeacherManagementViewModel teacherManagementViewModel = new ViewModelProvider(this).get(TeacherManagementViewModel.class);
         binding = FragmentViewAllTeachersBinding.inflate(inflater, container, false);
 
         teacherManagementViewModel.getTeachers().observe(getViewLifecycleOwner(), teachers -> {
@@ -52,11 +50,6 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
         binding.layoutViewAllUsrs.fltbtnAddUsr.setOnClickListener(v -> {
             NavDirections action = ViewAllTeachersFragmentDirections.actionViewAllTeachersFragmentToModifyTeacherFragment();
             Navigation.findNavController(requireView()).navigate(action);
-        });
-
-        teacherManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
-//            if (success)
-//                binding.layoutViewAllUsrs.rclrviewUsrs.getAdapter().notifyItemRemoved(teacherManagementViewModel.getCurrentIndex().getValue());
         });
 
         return binding.getRoot();
