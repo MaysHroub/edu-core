@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar;
+package com.bzu.educore.activity.registrar.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;

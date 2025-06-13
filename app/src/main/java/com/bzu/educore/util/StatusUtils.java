@@ -1,4 +1,4 @@
-package com.bzu.educore.util.teacher;
+package com.bzu.educore.util;
 
 import android.graphics.Color;
 

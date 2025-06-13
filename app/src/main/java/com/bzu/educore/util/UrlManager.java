@@ -72,4 +72,8 @@ public class UrlManager {
 
     // Registrar Profile URLs
     public static final String URL_GET_REGISTRAR_DATA = BASE_URL + "get_registrar_data.php";
+
+    public static final String GET_TEACHER_PROFILE = BASE_URL + "get_teacher_profile.php";
+    public static final String UPDATE_TEACHER_PROFILE = BASE_URL + "update_teacher_profile.php";
+    public static final String CHANGE_TEACHER_PASSWORD = BASE_URL + "change_teacher_password.php";
 }

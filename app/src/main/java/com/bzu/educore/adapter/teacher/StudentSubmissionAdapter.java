@@ -27,7 +27,7 @@ import com.bzu.educore.activity.teacher.ui.student_management.StudentSubmissions
 import com.bzu.educore.model.task.StudentSubmission;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.StatusUtils;
+import com.bzu.educore.util.StatusUtils;
 import org.json.JSONException;
 import java.util.List;
 
