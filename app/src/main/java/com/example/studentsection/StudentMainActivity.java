@@ -37,8 +37,6 @@ public class StudentMainActivity extends AppCompatActivity implements Navigation
             selectedFragment = new StudentHomeFragment();
         } else if (itemId == R.id.nav_profile) {
             selectedFragment = new StudentProfileFragment();
-        } else if (itemId == R.id.nav_notifications) {
-            selectedFragment = new StudentNotificationsFragment();
         }
 
         if (selectedFragment != null) {

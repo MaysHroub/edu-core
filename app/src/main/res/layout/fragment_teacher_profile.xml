@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -14,7 +15,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/headerCard"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="300dp"
             app:cardCornerRadius="0dp"
             app:cardElevation="4dp"
             app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:background="@drawable/gradient_background">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -31,8 +32,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/teacher"
-                    android:padding="4dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:background="@color/white"
                     app:shapeAppearanceOverlay="@style/CircleImageView"/>
 
@@ -60,10 +60,13 @@
             android:id="@+id/infoCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="-44dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:layout_constraintTop_toBottomOf="@id/headerCard">
+            app:layout_constraintTop_toBottomOf="@id/headerCard"
+            tools:layout_editor_absoluteX="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,24 +78,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/personal_information"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:color/darker_gray" />
 
                 <!-- Email Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginBottom="16dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -103,22 +106,22 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Email"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvTeacherEmail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -126,35 +129,35 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginBottom="16dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_phone"
-                        app:tint="@color/primary"/>
+                        app:tint="@color/primary" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Phone"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvPhoneNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -162,8 +165,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -174,22 +177,22 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Date of Birth"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvDateOfBirth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

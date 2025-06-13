@@ -47,9 +47,6 @@ public class TeacherMainActivity extends AppCompatActivity {
                 selectedFragment = TeacherDashboardFragment.newInstance(teacherId);
             } else if (itemId == R.id.nav_profile) {
                 selectedFragment = TeacherProfileFragment.newInstance(teacherId);
-            } else if (itemId == R.id.nav_notifications) {
-                // TODO: Implement notifications fragment
-                return false;
             }
 
             if (selectedFragment != null) {
