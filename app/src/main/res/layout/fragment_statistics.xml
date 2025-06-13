@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/number_of_students_registered"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/number_of_teachers_registered"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -55,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/number_of_classrooms"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -74,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/number_of_subjects_added"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -91,25 +95,42 @@
             android:id="@+id/linearLayoutCompat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/number_of_teachers_per_subject"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/bar_chart_teacher_subject_dist"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
-
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="44dp"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/number_of_students_per_grade"
+                android:textAlignment="center"
+                android:textStyle="bold"/>
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/bar_chart_student_grade_dist"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
 

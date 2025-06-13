@@ -18,7 +18,7 @@
         >
       
         <activity 
-            android:name=".activity.LoginActivity"
+            android:name=".activity.registrar.RegistrarMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +26,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.teacher.TeacherMainActivity"/>
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
