@@ -41,4 +41,9 @@
         <item name="android:layout_marginBottom">32dp</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources> 
