@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.registrar.ui.subject_management;
 
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,41 +36,64 @@ public class ModifySubjectFragment extends Fragment {
 
         subject = ModifySubjectFragmentArgs.fromBundle(getArguments()).getSubject();
 
+        binding.btnSubjSave.setOnClickListener(v -> saveSubject());
+        binding.btnSubjDelete.setOnClickListener(v -> deleteSubject());
+
         fillSpnrSemester();
         fillSpnrGrades();
-        fillViewWithSubjectData();
 
-        binding.btnSubjSave.setOnClickListener(v -> {
-            if (!InputValidator.validateEditTexts(binding.edtxtSubjTitle)) {
-                Toast.makeText(requireContext(), "Title can't be empty", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            subject.setTitle(binding.edtxtSubjTitle.getText().toString());
-            subject.setGradeNumber((Integer) binding.spnrSubjGrade.getSelectedItem());
-            subject.setSemesterNumber((Integer) binding.spnrSubjSemester.getSelectedItem());
-            subjectManagementViewModel.updateSubject(subject);
-        });
-
-        binding.btnSubjDelete.setOnClickListener(v -> {
-            DialogUtils.showConfirmationDialog(
-                    requireContext(),
-                    "Delete Subject",
-                    "Are you sure you want to delete it?",
-                    () -> {
-                        subjectManagementViewModel.deleteSubjectById(subject.getId());
-                        subjectManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
-                            if (!success) return;
-                            navigateBack();
-                        });
-                    }
-            );
-        });
-
-        binding.imgBack.setOnClickListener(v -> {
-            navigateBack();
-        });
+        if (subject != null) {
+            fillViewWithSubjectData();
+            binding.edtxtSubjId.setVisibility(VISIBLE);
+            binding.txtSubjId.setVisibility(VISIBLE);
+            binding.btnSubjDelete.setVisibility(VISIBLE);
+        }
 
         return binding.getRoot();
+    }
+
+    private void deleteSubject() {
+        DialogUtils.showConfirmationDialog(
+                requireContext(),
+                "Delete Subject",
+                "Are you sure you want to delete it?",
+                () -> {
+                    subjectManagementViewModel.deleteSubjectById(subject.getId());
+                    subjectManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
+                        if (success)
+                            navigateBack();
+                    });
+                }
+        );
+    }
+
+    private void saveSubject() {
+        if (!InputValidator.validateEditTexts(binding.edtxtSubjTitle, binding.edtxtSubjDesc)) {
+            Toast.makeText(requireContext(), "Please fill empty fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String title = binding.edtxtSubjTitle.getText().toString(),
+                description = binding.edtxtSubjDesc.getText().toString();
+        Integer gradeNum = (Integer) binding.spnrSubjGrade.getSelectedItem(),
+                semesterNum = (Integer) binding.spnrSubjSemester.getSelectedItem();
+
+        if (subject == null) {
+            Subject subjectTemp = new Subject(title, description, gradeNum, semesterNum);
+            subjectManagementViewModel.addNewSubject(subjectTemp);
+            subjectManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
+                if (!success) return;
+                binding.edtxtSubjTitle.setText("");
+                binding.edtxtSubjDesc.setText("");
+                binding.spnrSubjGrade.setSelection(0);
+                binding.spnrSubjSemester.setSelection(0);
+            });
+        } else {
+            subject.setTitle(title);
+            subject.setDescription(description);
+            subject.setGradeNumber(gradeNum);
+            subject.setSemesterNumber(semesterNum);
+            subjectManagementViewModel.updateSubject(subject);
+        }
     }
 
     private void navigateBack() {
@@ -77,10 +102,13 @@ public class ModifySubjectFragment extends Fragment {
     }
 
     private void fillViewWithSubjectData() {
-        binding.edtxtSubjId.setText(subject.getId());
+        binding.edtxtSubjId.setText(subject.getId()+"");
         binding.edtxtSubjTitle.setText(subject.getTitle());
+        binding.edtxtSubjDesc.setText(subject.getDescription());
         binding.spnrSubjSemester.setSelection(subject.getSemesterNumber() == 1 ? 0 : 1, true);
-        binding.spnrSubjGrade.setSelection(subject.getGradeNumber() - (Integer) binding.spnrSubjGrade.getAdapter().getItem(0), true);
+        subjectManagementViewModel.getGrades().observe(getViewLifecycleOwner(), grades -> {
+            binding.spnrSubjGrade.setSelection(subject.getGradeNumber() - (Integer) binding.spnrSubjGrade.getAdapter().getItem(0), true);
+        });
     }
 
     private void fillSpnrGrades() {

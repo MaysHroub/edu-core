@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
+import com.bzu.educore.util.PasswordGenerator;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -38,13 +39,12 @@ public class ModifyStudentFragment extends Fragment {
         binding = FragmentModifyStudentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        DummyStudent student = ModifyStudentFragmentArgs.fromBundle(getArguments()).getStudent();
+        student = ModifyStudentFragmentArgs.fromBundle(getArguments()).getStudent();
 
         fillClassroomSpinner();
         binding.btnSaveStd.setOnClickListener(v -> saveStudent());
         binding.btnDeleteStd.setOnClickListener(v -> deleteStudent());
         binding.btnStdDob.setOnClickListener(v -> showDatePickerDialog());
-        binding.imgBack.setOnClickListener(v -> navigateBack());
 
         if (student == null)
             generateCredentials();
@@ -59,19 +59,24 @@ public class ModifyStudentFragment extends Fragment {
     private void fillViewWithData() {
         binding.edttxtStdId.setText(student.getId()+"");
         binding.edttxtStdEmail.setText(student.getEmail());
+        binding.edttxtStdPass.setText(student.getPassword());
         binding.edttxtStdFname.setText(student.getFname());
         binding.edttxtStdLname.setText(student.getLname());
         String date = student.getDateOfBirth().getYear() + "-" + student.getDateOfBirth().getMonthValue() + "-" + student.getDateOfBirth().getDayOfMonth();
         binding.btnStdDob.setText(date);
-        int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(student.getClassroom());
-        binding.spnrStdClassroom.setSelection(pos);
+        studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
+            int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(new DummyClassroom(student.getClassId()));
+            binding.spnrStdClassroom.setSelection(pos);
+        });
+        dob = student.getDateOfBirth();
     }
 
     private void generateCredentials() {
-        studentManagementViewModel.getStudentId().observe(getViewLifecycleOwner(), studentId -> {
+        studentManagementViewModel.getNextStudentId().observe(getViewLifecycleOwner(), studentId -> {
             String generatedEmail = String.format("%d@student.educore.edu", studentId);
             binding.edttxtStdId.setText(studentId+"");
             binding.edttxtStdEmail.setText(generatedEmail);
+            binding.edttxtStdPass.setText(PasswordGenerator.generatePassword());
         });
         studentManagementViewModel.generateStudentId();
     }
@@ -98,15 +103,26 @@ public class ModifyStudentFragment extends Fragment {
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
         DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
-        int generatedId = Integer.parseInt(binding.edttxtStdId.getText().toString());
-        String generatedEmail = binding.edttxtStdEmail.getText().toString();
+        String stdEmail = binding.edttxtStdEmail.getText().toString(),
+                stdPass = binding.edttxtStdPass.getText().toString();
 
         // TODO: replace dummy-student with actual student class
         if (student == null) {
-            student = new DummyStudent(generatedId, fname, lname, generatedEmail, classroom, dob);
-            studentManagementViewModel.registerStudent(student);
-        } else
+            DummyStudent studentTemp = new DummyStudent(fname, lname, stdEmail, stdPass, dob, classroom.getId());
+            studentManagementViewModel.registerStudent(studentTemp);
+            studentManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
+                if (!success) return;
+                generateCredentials();
+                binding.edttxtStdFname.setText("");
+                binding.edttxtStdLname.setText("");
+                binding.spnrStdClassroom.setSelection(0);
+            });
+        } else {
+            student.setFname(fname);
+            student.setLname(lname);
+            student.setClassId(classroom.getId());
             studentManagementViewModel.updateStudent(student);
+        }
     }
 
     private void deleteStudent() {
@@ -118,8 +134,8 @@ public class ModifyStudentFragment extends Fragment {
                     int studentId = Integer.parseInt(binding.edttxtStdId.getText().toString());
                     studentManagementViewModel.deleteStudentById(studentId);
                     studentManagementViewModel.getDeletionSuccess().observe(getViewLifecycleOwner(), success -> {
-                        if (!success) return;
-                        navigateBack();
+                        if (success)
+                            navigateBack();
                     });
                 }
         );

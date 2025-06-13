@@ -2,8 +2,8 @@ package com.bzu.educore.listener;
 
 import com.bzu.educore.model.school.Subject;
 
-public interface OnItemClickListener {
+public interface OnItemClickListener<T> {
 
-    void onItemClick(int position);
+    void onItemClick(T data);
 
 }

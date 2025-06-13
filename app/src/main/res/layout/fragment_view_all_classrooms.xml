@@ -7,11 +7,6 @@
     android:orientation="vertical"
     tools:context=".activity.registrar.ui.homeroom_teacher.ViewAllClassroomsFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/classrooms"/>
-
     <ListView
         android:id="@+id/lst_classrooms"
         android:layout_width="match_parent"

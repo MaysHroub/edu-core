@@ -1,5 +1,6 @@
 package com.bzu.educore.activity.registrar.ui.stats;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bzu.educore.databinding.FragmentStatisticsBinding;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 public class StatisticsFragment extends Fragment {
@@ -29,40 +38,72 @@ public class StatisticsFragment extends Fragment {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView txtNumOfStds = binding.txtNumOfStds;
-        final TextView txtNumOfTeachers = binding.txtNumOfTeachers;
-        final TextView txtNumOfClassrooms = binding.txtNumOfSections;
-        final TextView txtNumOfSubjects = binding.txtNumOfSubjects;
-        final PieChart pieChartTeacherSubjectDist = binding.pieChartTeacherSubjectDist;
-        final PieChart pieChartStdGradeDist = binding.pieChartStdGradeDist;
-
-        statisticsViewModel.getNumOfStudents().observe(getViewLifecycleOwner(), txtNumOfStds::setText);
-        statisticsViewModel.getNumOfTeachers().observe(getViewLifecycleOwner(), txtNumOfTeachers::setText);
-        statisticsViewModel.getNumOfClassrooms().observe(getViewLifecycleOwner(), txtNumOfClassrooms::setText);
-        statisticsViewModel.getNumOfSubjects().observe(getViewLifecycleOwner(), txtNumOfSubjects::setText);
+        statisticsViewModel.getNumOfStudents().observe(getViewLifecycleOwner(), count -> binding.txtNumOfStds.setText(count+""));
+        statisticsViewModel.getNumOfTeachers().observe(getViewLifecycleOwner(), count -> binding.txtNumOfTeachers.setText(count+""));
+        statisticsViewModel.getNumOfClassrooms().observe(getViewLifecycleOwner(), count -> binding.txtNumOfClassrooms.setText(count+""));
+        statisticsViewModel.getNumOfSubjects().observe(getViewLifecycleOwner(), count -> binding.txtNumOfSubjects.setText(count+""));
 
         statisticsViewModel.getTeachersPerSubjectEntries().observe(getViewLifecycleOwner(), entries -> {
-            PieDataSet dataSet = new PieDataSet(entries, "Teachers per Subject");
+            BarDataSet dataSet = new BarDataSet(entries, "Teachers per Subject");
             dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-            PieData pieData = new PieData(dataSet);
-            pieChartTeacherSubjectDist.setData(pieData);
-            pieChartTeacherSubjectDist.invalidate(); // refresh chart
+
+            BarData barData = new BarData(dataSet);
+            barData.setBarWidth(0.9f);
+
+            BarChart chart = binding.barChartTeacherSubjectDist;
+            chart.setData(barData);
+            chart.setFitBars(true);
+            chart.getDescription().setEnabled(false);
+            chart.animateY(1000);
+
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setDrawGridLines(false);
+            xAxis.setGranularity(1f);
+            xAxis.setValueFormatter(new IndexAxisValueFormatter(statisticsViewModel.getSubjectLabels()));
+
+            YAxis leftAxis = chart.getAxisLeft();
+            YAxis rightAxis = chart.getAxisRight();
+            leftAxis.setDrawGridLines(false);
+            rightAxis.setEnabled(false);
+
+            chart.invalidate(); // Refresh
         });
 
         statisticsViewModel.getStudentsPerGradeEntries().observe(getViewLifecycleOwner(), entries -> {
-            PieDataSet dataSet = new PieDataSet(entries, "Students per Grade");
+            BarDataSet dataSet = new BarDataSet(entries, "Students per Grade");
             dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-            PieData pieData = new PieData(dataSet);
-            pieChartStdGradeDist.setData(pieData);
-            pieChartStdGradeDist.invalidate();
+
+            BarData barData = new BarData(dataSet);
+            barData.setBarWidth(0.9f);
+
+            BarChart chart = binding.barChartStudentGradeDist;
+            chart.setData(barData);
+            chart.setFitBars(true);
+            chart.getDescription().setEnabled(false);
+            chart.animateY(1000);
+
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setDrawGridLines(false);
+            xAxis.setGranularity(1f);
+            xAxis.setValueFormatter(new IndexAxisValueFormatter(statisticsViewModel.getGradeLabels()));
+
+            YAxis leftAxis = chart.getAxisLeft();
+            YAxis rightAxis = chart.getAxisRight();
+            leftAxis.setDrawGridLines(false);
+            rightAxis.setEnabled(false);
+
+            chart.invalidate(); // Refresh
         });
+
 
         statisticsViewModel.fetchNumOfStudents();
         statisticsViewModel.fetchNumOfTeachers();
         statisticsViewModel.fetchNumOfSubjects();
         statisticsViewModel.fetchNumOfClassrooms();
-        statisticsViewModel.fetchStudentPerGrade();
-        statisticsViewModel.fetchTeacherPerSubject();
+        statisticsViewModel.fetchNumOfStudentsPerGrade();
+        statisticsViewModel.fetchNumOfTeachersPerSubject();
 
         return root;
     }

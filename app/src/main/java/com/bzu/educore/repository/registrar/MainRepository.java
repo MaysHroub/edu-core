@@ -3,6 +3,7 @@ package com.bzu.educore.repository.registrar;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -10,18 +11,26 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bzu.educore.util.VolleySingleton;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainRepository {
 
     private static MainRepository instance;
-    private final Context context;
+    private final Context appContext;
 
     private MainRepository(Context context) {
-        this.context = context;
+        appContext = context.getApplicationContext(); // retrieve application context to avoid memory leaks
     }
 
     public static void init(Context context) {
@@ -36,17 +45,21 @@ public class MainRepository {
 
     public void getAllItems(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, listener, errorListener);
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public void getData(String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public <T> void addItem(String url, T item, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, type, context) ->
+                        new JsonPrimitive(src.toString()))  // LocalDate -> "2024-06-11"
+                .create();
         String stdJson = gson.toJson(item);
+        Log.d("JSON", stdJson);
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(stdJson);
@@ -59,13 +72,17 @@ public class MainRepository {
                 jsonObject,
                 listener,
                 errorListener);
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public <T> void updateItem(String url, T modifiedItem, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, type, context) ->
+                        new JsonPrimitive(src.toString()))  // LocalDate -> "2024-06-11"
+                .create();
         String jsonStr = gson.toJson(modifiedItem);
-        JSONObject jsonObject = null;
+        Log.d("UPDATE_JSON", jsonStr);
+        JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(jsonStr);
         } catch (JSONException e) {
@@ -78,7 +95,7 @@ public class MainRepository {
                 listener,
                 errorListener
         );
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
     public void deleteItemById(String url, Integer itemId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
@@ -89,7 +106,7 @@ public class MainRepository {
                 listener,
                 errorListener
         );
-        VolleySingleton.getInstance(context).addToRequestQueue(request);
+        VolleySingleton.getInstance(appContext).addToRequestQueue(request);
     }
 
 }

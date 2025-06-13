@@ -1,8 +1,10 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
+import static android.content.ContentValues.TAG;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -14,10 +16,14 @@ import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +33,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Subject>> subjects;
     private final MutableLiveData<Integer> teacherId;
     private final MutableLiveData<Boolean> deletionSuccess;
+    private final MutableLiveData<Boolean> additionSuccess;
     private MainRepository repo;
 
     public TeacherManagementViewModel(Application application) {
@@ -34,6 +41,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         teachers = new MutableLiveData<>();
         subjects = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
+        additionSuccess = new MutableLiveData<>();
         teacherId = new MutableLiveData<>();
         repo = MainRepository.getInstance();
     }
@@ -54,15 +62,22 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         return deletionSuccess;
     }
 
+    public LiveData<Boolean> getAdditionSuccess() {
+        return additionSuccess;
+    }
+
     public void registerTeacher(DummyTeacher teacher) {
         repo.addItem(
                 UrlManager.URL_ADD_NEW_TEACHER,
                 teacher,
                 response -> {
                     Toast.makeText(getApplication(), "Teacher is added successfully!", LENGTH_SHORT).show();
+                    additionSuccess.postValue(true);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Log.e(TAG, "registerTeacher: ", error);
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                    additionSuccess.postValue(false);
                 }
         );
     }
@@ -75,7 +90,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Teacher is updated successfully!", LENGTH_SHORT).show();
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", Toast.LENGTH_SHORT).show();
                 }
         );
     }
@@ -89,7 +104,8 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     deletionSuccess.postValue(true);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                    deletionSuccess.postValue(false);
                 }
         );
     }
@@ -99,14 +115,14 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                 UrlManager.URL_GENERATE_TCHR_ID,
                 response -> {
                     try {
-                        int generatedId = response.getInt("id");
+                        int generatedId = response.getInt("next_teacher_id");
                         teacherId.postValue(generatedId);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -115,7 +131,10 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         repo.getAllItems(
                 UrlManager.URL_GET_ALL_TEACHERS,
                 response -> {
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
+                                    (json, type, context) -> LocalDate.parse(json.getAsString()))
+                            .create();
                     List<DummyTeacher> teacherList = new ArrayList<>();
 
                     for (int i = 0; i < response.length(); i++)
@@ -129,7 +148,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                     teachers.postValue(teacherList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -149,10 +168,10 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    subjects.postValue(subjectList);
+                    subjects.setValue(subjectList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }

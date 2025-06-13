@@ -3,19 +3,25 @@ package com.bzu.educore.activity.registrar.ui.student_management;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.NetworkResponse;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +30,8 @@ public class StudentManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<DummyClassroom>> classrooms;
     private final MutableLiveData<List<DummyStudent>> students;
     private final MutableLiveData<Boolean> deletionSuccess;
-    private final MutableLiveData<Integer> studentId;
+    private final MutableLiveData<Boolean> additionSuccess;
+    private final MutableLiveData<Integer> nextStudentId;
     private final MainRepository repo;
 
     public StudentManagementViewModel(Application application) {
@@ -33,7 +40,8 @@ public class StudentManagementViewModel extends AndroidViewModel {
         classrooms = new MutableLiveData<>();
         students = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
-        studentId = new MutableLiveData<>();
+        additionSuccess = new MutableLiveData<>();
+        nextStudentId = new MutableLiveData<>();
     }
 
     public LiveData<List<DummyClassroom>> getClassrooms() {
@@ -48,8 +56,12 @@ public class StudentManagementViewModel extends AndroidViewModel {
         return deletionSuccess;
     }
 
-    public LiveData<Integer> getStudentId() {
-        return studentId;
+    public LiveData<Boolean> getAdditionSuccess() {
+        return additionSuccess;
+    }
+
+    public LiveData<Integer> getNextStudentId() {
+        return nextStudentId;
     }
 
     public void generateStudentId() {
@@ -57,14 +69,14 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 UrlManager.URL_GENERATE_STD_ID,
                 response -> {
                     try {
-                        int generatedId = response.getInt("id");
-                        studentId.postValue(generatedId);
+                        int generatedId = response.getInt("next_student_id");
+                        nextStudentId.postValue(generatedId);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -75,10 +87,13 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 student,
                 response -> {
                     Toast.makeText(getApplication(), "Student is added successfully!", LENGTH_SHORT).show();
+                    additionSuccess.postValue(true);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", Toast.LENGTH_SHORT).show();
+                    additionSuccess.postValue(false);
                 }
+
         );
     }
 
@@ -90,7 +105,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Student is updated successfully!", LENGTH_SHORT).show();
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -104,7 +119,8 @@ public class StudentManagementViewModel extends AndroidViewModel {
                     deletionSuccess.postValue(true);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                    deletionSuccess.postValue(false);
                 }
         );
     }
@@ -128,7 +144,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
                     classrooms.postValue(classroomList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -137,7 +153,10 @@ public class StudentManagementViewModel extends AndroidViewModel {
         repo.getAllItems(
                 UrlManager.URL_GET_ALL_STUDENTS,
                 response -> {
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
+                                    (json, type, context) -> LocalDate.parse(json.getAsString()))
+                            .create();
                     List<DummyStudent> studentList = new ArrayList<>();
 
                     for (int i = 0; i < response.length(); i++)
@@ -151,7 +170,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
                     students.postValue(studentList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -164,7 +183,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Classroom is updated successfully!", LENGTH_SHORT).show();
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }

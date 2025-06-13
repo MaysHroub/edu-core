@@ -8,12 +8,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bzu.educore.R;
+import com.bzu.educore.activity.registrar.User;
 import com.bzu.educore.adapter.registrar.UserAdapter;
 import com.bzu.educore.databinding.FragmentViewAllStudentsBinding;
 import com.bzu.educore.listener.OnItemClickListener;
@@ -22,7 +24,7 @@ import com.bzu.educore.model.user.Person;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAllStudentsFragment extends Fragment implements OnItemClickListener {
+public class ViewAllStudentsFragment extends Fragment implements OnItemClickListener<User> {
 
     private FragmentViewAllStudentsBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
@@ -35,9 +37,10 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
         binding = FragmentViewAllStudentsBinding.inflate(inflater, container, false);
 
         studentManagementViewModel.getStudents().observe(getViewLifecycleOwner(), students -> {
-            List<Person> users = new ArrayList<>(students);
+            List<User> users = new ArrayList<>(students);
             UserAdapter adapter = new UserAdapter(users, this);
             binding.layoutViewAllUsrs.rclrviewUsrs.setAdapter(adapter);
+            binding.layoutViewAllUsrs.rclrviewUsrs.setLayoutManager(new LinearLayoutManager(requireContext()));
         });
         studentManagementViewModel.fetchAllStudents();
 
@@ -56,11 +59,10 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
 
     // TODO: replace position with generic type
     @Override
-    public void onItemClick(int position) {
-        DummyStudent student = studentManagementViewModel.getStudents().getValue().get(position);
+    public void onItemClick(User user) {
         ViewAllStudentsFragmentDirections.ActionViewAllStudentsFragmentToModifyStudentFragment action =
                 ViewAllStudentsFragmentDirections.actionViewAllStudentsFragmentToModifyStudentFragment();
-        action.setStudent(student);
+        action.setStudent((DummyStudent) user);
         Navigation.findNavController(requireView()).navigate(action);
     }
 }

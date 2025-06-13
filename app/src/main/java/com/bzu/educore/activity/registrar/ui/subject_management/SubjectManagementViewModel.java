@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bzu.educore.model.school.ClassGrade;
 import com.bzu.educore.model.school.Subject;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
@@ -25,6 +26,7 @@ public class SubjectManagementViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Subject>> subjects;
     private final MutableLiveData<List<Integer>> grades;
     private final MutableLiveData<Boolean> deletionSuccess;
+    private final MutableLiveData<Boolean> additionSuccess;
     private final MainRepository repo;
 
     public SubjectManagementViewModel(@NonNull Application application) {
@@ -33,6 +35,7 @@ public class SubjectManagementViewModel extends AndroidViewModel {
         subjects = new MutableLiveData<>();
         grades = new MutableLiveData<>();
         deletionSuccess = new MutableLiveData<>();
+        additionSuccess = new MutableLiveData<>();
     }
 
     public LiveData<List<Subject>> getSubjects() {
@@ -47,6 +50,10 @@ public class SubjectManagementViewModel extends AndroidViewModel {
         return deletionSuccess;
     }
 
+    public LiveData<Boolean> getAdditionSuccess() {
+        return additionSuccess;
+    }
+
 
     public void updateSubject(Subject modifiedSubject) {
         repo.updateItem(
@@ -56,7 +63,22 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                     Toast.makeText(getApplication(), "Modifications are saved!", LENGTH_SHORT).show();
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                }
+        );
+    }
+
+    public void addNewSubject(Subject subject) {
+        repo.addItem(
+                UrlManager.URL_ADD_NEW_SUBJECT,
+                subject,
+                response -> {
+                    Toast.makeText(getApplication(), "Subject Added Successfully!", LENGTH_SHORT).show();
+                    additionSuccess.postValue(true);
+                },
+                error -> {
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
+                    additionSuccess.postValue(false);
                 }
         );
     }
@@ -79,7 +101,7 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                     subjects.postValue(subjectList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -94,15 +116,16 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                     for (int i = 0; i < response.length(); i++)
                         try {
                             JSONObject obj = response.getJSONObject(i);
-                            Integer grade = gson.fromJson(obj.toString(), Integer.class);
-                            gradeList.add(grade);
+                            ClassGrade grade = gson.fromJson(obj.toString(), ClassGrade.class);
+                            Integer gradeNum = grade.getGradeNumber();
+                            gradeList.add(gradeNum);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     grades.postValue(gradeList);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
@@ -116,7 +139,7 @@ public class SubjectManagementViewModel extends AndroidViewModel {
                     deletionSuccess.postValue(true);
                 },
                 error -> {
-                    Toast.makeText(getApplication(), error.getMessage(), LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "Error occurred", LENGTH_SHORT).show();
                 }
         );
     }
