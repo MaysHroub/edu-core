@@ -65,4 +65,8 @@ public class UrlManager {
     public static final String URL_GET_MARKS = BASE_URL + "get_marks.php";
     public static final String URL_SUBMIT_ASSIGNMENT = BASE_URL + "submit_assignment.php";
     public static final String URL_GET_TIMETABLE_BY_STUDENT = BASE_URL + "get_timetable_by_student.php";
+
+    // Student Profile URLs
+    public static final String URL_GET_STUDENT_DATA = BASE_URL + "get_student_data.php";
+    public static final String URL_EDIT_STUDENT_DATA = BASE_URL + "edit_student_data.php";
 }

@@ -19,6 +19,7 @@
     <color name="gray">#CCCCCC</color>
     <color name="button_text">#FFFFFF</color>
     <color name="ripple_color">#33FFFFFF</color>
+    <color name="text_secondary">#757575</color>
 
     <!-- Timetable Colors -->
     <color name="timetable_header_bg">#1A237E</color>  <!-- Using app's primary color -->
