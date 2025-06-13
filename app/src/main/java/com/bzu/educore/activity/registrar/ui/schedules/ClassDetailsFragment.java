@@ -35,12 +35,15 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class ClassDetailsFragment extends Fragment {
     private static final String ARG_CLASS = "classData";
     private static final String TAG = "ClassDetailsFragment";
     private TextView textClassDetails;
     private TableLayout timetableTable;
     private RequestQueue requestQueue;
+    private FloatingActionButton fabAddClass;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -55,9 +58,19 @@ public class ClassDetailsFragment extends Fragment {
         textClassDetails = view.findViewById(R.id.text_class_details);
         timetableTable = view.findViewById(R.id.timetable_table);
         requestQueue = Volley.newRequestQueue(requireContext());
+        fabAddClass = view.findViewById(R.id.fab_add_class);
 
         // Set TableLayout to stretch all columns
         timetableTable.setStretchAllColumns(true);
+
+        // Set OnClickListener for the FloatingActionButton
+        fabAddClass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(requireContext(), "Add Class button clicked!", Toast.LENGTH_SHORT).show();
+                // You can navigate to a new fragment or activity here to add a new class
+            }
+        });
 
         // Get class data from arguments
         Bundle args = getArguments();
@@ -122,9 +135,9 @@ public class ClassDetailsFragment extends Fragment {
         String[] timeSlots = {"8:00-9:00", "9:00-10:00", "10:00-11:00", "11:00-11:30", "11:30-12:30", "12:30-13:30"};
 
         // Set fixed height for all rows
-        int rowHeight = 200; // A more reasonable height
+        int rowHeight = 250; // A more reasonable height
 
-        // Create header row
+        // Create header row with time slots
         TableRow headerRow = new TableRow(requireContext());
         headerRow.setBackgroundColor(Color.parseColor("#2196F3"));
         headerRow.setLayoutParams(new TableRow.LayoutParams(
@@ -132,34 +145,35 @@ public class ClassDetailsFragment extends Fragment {
             rowHeight
         ));
         
-        // Add empty cell for time column
+        // Add empty cell for day column
         TextView emptyCell = new TextView(requireContext());
         emptyCell.setText("");
         emptyCell.setPadding(15, 15, 15, 15); // Consistent padding
         emptyCell.setTextColor(Color.WHITE);
         emptyCell.setTextSize(14);
-        emptyCell.setMinWidth(180); // Adjusted min width
+        emptyCell.setMinWidth(200); // Adjusted min width
         emptyCell.setGravity(Gravity.CENTER);
         emptyCell.setSingleLine(false); // Ensure multi-line text
-        emptyCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        emptyCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
         headerRow.addView(emptyCell);
 
-        // Add day headers
-        for (String day : days) {
-            TextView dayHeader = new TextView(requireContext());
-            dayHeader.setText(day);
-            dayHeader.setPadding(15, 15, 15, 15); // Consistent padding
-            dayHeader.setTextColor(Color.WHITE);
-            dayHeader.setTextSize(14);
-            dayHeader.setGravity(Gravity.CENTER);
-            dayHeader.setSingleLine(false); // Ensure multi-line text
-            dayHeader.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            headerRow.addView(dayHeader);
+        // Add time slot headers
+        for (String timeSlot : timeSlots) {
+            TextView timeHeader = new TextView(requireContext());
+            timeHeader.setText(timeSlot);
+            timeHeader.setPadding(15, 15, 15, 15); // Consistent padding
+            timeHeader.setTextColor(Color.WHITE);
+            timeHeader.setTextSize(14);
+            timeHeader.setMinWidth(400); // Set min width for time columns
+            timeHeader.setGravity(Gravity.CENTER);
+            timeHeader.setSingleLine(false); // Ensure multi-line text
+            timeHeader.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
+            headerRow.addView(timeHeader);
         }
         timetableTable.addView(headerRow);
 
-        // Create rows for each time slot
-        for (String timeSlot : timeSlots) {
+        // Create rows for each day
+        for (String day : days) {
             TableRow row = new TableRow(requireContext());
             row.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
@@ -167,31 +181,26 @@ public class ClassDetailsFragment extends Fragment {
             ));
             row.setBackgroundColor(Color.parseColor("#DDDDDD")); // Light grey for row background (border effect)
 
-            // Add time slot cell
-            TextView timeCell = new TextView(requireContext());
-            timeCell.setText(timeSlot);
-            timeCell.setPadding(15, 15, 15, 15); // Consistent padding
-            timeCell.setMinWidth(180); // Adjusted min width
-            timeCell.setGravity(Gravity.CENTER);
-            timeCell.setSingleLine(false); // Ensure multi-line text
-            timeCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            
-            // Set different color for break time
-            if (timeSlot.equals("11:00-11:30")) {
-                timeCell.setBackgroundColor(Color.parseColor("#FFE0B2")); // Light orange for break
-            } else {
-                timeCell.setBackgroundColor(Color.parseColor("#E3F2FD"));
-            }
-            timeCell.setTextSize(14);
-            row.addView(timeCell);
+            // Add day cell
+            TextView dayCell = new TextView(requireContext());
+            dayCell.setText(day);
+            dayCell.setPadding(15, 15, 15, 15); // Consistent padding
+            dayCell.setMinWidth(200); // Adjusted min width
+            dayCell.setGravity(Gravity.CENTER);
+            dayCell.setSingleLine(false); // Ensure multi-line text
+            dayCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
+            dayCell.setBackgroundColor(Color.parseColor("#E3F2FD"));
+            dayCell.setTextSize(14);
+            row.addView(dayCell);
 
-            // Add cells for each day
-            for (String day : days) {
+            // Add cells for each time slot
+            for (String timeSlot : timeSlots) {
                 TextView cell = new TextView(requireContext());
                 cell.setPadding(15, 15, 15, 15); // Consistent padding
+                cell.setMinWidth(400); // Set min width for time columns
                 cell.setGravity(Gravity.CENTER);
                 cell.setSingleLine(false); // Ensure multi-line text
-                cell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+                cell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT));
                 
                 // Set different color for break time
                 if (timeSlot.equals("11:00-11:30")) {
