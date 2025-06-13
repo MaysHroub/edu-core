@@ -27,8 +27,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity android:name=".activity.LoginActivity"/>
+      
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+      
+        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
         <activity
             android:name="com.example.studentsection.StudentMainActivity"

@@ -35,8 +35,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/generated_id"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:text="@string/generated_id" />
 
     <EditText
         android:id="@+id/edttxt_std_id"
@@ -51,6 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generated_email"
+        android:textStyle="bold"
         android:layout_marginTop="8dp"/>
 
     <EditText
@@ -66,6 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generated_password"
+        android:textStyle="bold"
         android:layout_marginTop="8dp"/>
 
     <EditText
@@ -81,6 +84,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/enter_student_s_date_of_birth"
+        android:textStyle="bold"
+
         android:layout_marginTop="16dp"/>
 
     <Button
@@ -100,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:textStyle="bold"
             android:text="@string/choose_classroom"/>
 
         <Spinner
