@@ -29,7 +29,7 @@ import java.util.List;
 public class TimetableSelectionFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private int teacherId = 14; // Replace with actual logged-in teacher ID
+    private int teacherId = 125001; // Replace with actual logged-in teacher ID
     private List<JSONObject> timetableList = new ArrayList<>();
     private String mode;
 

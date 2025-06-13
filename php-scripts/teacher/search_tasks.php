@@ -10,12 +10,15 @@ $type    = isset($_GET['type'])    ? strtolower(trim($_GET['type'])) : null;
 $subject = isset($_GET['subject']) ? $_GET['subject'] : null;
 $grade   = isset($_GET['grade'])   ? $_GET['grade']   : null;
 $search  = isset($_GET['search'])  ? trim($_GET['search']) : null;
+$teacher_id = isset($_GET['teacher_id']) ? intval($_GET['teacher_id']) : null;
 
 $sql = "SELECT 
             task.id,
+            task.title,
+            task.description,
             s.title AS subject_title,
             s.grade_number,
-            t.name AS teacher_name,
+            CONCAT(t.fname, ' ', t.lname) AS teacher_name,
             task.max_score,
             task.date,
             a.deadline,
@@ -29,13 +32,19 @@ $sql = "SELECT
 
 $params = [];
 
+// Filter by teacher if provided
+if ($teacher_id) {
+    $sql .= " AND task.teacher_id = ?";
+    $params[] = $teacher_id;
+}
+
 // Filter by specific type
 if ($type && $type !== 'all types') {
     if ($type === 'assignment') {
         // Show only assignments
         $sql .= " AND a.id IS NOT NULL";
     } else {
-        // Show only exams with specific type
+        // Show only tasks with specific type (Quiz, First, Second, Midterm, Final)
         $sql .= " AND a.id IS NULL AND LOWER(task.type) = ?";
         $params[] = $type;
     }
@@ -55,10 +64,11 @@ if ($grade && $grade !== 'All Grades') {
     $params[] = $gradeNum;
 }
 
-// Filter by search (subject title or teacher name)
+// Filter by search (subject title, teacher name, or task title)
 if ($search && !empty($search)) {
-    $sql .= " AND (s.title LIKE ? OR t.name LIKE ?)";
+    $sql .= " AND (s.title LIKE ? OR CONCAT(t.fname, ' ', t.lname) LIKE ? OR task.title LIKE ?)";
     $searchParam = '%' . $search . '%';
+    $params[] = $searchParam;
     $params[] = $searchParam;
     $params[] = $searchParam;
 }
@@ -74,6 +84,8 @@ try {
     foreach ($results as $row) {
         $tasks[] = [
             'id'                => (int)$row['id'],
+            'title'             => $row['title'],
+            'description'       => $row['description'],
             'subject_title'     => $row['subject_title'],
             'grade_number'      => (int)$row['grade_number'],
             'teacher_name'      => $row['teacher_name'],
