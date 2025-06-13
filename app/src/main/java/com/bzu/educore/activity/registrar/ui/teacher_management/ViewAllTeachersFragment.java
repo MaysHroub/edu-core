@@ -29,7 +29,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAllTeachersFragment extends Fragment implements OnItemClickListener {
+public class ViewAllTeachersFragment extends Fragment implements OnItemClickListener<User> {
 
     private FragmentViewAllTeachersBinding binding;
     private TeacherManagementViewModel teacherManagementViewModel;
@@ -69,11 +69,10 @@ public class ViewAllTeachersFragment extends Fragment implements OnItemClickList
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(User user) {
         ViewAllTeachersFragmentDirections.ActionViewAllTeachersFragmentToModifyTeacherFragment action =
                 ViewAllTeachersFragmentDirections.actionViewAllTeachersFragmentToModifyTeacherFragment();
-        DummyTeacher teacher = teacherManagementViewModel.getTeachers().getValue().get(position);
-        action.setTeacher(teacher);
+        action.setTeacher((DummyTeacher) user);
         Navigation.findNavController(requireView()).navigate(action);
     }
 

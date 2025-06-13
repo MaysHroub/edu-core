@@ -21,9 +21,9 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private final List<User> users;
-    private final OnItemClickListener listener;
+    private final OnItemClickListener<User> listener;
 
-    public UserAdapter(List<User> users, OnItemClickListener listener) {
+    public UserAdapter(List<User> users, OnItemClickListener<User> listener) {
         this.users = users;
         this.listener = listener;
     }
@@ -39,7 +39,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = users.get(position);
-        holder.bind(user, position, listener);
+        holder.bind(user, listener);
     }
 
     @Override
@@ -58,10 +58,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             imgUser = view.findViewById(R.id.img_user);
         }
 
-        public void bind(User user, int position, OnItemClickListener listener) {
+        public void bind(User user, OnItemClickListener<User> listener) {
             txtId.setText(String.valueOf(user.getId()));
             txtName.setText(String.format("%s %s", user.getFname(), user.getLname()));
-            itemView.setOnClickListener(v -> listener.onItemClick(position));
+            itemView.setOnClickListener(v -> listener.onItemClick(user));
             if (user instanceof DummyStudent)
                 imgUser.setImageResource(R.drawable.student_icon);
             else

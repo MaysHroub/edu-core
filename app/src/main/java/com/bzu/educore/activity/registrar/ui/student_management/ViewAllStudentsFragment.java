@@ -24,7 +24,7 @@ import com.bzu.educore.model.user.Person;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAllStudentsFragment extends Fragment implements OnItemClickListener {
+public class ViewAllStudentsFragment extends Fragment implements OnItemClickListener<User> {
 
     private FragmentViewAllStudentsBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
@@ -59,11 +59,10 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
 
     // TODO: replace position with generic type
     @Override
-    public void onItemClick(int position) {
-        DummyStudent student = studentManagementViewModel.getStudents().getValue().get(position);
+    public void onItemClick(User user) {
         ViewAllStudentsFragmentDirections.ActionViewAllStudentsFragmentToModifyStudentFragment action =
                 ViewAllStudentsFragmentDirections.actionViewAllStudentsFragmentToModifyStudentFragment();
-        action.setStudent(student);
+        action.setStudent((DummyStudent) user);
         Navigation.findNavController(requireView()).navigate(action);
     }
 }
