@@ -43,6 +43,7 @@ import java.util.Map;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.widget.LinearLayout;
+import android.widget.CheckBox;
 
 public class ClassDetailsFragment extends Fragment {
     private static final String ARG_CLASS = "classData";
@@ -56,17 +57,29 @@ public class ClassDetailsFragment extends Fragment {
     // Dialog related views and state
     private LinearLayout layoutStep1;
     private LinearLayout layoutStep2;
+    private LinearLayout layoutStep3;
+    private LinearLayout layoutStep4;
     private AutoCompleteTextView dropdownTeacher;
+    private AutoCompleteTextView dropdownTime;
     private MaterialButton buttonBack;
     private TextView textStepTitle;
     private int currentStep = 1; // Start at step 1
     private String selectedSubjectId = ""; // To store the selected subject ID
+    private String selectedTimeSlot = ""; // New: To store the selected time slot
     private List<com.bzu.educore.model.Subject> subjectsList; // Store fetched subjects with IDs
+    private CheckBox checkboxSunday;
+    private CheckBox checkboxMonday;
+    private CheckBox checkboxTuesday;
+    private CheckBox checkboxWednesday;
+    private CheckBox checkboxThursday;
 
     // Define timetable structure
     private final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"};
     private final String[] timeSlots = {"8:00-9:00", "9:00-10:00", "10:00-11:00", "11:00-11:30", "11:30-12:30", "12:30-13:30"};
     private final int columnCount = timeSlots.length + 1; // +1 for the day column
+
+    // New: Specific time slots for the dialog dropdown
+    private final String[] dialogTimeSlots = {"8:00-8:50", "9:00-9:50", "10:00-10:50", "11:30-12:20", "12:30-1:20"};
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -227,15 +240,31 @@ public class ClassDetailsFragment extends Fragment {
         textStepTitle = dialog.findViewById(R.id.text_step_title);
         layoutStep1 = dialog.findViewById(R.id.layout_step_1);
         layoutStep2 = dialog.findViewById(R.id.layout_step_2);
+        layoutStep3 = dialog.findViewById(R.id.layout_step_3);
+        layoutStep4 = dialog.findViewById(R.id.layout_step_4);
         AutoCompleteTextView dropdownSubject = dialog.findViewById(R.id.dropdown_subject);
         dropdownTeacher = dialog.findViewById(R.id.dropdown_teacher);
+        dropdownTime = dialog.findViewById(R.id.dropdown_time);
         MaterialButton buttonCancel = dialog.findViewById(R.id.button_cancel);
         buttonBack = dialog.findViewById(R.id.button_back);
         MaterialButton buttonNext = dialog.findViewById(R.id.button_next);
+        checkboxSunday = dialog.findViewById(R.id.checkbox_sunday);
+        checkboxMonday = dialog.findViewById(R.id.checkbox_monday);
+        checkboxTuesday = dialog.findViewById(R.id.checkbox_tuesday);
+        checkboxWednesday = dialog.findViewById(R.id.checkbox_wednesday);
+        checkboxThursday = dialog.findViewById(R.id.checkbox_thursday);
 
         // Reset current step to 1 when dialog is shown
         currentStep = 1;
         updateDialogUI();
+
+        // Populate time slots dropdown
+        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            dialogTimeSlots
+        );
+        dropdownTime.setAdapter(timeAdapter);
 
         // Fetch subjects for the class
         fetchSubjectsForClass(dialog, dropdownSubject);
@@ -273,14 +302,42 @@ public class ClassDetailsFragment extends Fragment {
                     Toast.makeText(requireContext(), "Please select a valid subject", Toast.LENGTH_SHORT).show();
                 }
             } else if (currentStep == 2) {
-                // Handle teacher selection and finalize schedule
+                // Handle teacher selection and move to step 3
                 String selectedTeacher = dropdownTeacher.getText().toString();
                 if (!selectedTeacher.isEmpty()) {
-                    // TODO: Finalize schedule and close dialog
-                    Toast.makeText(requireContext(), "Schedule added (Subject ID: " + selectedSubjectId + ", Teacher: " + selectedTeacher + ")", Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
+                    currentStep++;
+                    updateDialogUI();
                 } else {
                     Toast.makeText(requireContext(), "Please select a teacher", Toast.LENGTH_SHORT).show();
+                }
+            } else if (currentStep == 3) {
+                // Handle time selection and move to step 4
+                String selectedTime = dropdownTime.getText().toString();
+                if (!selectedTime.isEmpty()) {
+                    selectedTimeSlot = selectedTime;
+                    currentStep++;
+                    updateDialogUI();
+                } else {
+                    Toast.makeText(requireContext(), "Please select a time slot", Toast.LENGTH_SHORT).show();
+                }
+            } else if (currentStep == 4) {
+                // Handle day selection and finalize schedule
+                List<String> selectedDays = new ArrayList<>();
+                if (checkboxSunday.isChecked()) selectedDays.add("Sunday");
+                if (checkboxMonday.isChecked()) selectedDays.add("Monday");
+                if (checkboxTuesday.isChecked()) selectedDays.add("Tuesday");
+                if (checkboxWednesday.isChecked()) selectedDays.add("Wednesday");
+                if (checkboxThursday.isChecked()) selectedDays.add("Thursday");
+
+                if (!selectedDays.isEmpty()) {
+                    // TODO: Finalize schedule with selected days and close dialog
+                    Toast.makeText(requireContext(), "Schedule added (Subject ID: " + selectedSubjectId +
+                                   ", Teacher: " + dropdownTeacher.getText().toString() +
+                                   ", Time: " + selectedTimeSlot +
+                                   ", Days: " + selectedDays.toString() + ")", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(requireContext(), "Please select at least one day", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -294,12 +351,32 @@ public class ClassDetailsFragment extends Fragment {
                 textStepTitle.setText("Step 1: Select Subject");
                 layoutStep1.setVisibility(View.VISIBLE);
                 layoutStep2.setVisibility(View.GONE);
+                layoutStep3.setVisibility(View.GONE);
+                layoutStep4.setVisibility(View.GONE);
                 buttonBack.setVisibility(View.GONE);
                 break;
             case 2:
                 textStepTitle.setText("Step 2: Select Teacher");
                 layoutStep1.setVisibility(View.GONE);
                 layoutStep2.setVisibility(View.VISIBLE);
+                layoutStep3.setVisibility(View.GONE);
+                layoutStep4.setVisibility(View.GONE);
+                buttonBack.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                textStepTitle.setText("Step 3: Select Time");
+                layoutStep1.setVisibility(View.GONE);
+                layoutStep2.setVisibility(View.GONE);
+                layoutStep3.setVisibility(View.VISIBLE);
+                layoutStep4.setVisibility(View.GONE);
+                buttonBack.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                textStepTitle.setText("Step 4: Select Days");
+                layoutStep1.setVisibility(View.GONE);
+                layoutStep2.setVisibility(View.GONE);
+                layoutStep3.setVisibility(View.GONE);
+                layoutStep4.setVisibility(View.VISIBLE);
                 buttonBack.setVisibility(View.VISIBLE);
                 break;
         }
