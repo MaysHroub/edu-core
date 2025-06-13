@@ -85,4 +85,6 @@ public class UrlManager {
     public static final String GET_TEACHERS_FOR_SUBJECT_URL = BASE_URL + "get_teachers_for_subject.php";
     public static final String CHECK_TIME_AVAILABILITY_URL = BASE_URL + "check_time_availability.php";
     public static final String ADD_TO_TIMETABLE_URL = BASE_URL + "add_to_timetable.php";
+
+    public static final String GET_CLASS_TIMETABLE_URL = BASE_URL + "get_class_timetable.php";
 }
