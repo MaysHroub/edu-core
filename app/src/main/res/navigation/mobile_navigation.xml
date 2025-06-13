@@ -102,10 +102,17 @@
             android:id="@+id/action_modifyTeacherFragment_to_view_all_teachers"
             app:destination="@id/nav_teachers" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_home"
         android:name="com.bzu.educore.activity.registrar.ui.stats.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_statistics" />
+
+    <fragment
+        android:id="@+id/nav_registrar_profile"
+        android:name="com.bzu.educore.activity.registrar.RegistrarProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_registrar_profile" />
 
 </navigation>

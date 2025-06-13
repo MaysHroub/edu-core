@@ -38,9 +38,21 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
+        
         prefsManager = new SharedPreferencesManager(this);
+        
+        // Check if user is already logged in
+        if (prefsManager.isLoggedIn()) {
+            String userType = prefsManager.getUserType();
+            Log.d(TAG, "User is logged in with type: " + userType);
+            if (userType != null && !userType.isEmpty()) {
+                navigateToDashboard(userType);
+                finish();
+                return;
+            }
+        }
+        
+        setContentView(R.layout.activity_login);
         initializeViews();
         setupLoginButton();
         
@@ -156,8 +168,10 @@ public class LoginActivity extends AppCompatActivity {
                 prefsManager.saveUserType(userType);
                 prefsManager.setLoggedIn(true);
                 
+                Log.d(TAG, "Saved user type: " + userType);
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                 navigateToDashboard(userType);
+                finish();
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
@@ -169,6 +183,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToDashboard(String userType) {
         Intent intent;
+        Log.d(TAG, "Navigating to dashboard for user type: " + userType);
+        
         switch (userType.toLowerCase()) {
             case "teacher":
                 intent = new Intent(this, TeacherMainActivity.class);
@@ -180,11 +196,14 @@ public class LoginActivity extends AppCompatActivity {
                 intent = new Intent(this, StudentMainActivity.class);
                 break;
             default:
+                Log.e(TAG, "Unknown user type: " + userType);
                 Toast.makeText(this, "Unknown user type", Toast.LENGTH_SHORT).show();
                 return;
         }
+        
+        // Clear any existing tasks and start fresh
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
     }
 
     private void setLoading(boolean isLoading) {

@@ -8,6 +8,15 @@
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:windowBackground">@color/background</item>
+        <!-- Primary brand color -->
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="Theme.EduCore" parent="Base.Theme.EduCore" />
