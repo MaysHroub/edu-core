@@ -1,4 +1,4 @@
-package com.bzu.educore.activity.registrar;
+package com.bzu.educore.model.user;
 
 import com.google.gson.annotations.SerializedName;
 

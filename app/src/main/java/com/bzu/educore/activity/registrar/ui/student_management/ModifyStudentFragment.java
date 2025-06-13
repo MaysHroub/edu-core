@@ -17,6 +17,8 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bzu.educore.databinding.FragmentModifyStudentBinding;
+import com.bzu.educore.model.school.Classroom;
+import com.bzu.educore.model.user.Student;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.PasswordGenerator;
@@ -29,7 +31,7 @@ public class ModifyStudentFragment extends Fragment {
     private FragmentModifyStudentBinding binding;
     private StudentManagementViewModel studentManagementViewModel;
     private LocalDate dob;
-    private DummyStudent student;
+    private Student student;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,7 +67,7 @@ public class ModifyStudentFragment extends Fragment {
         String date = student.getDateOfBirth().getYear() + "-" + student.getDateOfBirth().getMonthValue() + "-" + student.getDateOfBirth().getDayOfMonth();
         binding.btnStdDob.setText(date);
         studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
-            int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(new DummyClassroom(student.getClassId()));
+            int pos = studentManagementViewModel.getClassrooms().getValue().indexOf(new Classroom(student.getClassId()));
             binding.spnrStdClassroom.setSelection(pos);
         });
         dob = student.getDateOfBirth();
@@ -83,7 +85,7 @@ public class ModifyStudentFragment extends Fragment {
 
     private void fillClassroomSpinner() {
         studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
-            ArrayAdapter<DummyClassroom> adapter = new ArrayAdapter<>(
+            ArrayAdapter<Classroom> adapter = new ArrayAdapter<>(
                     requireContext(),
                     android.R.layout.simple_spinner_item,
                     classrooms
@@ -102,13 +104,13 @@ public class ModifyStudentFragment extends Fragment {
         }
         String fname = binding.edttxtStdFname.getText().toString(),
                 lname = binding.edttxtStdLname.getText().toString();
-        DummyClassroom classroom = (DummyClassroom) binding.spnrStdClassroom.getSelectedItem();
+        Classroom classroom = (Classroom) binding.spnrStdClassroom.getSelectedItem();
         String stdEmail = binding.edttxtStdEmail.getText().toString(),
                 stdPass = binding.edttxtStdPass.getText().toString();
 
         // TODO: replace dummy-student with actual student class
         if (student == null) {
-            DummyStudent studentTemp = new DummyStudent(fname, lname, stdEmail, stdPass, dob, classroom.getId());
+            Student studentTemp = new Student(fname, lname, stdEmail, stdPass, dob, classroom.getId());
             studentManagementViewModel.registerStudent(studentTemp);
             studentManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
                 if (!success) return;

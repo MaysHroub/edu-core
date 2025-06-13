@@ -1,6 +1,5 @@
 package com.bzu.educore.adapter.registrar;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
-import com.bzu.educore.activity.registrar.User;
-import com.bzu.educore.activity.registrar.ui.student_management.DummyStudent;
+import com.bzu.educore.model.user.User;
+import com.bzu.educore.model.user.Student;
 import com.bzu.educore.listener.OnItemClickListener;
-import com.bzu.educore.model.user.Person;
 
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             txtId.setText(String.valueOf(user.getId()));
             txtName.setText(String.format("%s %s", user.getFname(), user.getLname()));
             itemView.setOnClickListener(v -> listener.onItemClick(user));
-            if (user instanceof DummyStudent)
+            if (user instanceof Student)
                 imgUser.setImageResource(R.drawable.student_icon);
             else
                 imgUser.setImageResource(R.drawable.teacher);

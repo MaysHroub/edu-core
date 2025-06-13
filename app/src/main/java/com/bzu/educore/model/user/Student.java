@@ -1,28 +1,26 @@
 package com.bzu.educore.model.user;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+public class Student extends User implements Serializable {
 
+    @SerializedName("class_id")
+    private Integer classId;
 
-public class Student extends Person{
-    private String grade_number,class_id;
-    private String id;
-    public Student(String id, Integer age, String name, String email, LocalDate dateOfBirth,
-                   String grade_number, String class_id) {
-        super(age, name, email, dateOfBirth);
-        this.grade_number = grade_number;
-        this.class_id = class_id;
-        this.id=id;
+    public Student(String fname, String lname, String email, String password,
+                   LocalDate dateOfBirth, Integer classId) {
+        super(fname, lname, email, password, dateOfBirth);
+        this.classId = classId;
     }
-
 }
+

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -14,12 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bzu.educore.R;
-import com.bzu.educore.activity.registrar.User;
+import com.bzu.educore.model.user.Student;
+import com.bzu.educore.model.user.User;
 import com.bzu.educore.adapter.registrar.UserAdapter;
 import com.bzu.educore.databinding.FragmentViewAllStudentsBinding;
 import com.bzu.educore.listener.OnItemClickListener;
-import com.bzu.educore.model.user.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +60,7 @@ public class ViewAllStudentsFragment extends Fragment implements OnItemClickList
     public void onItemClick(User user) {
         ViewAllStudentsFragmentDirections.ActionViewAllStudentsFragmentToModifyStudentFragment action =
                 ViewAllStudentsFragmentDirections.actionViewAllStudentsFragmentToModifyStudentFragment();
-        action.setStudent((DummyStudent) user);
+        action.setStudent((Student) user);
         Navigation.findNavController(requireView()).navigate(action);
     }
 }

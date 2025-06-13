@@ -3,14 +3,14 @@ package com.bzu.educore.activity.registrar.ui.student_management;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Application;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.NetworkResponse;
+import com.bzu.educore.model.school.Classroom;
+import com.bzu.educore.model.user.Student;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
@@ -20,15 +20,14 @@ import com.google.gson.JsonDeserializer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentManagementViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<List<DummyClassroom>> classrooms;
-    private final MutableLiveData<List<DummyStudent>> students;
+    private final MutableLiveData<List<Classroom>> classrooms;
+    private final MutableLiveData<List<Student>> students;
     private final MutableLiveData<Boolean> deletionSuccess;
     private final MutableLiveData<Boolean> additionSuccess;
     private final MutableLiveData<Integer> nextStudentId;
@@ -44,11 +43,11 @@ public class StudentManagementViewModel extends AndroidViewModel {
         nextStudentId = new MutableLiveData<>();
     }
 
-    public LiveData<List<DummyClassroom>> getClassrooms() {
+    public LiveData<List<Classroom>> getClassrooms() {
         return classrooms;
     }
 
-    public LiveData<List<DummyStudent>> getStudents() {
+    public LiveData<List<Student>> getStudents() {
         return students;
     }
 
@@ -81,7 +80,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
         );
     }
 
-    public void registerStudent(DummyStudent student) {
+    public void registerStudent(Student student) {
         repo.addItem(
                 UrlManager.URL_ADD_NEW_STUDENT,
                 student,
@@ -97,7 +96,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
         );
     }
 
-    public void updateStudent(DummyStudent modifiedStudent) {
+    public void updateStudent(Student modifiedStudent) {
         repo.updateItem(
                 UrlManager.URL_UPDATE_STUDENT,
                 modifiedStudent,
@@ -131,12 +130,12 @@ public class StudentManagementViewModel extends AndroidViewModel {
                 UrlManager.URL_GET_ALL_CLASSROOMS,
                 response -> {
                     Gson gson = new Gson();
-                    List<DummyClassroom> classroomList = new ArrayList<>();
+                    List<Classroom> classroomList = new ArrayList<>();
 
                     for (int i = 0; i < response.length(); i++)
                         try {
                             JSONObject obj = response.getJSONObject(i);
-                            DummyClassroom classroom = gson.fromJson(obj.toString(), DummyClassroom.class);
+                            Classroom classroom = gson.fromJson(obj.toString(), Classroom.class);
                             classroomList.add(classroom);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -157,12 +156,12 @@ public class StudentManagementViewModel extends AndroidViewModel {
                             .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
                                     (json, type, context) -> LocalDate.parse(json.getAsString()))
                             .create();
-                    List<DummyStudent> studentList = new ArrayList<>();
+                    List<Student> studentList = new ArrayList<>();
 
                     for (int i = 0; i < response.length(); i++)
                         try {
                             JSONObject obj = response.getJSONObject(i);
-                            DummyStudent student = gson.fromJson(obj.toString(), DummyStudent.class);
+                            Student student = gson.fromJson(obj.toString(), Student.class);
                             studentList.add(student);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -175,7 +174,7 @@ public class StudentManagementViewModel extends AndroidViewModel {
         );
     }
 
-    public void updateClassroom(DummyClassroom modifiedClassroom) {
+    public void updateClassroom(Classroom modifiedClassroom) {
         repo.updateItem(
                 UrlManager.URL_UPDATE_CLASSROOM,
                 modifiedClassroom,

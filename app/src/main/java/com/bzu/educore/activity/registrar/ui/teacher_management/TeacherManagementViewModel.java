@@ -11,8 +11,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
 import com.bzu.educore.model.school.Subject;
+import com.bzu.educore.model.user.Teacher;
 import com.bzu.educore.repository.registrar.MainRepository;
 import com.bzu.educore.util.UrlManager;
 import com.google.gson.Gson;
@@ -22,14 +22,13 @@ import com.google.gson.JsonDeserializer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherManagementViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<List<DummyTeacher>> teachers;
+    private final MutableLiveData<List<Teacher>> teachers;
     private final MutableLiveData<List<Subject>> subjects;
     private final MutableLiveData<Integer> teacherId;
     private final MutableLiveData<Boolean> deletionSuccess;
@@ -46,7 +45,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         repo = MainRepository.getInstance();
     }
 
-    public LiveData<List<DummyTeacher>> getTeachers() {
+    public LiveData<List<Teacher>> getTeachers() {
         return teachers;
     }
 
@@ -66,7 +65,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         return additionSuccess;
     }
 
-    public void registerTeacher(DummyTeacher teacher) {
+    public void registerTeacher(Teacher teacher) {
         repo.addItem(
                 UrlManager.URL_ADD_NEW_TEACHER,
                 teacher,
@@ -82,7 +81,7 @@ public class TeacherManagementViewModel extends AndroidViewModel {
         );
     }
     
-    public void updateTeacher(DummyTeacher modifiedTeacher) {
+    public void updateTeacher(Teacher modifiedTeacher) {
         repo.updateItem(
                 UrlManager.URL_UPDATE_TEACHER,
                 modifiedTeacher,
@@ -135,12 +134,12 @@ public class TeacherManagementViewModel extends AndroidViewModel {
                             .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
                                     (json, type, context) -> LocalDate.parse(json.getAsString()))
                             .create();
-                    List<DummyTeacher> teacherList = new ArrayList<>();
+                    List<Teacher> teacherList = new ArrayList<>();
 
                     for (int i = 0; i < response.length(); i++)
                         try {
                             JSONObject obj = response.getJSONObject(i);
-                            DummyTeacher teacher = gson.fromJson(obj.toString(), DummyTeacher.class);
+                            Teacher teacher = gson.fromJson(obj.toString(), Teacher.class);
                             teacherList.add(teacher);
                         } catch (JSONException e) {
                             e.printStackTrace();

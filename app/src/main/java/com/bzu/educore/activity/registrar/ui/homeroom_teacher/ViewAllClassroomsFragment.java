@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -14,13 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.bzu.educore.R;
-import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
-import com.bzu.educore.activity.registrar.ui.student_management.ModifyStudentFragment;
+import com.bzu.educore.model.school.Classroom;
 import com.bzu.educore.activity.registrar.ui.student_management.StudentManagementViewModel;
-import com.bzu.educore.activity.registrar.ui.teacher_management.TeacherManagementViewModel;
-import com.bzu.educore.activity.registrar.ui.teacher_management.ViewAllTeachersFragmentDirections;
-import com.bzu.educore.databinding.FragmentAssignHomeroomTeacherBinding;
 import com.bzu.educore.databinding.FragmentViewAllClassroomsBinding;
 
 public class ViewAllClassroomsFragment extends Fragment {
@@ -37,7 +31,7 @@ public class ViewAllClassroomsFragment extends Fragment {
         fillClassroomListView();
 
         binding.lstClassrooms.setOnItemClickListener((parent, view, position, id) -> {
-            DummyClassroom classroom = (DummyClassroom) parent.getItemAtPosition(position);
+            Classroom classroom = (Classroom) parent.getItemAtPosition(position);
             NavDirections action = ViewAllClassroomsFragmentDirections.actionViewAllClassroomsFragmentToAssignHomeroomTeacherFragment(classroom);
             Navigation.findNavController(requireView()).navigate(action);
         });
@@ -47,7 +41,7 @@ public class ViewAllClassroomsFragment extends Fragment {
 
     private void fillClassroomListView() {
         studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
-            ArrayAdapter<DummyClassroom> adapter = new ArrayAdapter<>(
+            ArrayAdapter<Classroom> adapter = new ArrayAdapter<>(
                     requireContext(),
                     android.R.layout.simple_spinner_item,
                     classrooms

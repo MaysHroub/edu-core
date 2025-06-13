@@ -52,7 +52,7 @@
         tools:layout="@layout/fragment_assign_homeroom_teacher" >
         <argument
             android:name="classroom"
-            app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom" />
+            app:argType="com.bzu.educore.model.school.Classroom" />
         <action
             android:id="@+id/action_assignHomeroomTeacherFragment_to_view_all_classrooms"
             app:destination="@id/nav_classrooms" />
@@ -67,7 +67,7 @@
             android:name="student"
             android:defaultValue="@null"
             app:nullable="true"
-            app:argType="com.bzu.educore.activity.registrar.ui.student_management.DummyStudent" />
+            app:argType="com.bzu.educore.model.user.Student" />
         <action
             android:id="@+id/action_modifyStudentFragment_to_view_all_students"
             app:destination="@id/nav_students" />
@@ -97,7 +97,7 @@
             android:name="teacher"
             android:defaultValue="@null"
             app:nullable="true"
-            app:argType="com.bzu.educore.activity.registrar.ui.teacher_management.DummyTeacher" />
+            app:argType="com.bzu.educore.model.user.Teacher" />
         <action
             android:id="@+id/action_modifyTeacherFragment_to_view_all_teachers"
             app:destination="@id/nav_teachers" />

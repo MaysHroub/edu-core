@@ -1,11 +1,9 @@
 package com.bzu.educore.activity.registrar.ui.teacher_management;
 
-import static android.content.ContentValues.TAG;
 import static android.view.View.VISIBLE;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.bzu.educore.activity.registrar.ui.student_management.DummyClassroom;
-import com.bzu.educore.activity.registrar.ui.subject_management.ModifySubjectFragmentDirections;
 import com.bzu.educore.databinding.FragmentModifyTeacherBinding;
 import com.bzu.educore.model.school.Subject;
+import com.bzu.educore.model.user.Teacher;
 import com.bzu.educore.util.DialogUtils;
 import com.bzu.educore.util.InputValidator;
 import com.bzu.educore.util.PasswordGenerator;
@@ -34,7 +31,7 @@ public class ModifyTeacherFragment extends Fragment {
     private FragmentModifyTeacherBinding binding;
     private TeacherManagementViewModel teacherManagementViewModel;
     private LocalDate dob;
-    private DummyTeacher teacher;
+    private Teacher teacher;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -77,7 +74,7 @@ public class ModifyTeacherFragment extends Fragment {
 
         // TODO: replace dummy-teacher with actual teacher class
         if (teacher == null) {
-            DummyTeacher teacherTemp = new DummyTeacher(fname, lname, tchrEmail, tchrPass, dob, phoneNumber, subject.getId());
+            Teacher teacherTemp = new Teacher(fname, lname, tchrEmail, tchrPass, dob, phoneNumber, subject.getId());
             teacherManagementViewModel.registerTeacher(teacherTemp);
             teacherManagementViewModel.getAdditionSuccess().observe(getViewLifecycleOwner(), success -> {
                 if (!success) return;
