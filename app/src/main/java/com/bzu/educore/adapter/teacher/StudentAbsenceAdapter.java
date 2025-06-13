@@ -12,9 +12,9 @@ import java.util.*;
 public class StudentAbsenceAdapter extends RecyclerView.Adapter<StudentAbsenceAdapter.VH> {
 
     private final List<Student> students;
-    private final Map<String, Absence> absenceMap;
+    private final Map<Integer, Absence> absenceMap;
 
-    public StudentAbsenceAdapter(List<Student> students, Map<String, Absence> absenceMap) {
+    public StudentAbsenceAdapter(List<Student> students, Map<Integer, Absence> absenceMap) {
         this.students = students;
         this.absenceMap = absenceMap;
     }
@@ -30,9 +30,9 @@ public class StudentAbsenceAdapter extends RecyclerView.Adapter<StudentAbsenceAd
     @Override
     public void onBindViewHolder(@NonNull VH h, int pos) {
         Student s = students.get(pos);
-        String sid = s.getId();
+        Integer sid = s.getId();
 
-        h.tvName.setText(s.getName());
+        h.tvName.setText(String.format("%s %s", s.getFname(), s.getLname()));
         h.ivProfile.setImageResource(R.drawable.student_icon);
 
         boolean isAbsent = absenceMap.containsKey(sid);

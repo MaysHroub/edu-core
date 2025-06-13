@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RegistrarProfileFragment extends Fragment {
+
     private static final String TAG = "RegistrarProfileFragment";
     private TextView tvName, tvEmail, tvEmailInfo;
     private MaterialButton btnLogout;

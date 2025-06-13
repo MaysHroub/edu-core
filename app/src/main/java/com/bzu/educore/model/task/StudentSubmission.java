@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class StudentSubmission {
-    private  String studentId;
+    private  Integer studentId;
     private  String studentName;
     private  String submissionDate;
     private  String submissionFileUrl;
