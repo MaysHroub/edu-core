@@ -72,34 +72,9 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Step 3: Select Time (initially hidden) -->
+        <!-- Step 3: Select Days (renamed from Step 4, initially hidden) -->
         <LinearLayout
             android:id="@+id/layout_step_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_time"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Select Time Slot"
-                android:layout_marginBottom="24dp">
-
-                <AutoCompleteTextView
-                    android:id="@+id/dropdown_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Step 4: Select Days (initially hidden, renamed from Step 3) -->
-        <LinearLayout
-            android:id="@+id/layout_step_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -147,6 +122,116 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thursday"/>
+
+        </LinearLayout>
+
+        <!-- Step 4: Same Time for All Days? (New Step, initially hidden) -->
+        <LinearLayout
+            android:id="@+id/layout_step_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Do you want this subject to be at the same time on all selected days?"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_marginBottom="16dp"/>
+
+            <RadioGroup
+                android:id="@+id/radio_group_same_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioButton
+                    android:id="@+id/radio_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yes, same time for all selected days"/>
+                <RadioButton
+                    android:id="@+id/radio_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No, different times for different days"/>
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <!-- Step 5: Select Time for Each Day (Dynamically generated, initially hidden) -->
+        <LinearLayout
+            android:id="@+id/layout_step_5_per_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <!-- Dynamic content will be added here via Java -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select time slot for each selected day:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_marginBottom="16dp"/>
+        </LinearLayout>
+
+        <!-- Step 5: Select Time (for single time selection, formerly Step 3 Time) -->
+        <LinearLayout
+            android:id="@+id/layout_step_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select a single time slot for all selected days:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Single time selection dropdown -->
+            <Spinner
+                android:id="@+id/dropdown_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/spinner_background"
+                android:minHeight="48dp"
+                android:layout_marginBottom="24dp"/>
+
+        </LinearLayout>
+
+        <!-- Step 7: Confirmation -->
+        <LinearLayout
+            android:id="@+id/layout_step_7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Review your selections:"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_marginBottom="16dp"/>
+
+            <LinearLayout
+                android:id="@+id/confirmation_details_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
         </LinearLayout>
 
