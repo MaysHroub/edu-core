@@ -17,35 +17,28 @@
         tools:targetApi="31"
         android:usesCleartextTraffic="true"
         >
-      
-        <activity 
-            android:name=".activity.teacher.TeacherMainActivity"
+
+
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
+        <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
+
+        <!-- New Launcher Activity -->
+        <activity
+            android:name="com.example.studentsection.StudentMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.LoginActivity"/>
-      
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-      
-        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
-        <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
-        <activity
-            android:name="com.example.studentsection.StudentMainActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.studentsection.ViewMarksActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.studentsection.ViewEventsActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.studentsection.SubmitAssignmentActivity"
-            android:exported="false" />
+
+        <!-- Keep other student activities -->
+        <activity android:name="com.example.studentsection.ViewMarksActivity" android:exported="false" />
+        <activity android:name="com.example.studentsection.ViewEventsActivity" android:exported="false" />
+        <activity android:name="com.example.studentsection.SubmitAssignmentActivity" android:exported="false" />
+
     </application>
+
 </manifest>
