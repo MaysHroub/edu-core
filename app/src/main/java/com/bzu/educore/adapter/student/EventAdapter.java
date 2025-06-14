@@ -1,4 +1,4 @@
-package com.bzu.educore.adapter.student;
+package com.example.studentsection.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

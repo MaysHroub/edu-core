@@ -15,6 +15,7 @@ import com.bzu.educore.R;
 import com.bzu.educore.adapter.student.EventAdapter;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
+import com.example.studentsection.adapter.EventAdapter;
 import com.example.studentsection.model.Event;
 
 import org.json.JSONArray;
