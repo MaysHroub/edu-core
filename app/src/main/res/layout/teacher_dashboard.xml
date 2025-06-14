@@ -147,7 +147,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/view_timetable_desc"
-                    android:src="@drawable/time_table" />
+                    android:src="@drawable/timetable_teacher" />
 
                 <TextView
                     android:layout_width="wrap_content"

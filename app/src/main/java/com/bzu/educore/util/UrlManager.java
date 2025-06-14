@@ -2,7 +2,7 @@ package com.bzu.educore.util;
 
 public class UrlManager {
     private static final String BASE_URL = "http://10.0.2.2/edu-core/";
-  
+
     public static final String URL_GET_TEACHER_COUNT = BASE_URL + "get_teacher_count.php";
     public static final String URL_GET_TEACHER_PER_SUBJECT = BASE_URL + "get_teachers_per_subject.php";
     public static final String URL_GENERATE_TCHR_ID = BASE_URL + "generate_teacher_id.php";
@@ -41,15 +41,38 @@ public class UrlManager {
     public static final String URL_VIEW_SUBMISSION = BASE_URL + "view_submission.php";
     public static final String URL_GET_HOMEROOM_CLASS = BASE_URL + "get_homeroom_class.php";
     public static final String URL_GET_TEACHER_TIMETABLE = BASE_URL + "get_teacher_timetable.php";
+
+
     public static final String URL_LOGIN = BASE_URL + "login.php";
+
+    // Student URLs
     public static final String URL_GET_EVENTS = BASE_URL + "get_events.php";
     public static final String URL_GET_MARKS = BASE_URL + "get_marks.php";
     public static final String URL_SUBMIT_ASSIGNMENT = BASE_URL + "submit_assignment.php";
     public static final String URL_GET_TIMETABLE_BY_STUDENT = BASE_URL + "get_timetable_by_student.php";
+
+    // Student Profile URLs
     public static final String URL_GET_STUDENT_DATA = BASE_URL + "get_student_data.php";
     public static final String URL_EDIT_STUDENT_DATA = BASE_URL + "edit_student_data.php";
+
+    // Registrar Profile URLs
     public static final String URL_GET_REGISTRAR_DATA = BASE_URL + "get_registrar_data.php";
     public static final String GET_TEACHER_PROFILE = BASE_URL + "get_teacher_profile.php";
     public static final String UPDATE_TEACHER_PROFILE = BASE_URL + "update_teacher_profile.php";
     public static final String CHANGE_TEACHER_PASSWORD = BASE_URL + "change_teacher_password.php";
+
+    // Authentication URLs
+    public static final String LOGIN_URL = BASE_URL + "login.php";
+    public static final String REGISTER_URL = BASE_URL + "register.php";
+    public static final String GET_TEACHER_DATA_URL = BASE_URL + "get_teacher_data.php";
+    public static final String GET_REGISTRAR_DATA_URL = BASE_URL + "get_registrar_data.php";
+
+    // Timetable Management URLs
+    public static final String GET_ALL_CLASSES_URL = BASE_URL + "get_all_classes.php";
+    public static final String GET_CLASS_SUBJECTS_URL = BASE_URL + "get_class_subjects.php";
+    public static final String GET_TEACHERS_FOR_SUBJECT_URL = BASE_URL + "get_teachers_for_subject.php";
+    public static final String CHECK_TIME_AVAILABILITY_URL = BASE_URL + "check_time_availability.php";
+    public static final String ADD_TO_TIMETABLE_URL = BASE_URL + "add_to_timetable.php";
+
+    public static final String GET_CLASS_TIMETABLE_URL = BASE_URL + "get_class_timetable.php";
 }

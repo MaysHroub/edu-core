@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json"); // this is the response back to the app telling it it's gonna get json data
-require_once 'connection.php';
+require_once("connection.php"); // use this method in every php file you create to connect to the database
 
 if (isset($_GET['student_id'])) { // checks which student (using their id) wants to see their marks 
     $studentId = $_GET['student_id'];
