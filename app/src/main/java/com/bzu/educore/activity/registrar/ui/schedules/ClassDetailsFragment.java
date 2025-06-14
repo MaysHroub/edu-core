@@ -504,46 +504,47 @@ public class ClassDetailsFragment extends Fragment {
     }
 
     private void updateDialogUI() {
+        // Hide all layouts first
         layoutStep1.setVisibility(View.GONE);
         layoutStep2.setVisibility(View.GONE);
         layoutStep3.setVisibility(View.GONE);
         layoutStep4.setVisibility(View.GONE);
         layoutStep5.setVisibility(View.GONE);
         layoutStep6.setVisibility(View.GONE);
-        layoutStep7.setVisibility(View.GONE);
+        layoutStep7.setVisibility(View.GONE); // Hide new step 7
         buttonBack.setVisibility(View.VISIBLE);
-        buttonNext.setText("Next");
+        buttonNext.setText("Next"); // Reset Next button text
 
         switch (currentStep) {
             case 1:
-                textStepTitle.setText("Step 1: Select Subject");
+                textStepTitle.setText("Select Subject");
                 layoutStep1.setVisibility(View.VISIBLE);
                 buttonBack.setVisibility(View.GONE);
                 break;
             case 2:
-                textStepTitle.setText("Step 2: Select Teacher");
+                textStepTitle.setText("Select Teacher");
                 layoutStep2.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                textStepTitle.setText("Step 3: Select Days");
+                textStepTitle.setText("Select Days");
                 layoutStep3.setVisibility(View.VISIBLE);
                 break;
             case 4:
-                textStepTitle.setText("Step 4: Same Time for All Days?");
+                textStepTitle.setText("Same Time for All Days?");
                 layoutStep4.setVisibility(View.VISIBLE);
                 break;
             case 5:
-                textStepTitle.setText("Step 5: Select Time for Each Day");
+                textStepTitle.setText("Select Time for Each Day");
                 layoutStep5.setVisibility(View.VISIBLE);
                 break;
             case 6:
-                textStepTitle.setText("Step 6: Select Time");
+                textStepTitle.setText("Select Time");
                 layoutStep6.setVisibility(View.VISIBLE);
                 break;
             case 7:
-                textStepTitle.setText("Step 7: Confirm Schedule");
+                textStepTitle.setText("Confirm Schedule");
                 layoutStep7.setVisibility(View.VISIBLE);
-                buttonNext.setText("Confirm Schedule");
+                buttonNext.setText("Confirm Schedule"); // Change button text for final step
                 break;
         }
     }
@@ -671,23 +672,27 @@ public class ClassDetailsFragment extends Fragment {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
-                dayLayout.setOrientation(LinearLayout.VERTICAL);
+                dayLayout.setOrientation(LinearLayout.HORIZONTAL);
+                dayLayout.setGravity(Gravity.CENTER_VERTICAL);
                 ((LinearLayout.LayoutParams) dayLayout.getLayoutParams()).setMargins(0, 0, 0, (int) (24 * getResources().getDisplayMetrics().density));
 
                 TextView dayLabel = new TextView(requireContext());
-                dayLabel.setText("Select Time for " + day);
+                dayLabel.setText(day + ": ");
                 dayLabel.setTextSize(14);
                 dayLabel.setTextColor(textColorPrimary);
+                LinearLayout.LayoutParams labelParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                labelParams.setMargins(0, 0, (int) (8 * getResources().getDisplayMetrics().density), 0);
+                dayLabel.setLayoutParams(labelParams);
                 dayLayout.addView(dayLabel);
-
-                dayLabel.post(() -> {
-                    Log.d(TAG, "Day label for " + day + " - Text: \"" + dayLabel.getText().toString() + "\", Width: " + dayLabel.getWidth() + ", Height: " + dayLabel.getHeight() + ", Visibility: " + dayLabel.getVisibility());
-                });
 
                 Spinner spinner = new Spinner(requireContext());
                 spinner.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    0,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    1.0f
                 ));
 
                 if (!availableTimeSlots.isEmpty()) {
@@ -711,10 +716,6 @@ public class ClassDetailsFragment extends Fragment {
 
                 dayLayout.addView(spinner);
                 layoutStep5.addView(dayLayout);
-
-                dayLayout.post(() -> {
-                    Log.d(TAG, "Day layout for " + day + " - Width: " + dayLayout.getWidth() + ", Height: " + dayLayout.getHeight() + ", Visibility: " + dayLayout.getVisibility());
-                });
 
                 dropdownsPerDay.put(day, spinner);
             }
