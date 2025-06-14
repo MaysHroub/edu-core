@@ -74,4 +74,19 @@ public class UrlManager {
 
     // Registrar Profile URLs
     public static final String URL_GET_REGISTRAR_DATA = BASE_URL + "get_registrar_data.php";
+
+    // Authentication URLs
+    public static final String LOGIN_URL = BASE_URL + "login.php";
+    public static final String REGISTER_URL = BASE_URL + "register.php";
+    public static final String GET_TEACHER_DATA_URL = BASE_URL + "get_teacher_data.php";
+    public static final String GET_REGISTRAR_DATA_URL = BASE_URL + "get_registrar_data.php";
+
+    // Timetable Management URLs
+    public static final String GET_ALL_CLASSES_URL = BASE_URL + "get_all_classes.php";
+    public static final String GET_CLASS_SUBJECTS_URL = BASE_URL + "get_class_subjects.php";
+    public static final String GET_TEACHERS_FOR_SUBJECT_URL = BASE_URL + "get_teachers_for_subject.php";
+    public static final String CHECK_TIME_AVAILABILITY_URL = BASE_URL + "check_time_availability.php";
+    public static final String ADD_TO_TIMETABLE_URL = BASE_URL + "add_to_timetable.php";
+
+    public static final String GET_CLASS_TIMETABLE_URL = BASE_URL + "get_class_timetable.php";
 }

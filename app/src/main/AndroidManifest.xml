@@ -21,7 +21,15 @@
 
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.LoginActivity"/>
-        <activity android:name=".activity.registrar.RegistrarMainActivity"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+      
+        <activity 
+            android:name=".activity.registrar.RegistrarMainActivity"
+            android:theme="@style/Theme.EduCore.NoActionBar" />
+
         <activity android:name=".activity.teacher.ui.student_management.StudentSubmissionsActivity"/>
 
         <!-- New Launcher Activity -->

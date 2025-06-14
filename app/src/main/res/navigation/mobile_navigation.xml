@@ -115,4 +115,30 @@
         android:label="Profile"
         tools:layout="@layout/fragment_registrar_profile" />
 
+    <fragment
+        android:id="@+id/nav_schedules"
+        android:name="com.bzu.educore.activity.registrar.ui.schedules.SchedulesFragment"
+        android:label="Schedules"
+        tools:layout="@layout/fragment_schedules">
+        <action
+            android:id="@+id/action_schedulesFragment_to_classDetailsFragment"
+            app:destination="@id/classDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/nav_schedules"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/classDetailsFragment"
+        android:name="com.bzu.educore.activity.registrar.ui.schedules.ClassDetailsFragment"
+        android:label="Class Details"
+        tools:layout="@layout/fragment_class_details">
+        <argument
+            android:name="classData"
+            app:argType="com.bzu.educore.model.Class" />
+    </fragment>
+
 </navigation>
