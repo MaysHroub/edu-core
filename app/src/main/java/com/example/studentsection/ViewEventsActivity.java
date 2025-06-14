@@ -11,10 +11,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.RequestQueue;
 import com.bzu.educore.R;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
+import com.example.studentsection.adapter.EventAdapter;
 import com.example.studentsection.model.Event;
 
 import org.json.JSONArray;
