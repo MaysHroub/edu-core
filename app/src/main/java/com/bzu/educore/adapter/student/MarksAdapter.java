@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
-import com.example.studentsection.model.Mark;
+import com.bzu.educore.model.Mark;
 
 import java.util.List;
 

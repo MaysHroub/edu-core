@@ -32,9 +32,9 @@
         </activity>
 
         <!-- Keep other student activities -->
-        <activity android:name="com.example.studentsection.ViewMarksActivity" android:exported="false" />
-        <activity android:name="com.example.studentsection.ViewEventsActivity" android:exported="false" />
-        <activity android:name="com.example.studentsection.SubmitAssignmentActivity" android:exported="false" />
+        <activity android:name=".activity.student.ViewMarksActivity" android:exported="false" />
+        <activity android:name=".activity.student.ViewEventsActivity" android:exported="false" />
+        <activity android:name=".activity.student.SubmitAssignmentActivity" android:exported="false" />
 
         <activity android:name=".activity.teacher.TeacherMainActivity"/>
 

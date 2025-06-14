@@ -1,5 +1,7 @@
 package com.bzu.educore.activity.student.ui;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.*;
 
 import androidx.annotation.NonNull;
@@ -20,12 +21,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bzu.educore.R;
+import com.bzu.educore.util.SharedPreferencesManager;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.example.studentsection.model.AssignmentData;
+import com.bzu.educore.model.AssignmentData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -39,7 +46,7 @@ public class SubmitAssignmentFragment extends Fragment {
     private Button btnSelectFile, btnSubmit;
     private Uri selectedFileUri = null;
     private int selectedAssignmentId = -1;
-    private String studentId = "S001";
+    private Integer studentId;
     private View rootView;
 
     @Nullable
@@ -57,7 +64,7 @@ public class SubmitAssignmentFragment extends Fragment {
         btnSelectFile = rootView.findViewById(R.id.btnSelectFile);
         btnSubmit = rootView.findViewById(R.id.btnSubmit);
 
-        loadAssignments();
+        fetchStudentId();
 
         assignmentList.setOnItemClickListener((parent, v, position, id) -> {
             AssignmentData assignment = (AssignmentData) parent.getItemAtPosition(position);
@@ -75,6 +82,38 @@ public class SubmitAssignmentFragment extends Fragment {
         });
     }
 
+    private void fetchStudentId() {
+        SharedPreferencesManager prefsManager = new SharedPreferencesManager(requireContext());
+        String email = prefsManager.getUserEmail();
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email);
+        } catch (JSONException e) {
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                UrlManager.URL_GET_STUDENT_DATA,
+                requestBody,
+                response -> {
+                    try {
+                        JSONObject student = response.getJSONObject("student");
+                        studentId = student.getInt("id");
+                        loadAssignments();
+                    } catch (JSONException e) {
+                        Toast.makeText(requireContext(), "Parsing Error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(requireContext(), "Couldn't load registrar's data", Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
+    }
+
     private void loadAssignments() {
         String url = "http://10.0.2.2/edu-core/get_assignments.php?student_id=" + studentId;
 
@@ -89,6 +128,7 @@ public class SubmitAssignmentFragment extends Fragment {
                         }
 
                         List<AssignmentData> list = new Gson().fromJson(response, new TypeToken<List<AssignmentData>>() {}.getType());
+                        Log.d(TAG, "loadAssignments: " + list.size());
                         ArrayAdapter<AssignmentData> adapter = new ArrayAdapter<>(requireContext(),
                                 android.R.layout.simple_list_item_1, list);
                         assignmentList.setAdapter(adapter);
@@ -139,7 +179,7 @@ public class SubmitAssignmentFragment extends Fragment {
             String fileName = getFileName(selectedFileUri);
             String encodedFile = Base64.encodeToString(fileBytes, Base64.DEFAULT);
 
-            String url = "http://10.0.2.2/edu-core/student/submit_assignment.php";
+            String url = "http://10.0.2.2/edu-core/submit_assignment.php";
 
             StringRequest request = new StringRequest(Request.Method.POST, url,
                     response -> {
@@ -155,7 +195,7 @@ public class SubmitAssignmentFragment extends Fragment {
                 protected Map<String, String> getParams() {
                     Map<String, String> map = new HashMap<>();
                     map.put("assignment_id", String.valueOf(selectedAssignmentId));
-                    map.put("student_id", studentId);
+                    map.put("student_id", String.valueOf(studentId));
                     map.put("file_name", fileName);
                     map.put("file_data", encodedFile);
                     return map;

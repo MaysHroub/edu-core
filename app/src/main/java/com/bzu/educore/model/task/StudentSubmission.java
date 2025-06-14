@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class StudentSubmission {
+
     private  Integer studentId;
     private  String studentName;
     private  String submissionDate;
@@ -15,4 +16,5 @@ public class StudentSubmission {
     private Double mark;
     private String feedback;
     private String status;
+
 }

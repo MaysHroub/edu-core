@@ -1,4 +1,4 @@
-package com.example.studentsection;
+package com.bzu.educore.activity.student;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,7 +17,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bzu.educore.R;
-import com.example.studentsection.model.AssignmentData;
+import com.bzu.educore.model.AssignmentData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;

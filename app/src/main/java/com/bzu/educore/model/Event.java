@@ -1,4 +1,4 @@
-package com.example.studentsection.model;
+package com.bzu.educore.model;
 
 public class Event {
     private String title;

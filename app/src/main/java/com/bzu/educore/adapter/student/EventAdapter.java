@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bzu.educore.R;
-import com.example.studentsection.model.Event;
+import com.bzu.educore.model.Event;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.studentsection.model;
+package com.bzu.educore.model;
 
 import androidx.annotation.NonNull;
 

@@ -15,19 +15,25 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
-import com.example.studentsection.model.MarkData;
+import com.bzu.educore.model.MarkData;
+import com.bzu.educore.util.SharedPreferencesManager;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewMarksFragment extends Fragment {
 
     private ListView lstMarks;
+    private Integer studentId;
 
     @Nullable
     @Override
@@ -40,11 +46,10 @@ public class ViewMarksFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         lstMarks = view.findViewById(R.id.lstMarks);
-        loadMarks();
+        fetchStudentId();
     }
 
     private void loadMarks() {
-        String studentId = "S001"; // TODO: Replace with SharedPreferences later if needed
         String url = UrlManager.URL_GET_MARKS + "?student_id=" + studentId;
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -61,6 +66,37 @@ public class ViewMarksFragment extends Fragment {
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
 
+    private void fetchStudentId() {
+        SharedPreferencesManager prefsManager = new SharedPreferencesManager(requireContext());
+        String email = prefsManager.getUserEmail();
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email);
+        } catch (JSONException e) {
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                UrlManager.URL_GET_STUDENT_DATA,
+                requestBody,
+                response -> {
+                    try {
+                        JSONObject student = response.getJSONObject("student");
+                        studentId = student.getInt("id");
+                        loadMarks();
+                    } catch (JSONException e) {
+                        Toast.makeText(requireContext(), "Parsing Error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(requireContext(), "Couldn't load registrar's data", Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
+    }
 
     private void handleMarksResponse(JSONArray response) {
         try {

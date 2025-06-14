@@ -1,4 +1,4 @@
-package com.example.studentsection;
+package com.bzu.educore.activity.student;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -12,11 +12,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.bzu.educore.R;
-import com.bzu.educore.adapter.student.EventAdapter;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.example.studentsection.adapter.EventAdapter;
-import com.example.studentsection.model.Event;
+import com.bzu.educore.model.Event;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +67,7 @@ public class ViewEventsActivity extends AppCompatActivity {
                 );
                 events.add(event);
             }
-            recyclerEvents.setAdapter(new EventAdapter(events));
+            recyclerEvents.setAdapter(new com.example.studentsection.adapter.EventAdapter(events));
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error parsing events data", Toast.LENGTH_SHORT).show();

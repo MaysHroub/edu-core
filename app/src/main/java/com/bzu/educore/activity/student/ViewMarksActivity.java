@@ -1,4 +1,4 @@
-package com.example.studentsection;
+package com.bzu.educore.activity.student;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bzu.educore.R;
-import com.example.studentsection.model.MarkData;
+import com.bzu.educore.model.MarkData;
 import com.google.gson.Gson; // to parse JSON JSON responses into Java objects
 
 

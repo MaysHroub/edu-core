@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
+import com.bzu.educore.util.SharedPreferencesManager;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
 import com.example.studentsection.adapter.EventAdapter;
-import com.example.studentsection.model.Event;
+import com.bzu.educore.model.Event;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +34,8 @@ public class ViewEventsFragment extends Fragment {
 
     private RecyclerView recyclerEvents;
     private List<Event> events;
+    private Integer studentId;
+
 
     @Nullable
     @Override
@@ -47,11 +51,42 @@ public class ViewEventsFragment extends Fragment {
         recyclerEvents.setLayoutManager(new LinearLayoutManager(requireContext()));
         events = new ArrayList<>();
 
-        loadEvents();
+        fetchStudentId();
+    }
+
+    private void fetchStudentId() {
+        SharedPreferencesManager prefsManager = new SharedPreferencesManager(requireContext());
+        String email = prefsManager.getUserEmail();
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email);
+        } catch (JSONException e) {
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                UrlManager.URL_GET_STUDENT_DATA,
+                requestBody,
+                response -> {
+                    try {
+                        JSONObject student = response.getJSONObject("student");
+                        studentId = student.getInt("id");
+                        loadEvents();
+                    } catch (JSONException e) {
+                        Toast.makeText(requireContext(), "Parsing Error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(requireContext(), "Couldn't load registrar's data", Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
 
     private void loadEvents() {
-        String studentId = "S001"; // Replace with actual logged-in student ID
         String urlWithId = UrlManager.URL_GET_EVENTS + "?student_id=" + studentId;
 
         JsonArrayRequest request = new JsonArrayRequest(

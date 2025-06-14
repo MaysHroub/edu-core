@@ -21,7 +21,7 @@ import com.bzu.educore.R;
 import com.bzu.educore.util.SharedPreferencesManager;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.example.studentsection.model.TimetableEntry;
+import com.bzu.educore.model.TimetableEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
