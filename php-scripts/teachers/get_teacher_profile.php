@@ -1,4 +1,5 @@
 <?php
+// filepath: c:\xampp\htdocs\edu-core\get_teacher_profile.php
 header('Content-Type: application/json');
 require_once 'connection.php';
 
@@ -13,19 +14,20 @@ if (empty($email)) {
 
 try {
     // Get teacher data with subject name
-    $query = "SELECT t.*, s.title as subject_title 
-              FROM teacher t 
-              LEFT JOIN subject s ON t.subject_id = s.id 
+    $query = "SELECT t.*, s.title as subject_title
+              FROM Teacher t
+              LEFT JOIN Subject s ON t.subject_id = s.id
               WHERE t.email = ?";
-    
-    $stmt = $conn->prepare($query);
+
+    $stmt = $pdo->prepare($query);
     $stmt->execute([$email]);
     $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($teacher) {
-        // Format the date of birth
-        $teacher['date_of_birth'] = date('Y-m-d', strtotime($teacher['date_of_birth']));
-        
+        // Format the date of birth if not null
+        if (!empty($teacher['date_of_birth'])) {
+            $teacher['date_of_birth'] = date('Y-m-d', strtotime($teacher['date_of_birth']));
+        }
         echo json_encode([
             'success' => true,
             'teacher' => $teacher
@@ -42,4 +44,4 @@ try {
         'message' => 'Database error: ' . $e->getMessage()
     ]);
 }
-?> 
+?>
