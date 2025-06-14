@@ -163,7 +163,7 @@ public class ClassDetailsFragment extends Fragment {
                     try {
                         Log.d(TAG, "Received response: " + response.toString());
                         if (response.getString("status").equals("success")) {
-                            JSONObject timetable = response.getJSONObject("timetable");
+                            JSONArray timetable = response.getJSONArray("timetable");
                             Log.d(TAG, "Timetable data: " + timetable.toString());
                             displayTimetable(timetable);
                         } else {
@@ -190,80 +190,71 @@ public class ClassDetailsFragment extends Fragment {
         requestQueue.add(request);
     }
 
-    private void displayTimetable(JSONObject timetable) {
+    private void displayTimetable(JSONArray timetable) {
         Log.d(TAG, "Starting to display timetable");
 
         new Thread(() -> {
             List<TimetableCell> cells = new ArrayList<>();
 
-            // Add empty cell for the top-left corner
+            // Group periods by day_of_week
+            Map<String, List<JSONObject>> timetableMap = new HashMap<>();
+            try {
+                for (int i = 0; i < timetable.length(); i++) {
+                    JSONObject period = timetable.getJSONObject(i);
+                    String day = period.getString("day_of_week");
+                    timetableMap.computeIfAbsent(day, k -> new ArrayList<>()).add(period);
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "Error grouping timetable: " + e.getMessage());
+            }
+
+            // Add top-left empty header
             cells.add(new TimetableCell("", Color.parseColor("#2196F3"), Color.WHITE, TimetableCell.TYPE_HEADER));
 
-            // Add time slot headers
+            // Time slot headers
             for (String timeSlot : timeSlots) {
                 cells.add(new TimetableCell(timeSlot, Color.parseColor("#2196F3"), Color.WHITE, TimetableCell.TYPE_STANDARD));
             }
 
-            // Add rows for each day
+            // Fill rows per day
             for (String day : days) {
                 Log.d(TAG, "Processing day: " + day);
-                // Add day header cell
                 cells.add(new TimetableCell(day, Color.parseColor("#E3F2FD"), Color.BLACK, TimetableCell.TYPE_HEADER));
 
-                // Add cells for each time slot
                 for (String timeSlot : timeSlots) {
-                    Log.d(TAG, "  Processing time slot: " + timeSlot);
                     String cellText = "";
                     int bgColor = Color.WHITE;
                     int textColor = Color.BLACK;
 
                     if (timeSlot.equals("11:00-11:30")) {
                         cellText = "Break";
-                        bgColor = Color.parseColor("#FFE0B2"); // Light orange for break
+                        bgColor = Color.parseColor("#FFE0B2");
                     } else {
-                        try {
-                            if (timetable.has(day)) {
-                                JSONArray daySchedule = timetable.getJSONArray(day);
-                                String slotHour = timeSlot.split(":")[0];
-                                // String slotMinute = timeSlot.split(":")[1].split("-")[0]; // Removed as per previous instruction
+                        String slotHour = timeSlot.split(":")[0];
+                        if (slotHour.startsWith("0")) slotHour = slotHour.substring(1);
 
-                                // Remove leading zeros from slotHour (if applicable, for consistency)
-                                if (slotHour.startsWith("0")) {
-                                    slotHour = slotHour.substring(1);
-                                }
-                                Log.d(TAG, "    Extracted slotHour: " + slotHour);
-
-                                for (int i = 0; i < daySchedule.length(); i++) {
-                                    JSONObject period = daySchedule.getJSONObject(i);
+                        List<JSONObject> daySchedule = timetableMap.get(day);
+                        if (daySchedule != null) {
+                            for (JSONObject period : daySchedule) {
+                                try {
                                     String startTime = period.getString("start_time").substring(0, 5);
                                     String periodHour = startTime.split(":")[0];
-                                    // String periodMinute = startTime.split(":")[1]; // Removed as per previous instruction
+                                    if (periodHour.startsWith("0")) periodHour = periodHour.substring(1);
 
-                                    // Remove leading zeros from periodHour
-                                    if (periodHour.startsWith("0")) {
-                                        periodHour = periodHour.substring(1);
-                                    }
-                                    Log.d(TAG, "      Period startTime: " + startTime + ", extracted periodHour: " + periodHour);
-
-                                    // Compare both hour (reverting minute comparison for flexibility)
                                     if (slotHour.equals(periodHour)) {
                                         String subject = period.getString("subject");
-                                        String teacher = period.getString("teacher");
+                                        String teacher = period.getString("teacher_fname") + " " + period.getString("teacher_lname");
                                         cellText = subject + "\n" + teacher;
-                                        bgColor = Color.parseColor("#E8F5E9"); // Light green for class cells
-                                        Log.d(TAG, "        MATCH FOUND! Subject: " + subject + ", Teacher: " + teacher);
+                                        bgColor = Color.parseColor("#E8F5E9");
                                         break;
-                                    } else {
-                                        Log.d(TAG, "        NO MATCH: slotHour ('" + slotHour + "') != periodHour ('" + periodHour + "')");
                                     }
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "Error in daySchedule loop: " + e.getMessage());
                                 }
-                            } else {
-                                Log.d(TAG, "    Timetable has no data for day: " + day);
                             }
-                        } catch (JSONException e) {
-                            Log.e(TAG, "Error parsing timetable data for cell: " + e.getMessage());
                         }
                     }
+
                     cells.add(new TimetableCell(cellText, bgColor, textColor, TimetableCell.TYPE_STANDARD));
                 }
             }
@@ -274,6 +265,7 @@ public class ClassDetailsFragment extends Fragment {
             });
         }).start();
     }
+
 
     private void showAddScheduleDialog() {
         Log.d(TAG, "1. showAddScheduleDialog called. currentClassId: " + currentClassId);

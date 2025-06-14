@@ -93,4 +93,6 @@
     <string name="number_of_teachers_per_subject">Number Of Teachers Per Subject</string>
     <string name="number_of_students_per_grade">Number Of Students Per Grade</string>
     <string name="add_class">Add Class</string>
+    <string name="hello_fellow_registrar">Hello, Good to see you again!</string>
+    <string name="personal_information">Teacher Information</string>
 </resources>
