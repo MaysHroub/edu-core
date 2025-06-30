@@ -1,4 +1,4 @@
-## Developers' Note
+## Developer's Note
 
 This project still needs some modifications in terms of internal code logic and structure, and adding more features like notification system.
 
