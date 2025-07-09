@@ -44,6 +44,17 @@ $timetable = getClassTimetable($class_id);
 // Return the result as JSON
 if ($timetable) {
     echo json_encode(['status' => 'success', 'timetable' => $timetable]);
+    
+    // $groupedTimetable = [];
+    // foreach ($timetable as $entry) {
+    //     $day = $entry['day_of_week'];
+    //     if (!isset($groupedTimetable[$day])) {
+    //         $groupedTimetable[$day] = [];
+    //     }
+    //     $groupedTimetable[$day][] = $entry;
+    // }
+    // echo json_encode(['status' => 'success', 'timetable' => $groupedTimetable]);
+
 } else {
     echo json_encode(['status' => 'error', 'message' => 'No timetable found for the class']);
 }

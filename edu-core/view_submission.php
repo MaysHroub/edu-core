@@ -43,82 +43,24 @@ try {
         echo json_encode(["error" => "No submission found for this student"]);
         exit();
     }
-    
-    $submissionDate = $submissionRow['submission_date'];
-    
-    // Construct the expected file path using the new structure
-    // uploads/assignments/{task_id}/{student_id}.{extension}
-    $assignmentDir = "uploads/assignments/" . $taskId . "/";
-    
-    // Look for files starting with the student ID
-    $possibleExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt'];
-    $filePath = null;
-    $fileName = null;
-    
-    // Check if the assignment directory exists
-    if (!is_dir($assignmentDir)) {
-        http_response_code(404);
-        echo json_encode([
-            "error" => "Assignment directory not found",
-            "debug" => [
-                "looking_for_directory" => $assignmentDir
-            ]
-        ]);
-        exit();
-    }
-    
-    // Try to find the file with different extensions
-    foreach ($possibleExtensions as $ext) {
-        $testPath = $assignmentDir . $studentId . '.' . $ext;
-        if (file_exists($testPath)) {
-            $filePath = $testPath;
-            $fileName = $studentId . '.' . $ext;
-            break;
-        }
-    }
-    
-    // If no file found with standard extensions, scan directory for any file starting with student ID
-    if (!$filePath) {
-        $files = scandir($assignmentDir);
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..' && strpos($file, $studentId) === 0) {
-                $filePath = $assignmentDir . $file;
-                $fileName = $file;
-                break;
-            }
-        }
-    }
-    
-    // Check if any file was found
-    if (!$filePath || !file_exists($filePath)) {
+
+    $storedRelativePath = $submissionRow['submission_file_url'];
+    $filePath = $storedRelativePath;
+    $fileName = basename($storedRelativePath);
+
+    if (!file_exists($filePath)) {
         http_response_code(404);
         echo json_encode([
             "error" => "Submission file not found on server",
             "debug" => [
-                "searched_directory" => $assignmentDir,
-                "student_id" => $studentId,
-                "checked_extensions" => $possibleExtensions
+                "expected_path" => $filePath
             ]
         ]);
         exit();
     }
+
     
-    // Security check - ensure file is within the uploads/assignments directory
-    $realPath = realpath($filePath);
-    $uploadsPath = realpath('uploads/assignments/');
-    
-    if (!$realPath || !$uploadsPath || strpos($realPath, $uploadsPath) !== 0) {
-        http_response_code(403);
-        echo json_encode([
-            "error" => "Access denied - file outside allowed directory",
-            "debug" => [
-                "filePath" => $filePath,
-                "realPath" => $realPath,
-                "uploadsPath" => $uploadsPath
-            ]
-        ]);
-        exit();
-    }
+    $submissionDate = $submissionRow['submission_date'];
     
     // Get file information
     $fileSize = filesize($filePath);

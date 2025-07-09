@@ -8,10 +8,11 @@ $file_name = $_POST['file_name']; // 	original file name
 $file_data = base64_decode($_POST['file_data']); // base64-encoded file content (decoded into binary)
 
 // sets the directory where the uploaded files will be stored. 
-$upload_dir = "../uploads/";
+$upload_dir = "uploads/";
 if (!is_dir($upload_dir)) { // creates it if it doesn’t exist (0777 gives full read/write permissions)
     mkdir($upload_dir, 0777, true);
 }
+
 // generating a unique filename to avoid conflicts (like 683f2a6a_homework.pdf). 
 $target_file = $upload_dir . uniqid() . "_" . basename($file_name);
 file_put_contents($target_file, $file_data); // saves the decoded binary file into that path
@@ -27,7 +28,6 @@ if (!$assignment_id || !$student_id || !$file_name || !$file_data) {
     echo json_encode(["status" => "error", "message" => "Missing one or more required fields"]);
     exit;
 }
-
 
 $sql = "INSERT INTO AssignmentSubmission (id, student_id, submission_file_url, submission_date)
         VALUES (?, ?, ?, ?)";

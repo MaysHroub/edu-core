@@ -1,51 +1,45 @@
 <?php
+// Include the database connection file
 header('Content-Type: application/json');
-require_once 'config/database.php';
+require_once 'connection.php';
 
-// Get POST data
-$data = json_decode(file_get_contents('php://input'), true);
-$email = isset($data['email']) ? $data['email'] : '';
+// Get the input JSON
+$input = json_decode(file_get_contents('php://input'), true);
 
-if (empty($email)) {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Email is required'
-    ]);
-    exit;
+// Check if email is provided in the JSON input
+if (!isset($input['email'])) {
+    echo json_encode(['error' => 'Email is required']);
+    exit();
 }
 
-try {
-    // Get student data
-    $query = "SELECT s.*, g.grade_number, c.section 
-              FROM students s 
-              LEFT JOIN grades g ON s.grade_id = g.id 
-              LEFT JOIN classrooms c ON s.classroom_id = c.id 
-              WHERE s.email = ?";
-    
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $student = $result->fetch_assoc();
-        echo json_encode([
-            'status' => 'success',
-            'student' => $student
-        ]);
+$email = $input['email'];
+
+function getStudentDataByEmail($email) {
+    global $pdo;
+
+    $sql = "SELECT s.id, s.fname, s.lname, s.email, s.date_of_birth, c.grade_number, c.section
+            FROM Student s
+            JOIN Classroom c ON s.class_id = c.id
+            WHERE s.email = :email";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['email' => $email]);
+
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($student) {
+        return $student;
     } else {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Student not found'
-        ]);
+        return null; // Student not found
     }
-} catch (Exception $e) {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Database error: ' . $e->getMessage()
-    ]);
 }
 
-$stmt->close();
-$conn->close();
-?> 
+// Fetch student data
+$student = getStudentDataByEmail($email);
+
+if ($student) {
+    echo json_encode(['status' => 'success', 'student' => $student]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Student not found']);
+}
+?>

@@ -14,11 +14,11 @@ if (empty($email)) {
 
 try {
     // Get teacher data with subject name
-    $query = "SELECT t.*, s.title as subject_title
-              FROM Teacher t
-              LEFT JOIN Subject s ON t.subject_id = s.id
+    $query = "SELECT t.*, s.title as subject_title 
+              FROM Teacher t 
+              LEFT JOIN Subject s ON t.subject_id = s.id 
               WHERE t.email = ?";
-
+    
     $stmt = $pdo->prepare($query);
     $stmt->execute([$email]);
     $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
