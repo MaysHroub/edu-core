@@ -65,12 +65,16 @@
                     android:layout_height="36dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="12dp"
-                    android:text="×"
+                    android:text="X"
                     android:textSize="20sp"
-                    android:textColor="#6C757D"
+                    android:textColor="#FFFFFF"
                     android:background="@drawable/clear_button_background"
                     android:minWidth="36dp"
-                    android:visibility="gone" />
+                    android:minHeight="36dp"
+                    android:visibility="gone"
+                    android:padding="0dp"
+                    android:includeFontPadding="false" />
+
             </LinearLayout>
 
             <!-- Filters Row -->
