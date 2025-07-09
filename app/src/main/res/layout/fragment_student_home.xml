@@ -22,29 +22,21 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:orientation="vertical"
                 android:padding="24dp"
-                android:background="@color/primary">
+                android:background="@color/primary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Welcome Back!"
+                    android:text="Welcome Student"
+                    android:layout_gravity="center"
                     android:textSize="28sp"
                     android:textStyle="bold"
+
                     android:textColor="@color/white"/>
 
-                <TextView
-                    android:id="@+id/tvStudentName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="John Doe"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:alpha="0.9"/>
-            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Quick Actions Grid -->

@@ -3,37 +3,105 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:strokeColor="#E0E0E0"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <TextView
-            android:id="@+id/subjectTextView"
+        <!-- Subject Header with Icon -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/gradeTextView"
+            <View
+                android:layout_width="4dp"
+                android:layout_height="24dp"
+                android:background="#2196F3"
+                android:layout_marginEnd="12dp" />
+
+            <TextView
+                android:id="@+id/subjectTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A"
+                android:letterSpacing="0.01" />
+
+        </LinearLayout>
+
+        <!-- Grade Section -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="16sp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/semesterTextView"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grade: "
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/gradeTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#4CAF50"
+                android:layout_marginStart="4dp" />
+
+        </LinearLayout>
+
+        <!-- Semester Section with Background -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray" />
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#E0E0E0"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:id="@+id/semesterTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="#9E9E9E"
+                android:textStyle="normal"
+                android:padding="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginStart="4dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#E0E0E0"
+                android:layout_marginStart="16dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView> 
+</com.google.android.material.card.MaterialCardView>

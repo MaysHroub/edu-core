@@ -5,19 +5,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
+import com.bzu.educore.adapter.student.MarksAdapter;
 import com.bzu.educore.model.MarkData;
+import com.bzu.educore.model.Mark;
 import com.bzu.educore.util.SharedPreferencesManager;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
@@ -28,11 +30,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
 public class ViewMarksFragment extends Fragment {
 
-    private ListView lstMarks;
+    private RecyclerView recyclerMarks;
+    private List<Mark> marksList;
+    private MarksAdapter marksAdapter;
     private Integer studentId;
 
     @Nullable
@@ -45,7 +49,12 @@ public class ViewMarksFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        lstMarks = view.findViewById(R.id.lstMarks);
+        recyclerMarks = view.findViewById(R.id.recyclerMarks);
+        recyclerMarks.setLayoutManager(new LinearLayoutManager(requireContext()));
+        marksList = new ArrayList<>();
+        marksAdapter = new MarksAdapter(marksList);
+        recyclerMarks.setAdapter(marksAdapter);
+
         fetchStudentId();
     }
 
@@ -106,18 +115,21 @@ public class ViewMarksFragment extends Fragment {
             Gson gson = new Gson();
             MarkData[] results = gson.fromJson(response.toString(), MarkData[].class);
 
-            ArrayList<String> marksList = new ArrayList<>();
-            for (MarkData r : results) {
-                marksList.add(r.toString());
+            marksList.clear();
+            for (MarkData markData : results) {
+                // Convert MarkData to Mark object for the adapter
+                Mark mark = new Mark();
+                mark.setSubject(markData.getSubject_title() != null ? markData.getSubject_title() : "Unknown Subject");
+                mark.setGrade(markData.getMark() + "/" + markData.getMax_score());
+                mark.setSemester(markData.getType() + " • " + (markData.getDate() != null ? markData.getDate() : "No Date"));
+
+                marksList.add(mark);
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
-                    android.R.layout.simple_list_item_1, marksList);
-            lstMarks.setAdapter(adapter);
+            marksAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Error parsing marks", Toast.LENGTH_SHORT).show();
             Log.e("marks_error", "Parsing error: " + e.getMessage());
         }
     }
-
 }
