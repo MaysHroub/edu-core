@@ -1,6 +1,7 @@
 package com.bzu.educore.activity.student.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,10 +110,14 @@ public class ViewEventsFragment extends Fragment {
 
                 String title = obj.getString("subject_title") + " (" + obj.getString("type") + ")";
                 String description = obj.optString("question_file_url", "No file");
-                String date = obj.has("deadline") ? obj.getString("deadline") : obj.getString("date");
+                String deadline = obj.getString("deadline");
+                String date = obj.getString("date");
                 String location = "School Campus"; // Static or optional info
 
-                events.add(new Event(title, description, date, location));
+                if (deadline.equals("null"))
+                    events.add(new Event(title, description, date, location));
+                else
+                    events.add(new Event(title, description, deadline, location));
             }
 
             recyclerEvents.setAdapter(new EventAdapter(events));
