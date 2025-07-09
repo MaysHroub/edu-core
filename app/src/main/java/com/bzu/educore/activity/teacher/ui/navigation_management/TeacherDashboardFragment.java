@@ -1,13 +1,15 @@
 package com.bzu.educore.activity.teacher.ui.navigation_management;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -19,12 +21,15 @@ import com.bzu.educore.activity.teacher.ui.task_management.TimetableSelectionFra
 import com.bzu.educore.activity.teacher.ui.student_management.SearchTasksFragment;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
+import com.google.android.material.card.MaterialCardView;
 import org.json.JSONException;
 
 public class TeacherDashboardFragment extends Fragment {
 
     private static final String ARG_TEACHER_ID = "teacher_id";
     private int teacherId;
+    private TextView tvTeacherName;
+
     public static TeacherDashboardFragment newInstance(int teacherId) {
         TeacherDashboardFragment fragment = new TeacherDashboardFragment();
         Bundle args = new Bundle();
@@ -45,36 +50,42 @@ public class TeacherDashboardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.teacher_dashboard, container, false);
+
+        // Initialize views
+        tvTeacherName = view.findViewById(R.id.tvTeacherName);
+
+        // Setup click listeners
         setupClickListeners(view);
+
         return view;
     }
 
     private void setupClickListeners(View view) {
-        CardView cardCreateAssignment = view.findViewById(R.id.cardCreateAssignment);
-        CardView cardAnnounceExam = view.findViewById(R.id.cardAnnounceExam);
-        CardView cardSubmissions = view.findViewById(R.id.cardViewSubmissions);
-        CardView cardAttendance = view.findViewById(R.id.cardViewAttendance);
-        CardView cardTimeTable = view.findViewById(R.id.cardViewTimeTable);
-
+        MaterialCardView cardCreateAssignment = view.findViewById(R.id.cardCreateAssignment);
+        MaterialCardView cardAnnounceExam = view.findViewById(R.id.cardAnnounceExam);
+        MaterialCardView cardSubmissions = view.findViewById(R.id.cardViewSubmissions);
+        MaterialCardView cardAttendance = view.findViewById(R.id.cardViewAttendance);
+        MaterialCardView cardTimeTable = view.findViewById(R.id.cardViewTimeTable);
 
         cardCreateAssignment.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("mode", "assignment");
-            bundle.putInt("teacher_id", teacherId); // Pass teacher ID
+            bundle.putInt("teacher_id", teacherId);
 
             TimetableSelectionFragment fragment = new TimetableSelectionFragment();
             fragment.setArguments(bundle);
             ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
         });
+
         cardTimeTable.setOnClickListener(v -> {
             TeacherTimetableFragment fragment = TeacherTimetableFragment.newInstance(teacherId);
             ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
-
         });
+
         cardAnnounceExam.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("mode", "exam");
-            bundle.putInt("teacher_id", teacherId); // Pass teacher ID
+            bundle.putInt("teacher_id", teacherId);
 
             TimetableSelectionFragment fragment = new TimetableSelectionFragment();
             fragment.setArguments(bundle);
@@ -82,13 +93,11 @@ public class TeacherDashboardFragment extends Fragment {
         });
 
         cardSubmissions.setOnClickListener(v -> {
-            // Pass teacher ID to SearchTasksFragment
             SearchTasksFragment fragment = SearchTasksFragment.newInstance(teacherId);
             ((TeacherMainActivity) requireActivity()).loadFragment(fragment, true);
         });
 
         cardAttendance.setOnClickListener(v -> {
-            // Fetch homeroom class ID asnd then navigate to attendance
             fetchHomeroomClassAndNavigate();
         });
     }
@@ -119,7 +128,8 @@ public class TeacherDashboardFragment extends Fragment {
 
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
+
     private void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, LENGTH_SHORT).show();
     }
 }

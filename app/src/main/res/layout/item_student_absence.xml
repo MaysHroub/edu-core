@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp"
+    android:layout_marginBottom="4dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/student_item_background"
+    android:elevation="2dp">
 
     <!-- Top row with profile, name, and absent checkbox -->
     <LinearLayout
@@ -16,11 +20,13 @@
         <!-- Profile picture -->
         <ImageView
             android:id="@+id/ivProfile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/student_icon"
             android:contentDescription="@string/profile_picture_desc"
-            android:layout_marginEnd="12dp" />
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            android:elevation="1dp" />
 
         <!-- Student name -->
         <TextView
@@ -29,8 +35,11 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/student_name_placeholder"
-            android:textSize="16sp"
-            android:layout_marginEnd="12dp" />
+            android:textSize="18sp"
+            android:textStyle="normal"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_vertical" />
 
         <!-- Absent checkbox -->
         <CheckBox
@@ -48,8 +57,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="64dp"
         android:gravity="start">
 
         <RadioButton
@@ -57,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/unexcused_label"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="20dp" />
 
         <RadioButton
             android:id="@+id/rbExcused"

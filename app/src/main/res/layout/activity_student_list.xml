@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:fitsSystemWindows="true">
 
-    <!-- Search bar container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_bar_container"
         android:layout_width="0dp"
@@ -14,17 +13,18 @@
         android:layout_marginBottom="16dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
+        android:background="@drawable/search_bar_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/iv_search_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="12dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/search_icon"
+            android:tint="#6C757D"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -37,8 +37,10 @@
             android:inputType="textPersonName"
             android:background="@android:color/transparent"
             android:paddingStart="0dp"
+            android:paddingEnd="8dp"
             android:textSize="14sp"
             android:textColor="#222222"
+            android:textStyle="normal"
             android:singleLine="true"
             android:imeOptions="actionSearch"
             app:layout_constraintStart_toEndOf="@id/iv_search_icon"
@@ -47,7 +49,6 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_students"
         android:layout_width="0dp"
@@ -59,7 +60,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Publish Button -->
     <Button
         android:id="@+id/btn_publish_marks"
         android:layout_width="300dp"
