@@ -3,37 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F8F9FA">
 
     <!-- Header with Search Bar -->
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp">
+        android:layout_margin="16dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp"
+            android:background="#FFFFFF">
 
             <!-- Search Bar -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:orientation="horizontal"
                 android:padding="4dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center_vertical">
+                android:layout_marginBottom="20dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/search_background"
+                android:elevation="2dp">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/search_icon"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:tint="#6C757D" />
 
                 <EditText
                     android:id="@+id/et_search"
@@ -43,22 +49,27 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
                     android:hint="Search assignments or exams..."
-                    android:textSize="14sp"
+                    android:textSize="16sp"
+                    android:textColor="#212529"
+                    android:textColorHint="#6C757D"
                     android:background="@android:color/transparent"
                     android:inputType="text"
                     android:imeOptions="actionSearch"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp" />
 
                 <Button
                     android:id="@+id/btn_clear_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="12dp"
                     android:text="×"
-                    android:textSize="18sp"
-                    android:background="@android:color/transparent"
-                    android:minWidth="32dp"
+                    android:textSize="20sp"
+                    android:textColor="#6C757D"
+                    android:background="@drawable/clear_button_background"
+                    android:minWidth="36dp"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -67,26 +78,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Subject"
-                        android:textSize="12sp"
-                        android:layout_marginBottom="4dp" />
+                        android:textSize="14sp"
+                        android:textColor="#495057"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
 
                     <Spinner
                         android:id="@+id/spinner_subject"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp" />
+                        android:layout_height="44dp"
+                        android:background="@drawable/spinner_background"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,19 +110,24 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_marginStart="8dp">
+                    android:layout_marginStart="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Grade"
-                        android:textSize="12sp"
-                        android:layout_marginBottom="4dp" />
+                        android:textSize="14sp"
+                        android:textColor="#495057"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
 
                     <Spinner
                         android:id="@+id/spinner_grade"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp" />
+                        android:layout_height="44dp"
+                        android:background="@drawable/spinner_background"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -115,19 +136,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Type"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp" />
+                    android:textSize="14sp"
+                    android:textColor="#495057"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
                 <Spinner
                     android:id="@+id/spinner_type"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp" />
+                    android:layout_height="44dp"
+                    android:background="@drawable/spinner_background"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
             </LinearLayout>
 
             <!-- Action Buttons -->
@@ -140,55 +166,70 @@
                 <Button
                     android:id="@+id/btn_clear_filters"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:text="Clear"
                     android:textSize="14sp"
-                    android:layout_marginEnd="8dp"
-                    android:minWidth="90dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp" />
+                    android:textColor="#6C757D"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp"
+                    android:minWidth="100dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:background="@drawable/clear_button_background"
+                    android:elevation="2dp" />
 
                 <Button
                     android:id="@+id/btn_search"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:text="Filter"
                     android:textSize="14sp"
-                    android:minWidth="90dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp" />
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:minWidth="100dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:background="@drawable/primary_button_background"
+                    android:elevation="4dp" />
             </LinearLayout>
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Results Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Results"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#212529" />
 
         <TextView
             android:id="@+id/tv_result_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0 items"
-            android:textSize="12sp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp" />
+            android:textSize="14sp"
+            android:textColor="#6C757D"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="@drawable/count_badge_background"
+            android:minWidth="60dp"
+            android:gravity="center" />
     </LinearLayout>
 
     <!-- RecyclerView for both Assignments and Exams -->
@@ -197,11 +238,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:clipToPadding="false"
-        android:paddingTop="4dp"
-        android:paddingBottom="8dp" />
+        android:paddingTop="8dp"
+        android:paddingBottom="12dp"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true" />
 
     <!-- Empty State -->
     <LinearLayout
@@ -211,27 +254,35 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:padding="32dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No results found"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:textSize="18sp"
+            android:textColor="#495057"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Try adjusting your search or filters"
-            android:textSize="12sp" />
+            android:textSize="14sp"
+            android:textColor="#6C757D"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone" />
-
+            android:visibility="gone"
+            android:indeterminateTint="#007BFF" />
 
     </LinearLayout>
 </LinearLayout>

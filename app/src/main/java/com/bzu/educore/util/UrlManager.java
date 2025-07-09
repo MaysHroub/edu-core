@@ -42,7 +42,6 @@ public class UrlManager {
     public static final String URL_GET_HOMEROOM_CLASS = BASE_URL + "get_homeroom_class.php";
     public static final String URL_GET_TEACHER_TIMETABLE = BASE_URL + "get_teacher_timetable.php";
 
-
     public static final String URL_LOGIN = BASE_URL + "login.php";
 
     // Student URLs
