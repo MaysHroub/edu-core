@@ -33,7 +33,7 @@ public class Classroom implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return gradeNumber + " - " + section;
+        return String.format("Grade %d - Sec %s", gradeNumber, section);
     }
 
     @Override

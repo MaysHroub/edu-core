@@ -27,7 +27,7 @@ import com.bzu.educore.activity.teacher.ui.student_management.StudentSubmissions
 import com.bzu.educore.model.task.StudentSubmission;
 import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.StatusUtils;
+import com.bzu.educore.util.StatusUtils;
 import org.json.JSONException;
 import java.util.List;
 
@@ -79,9 +79,9 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
         super.onViewRecycled(h);
     }
 
-    private void viewSubmission(StudentSubmission student) {
-        // Get taskId from the activity
+    private void viewSubmission(StudentSubmission submission) {
         int taskId = -1;
+
         if (context instanceof StudentSubmissionsActivity) {
             taskId = ((StudentSubmissionsActivity) context).getTaskId();
         }
@@ -91,10 +91,13 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
             return;
         }
 
+        Log.d(TAG, "viewSubmission: " + taskId);
+        Log.d(TAG, "viewSubmission: " + submission.getStudentId());
+
         // First, get file information from the server
         String infoUrl = UrlManager.URL_VIEW_SUBMISSION +
                 "?task_id=" + taskId +
-                "&student_id=" + student.getStudentId();
+                "&student_id=" + submission.getStudentId();
 
         JsonObjectRequest infoRequest = new JsonObjectRequest(
                 Request.Method.GET, infoUrl, null,
@@ -119,7 +122,7 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
                             }
 
                             // Show dialog with options
-                            showSubmissionDialog(student.getStudentName(), fileName, fileType, viewUrl, downloadUrl);
+                            showSubmissionDialog(submission.getStudentName(), fileName, fileType, viewUrl, downloadUrl);
                         } else {
                             Toast.makeText(context, "No submission file found", Toast.LENGTH_SHORT).show();
                         }
@@ -128,6 +131,7 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
                     }
                 },
                 error -> {
+                    Log.e(TAG, "viewSubmission: ", error);
                     String message = "Failed to load submission";
                     if (error.networkResponse != null) {
                         switch (error.networkResponse.statusCode) {

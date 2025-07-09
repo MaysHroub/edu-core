@@ -18,15 +18,11 @@
         android:usesCleartextTraffic="true"
         >
 
-
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.LoginActivity"/>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-      
-        <activity 
+
+        <activity
             android:name=".activity.registrar.RegistrarMainActivity"
             android:theme="@style/Theme.EduCore.NoActionBar" />
 
@@ -34,7 +30,7 @@
 
         <!-- New Launcher Activity -->
         <activity
-            android:name="com.example.studentsection.StudentMainActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,9 +39,19 @@
         </activity>
 
         <!-- Keep other student activities -->
-        <activity android:name="com.example.studentsection.ViewMarksActivity" android:exported="false" />
-        <activity android:name="com.example.studentsection.ViewEventsActivity" android:exported="false" />
-        <activity android:name="com.example.studentsection.SubmitAssignmentActivity" android:exported="false" />
+        <activity android:name=".activity.student.ViewMarksActivity" android:exported="false" />
+        <activity android:name=".activity.student.ViewEventsActivity" android:exported="false" />
+        <activity android:name=".activity.student.SubmitAssignmentActivity" android:exported="false" />
+
+        <activity android:name=".activity.teacher.TeacherMainActivity"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".activity.student.StudentMainActivity"
+            android:exported="false" />
 
     </application>
 

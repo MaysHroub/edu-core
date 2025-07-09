@@ -21,11 +21,11 @@ public class User {
     @SerializedName("date_of_birth")
     private LocalDate dateOfBirth;
 
-    public User(String lname, String fname, String email, String password, LocalDate dateOfBirth) {
+    public User(String fname, String lname, String email, String password, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.password = password;
         this.email = email;
-        this.lname = lname;
         this.fname = fname;
+        this.lname = lname;
     }
 }

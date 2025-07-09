@@ -1,7 +1,6 @@
 package com.bzu.educore.activity.teacher.ui.profile;
 
 import android.app.DatePickerDialog;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,13 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bzu.educore.R;
 import com.bzu.educore.activity.LoginActivity;
 import com.bzu.educore.util.SharedPreferencesManager;
+import com.bzu.educore.util.UrlManager;
 import com.bzu.educore.util.VolleySingleton;
-import com.bzu.educore.util.teacher.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -40,9 +38,11 @@ import java.util.Map;
 import lombok.Getter;
 
 public class TeacherProfileFragment extends Fragment {
+
     private static final String TAG = "TeacherProfileFragment";
 
     private static final String ARG_TEACHER_ID = "teacher_id";
+
     @Getter
     private int teacherId;
 
@@ -50,6 +50,7 @@ public class TeacherProfileFragment extends Fragment {
     private MaterialButton btnEditProfile, btnChangePassword, btnLogout;
     private SharedPreferencesManager prefsManager;
     private String currentEmail;
+
 
     public static TeacherProfileFragment newInstance(int teacherId) {
         TeacherProfileFragment fragment = new TeacherProfileFragment();
@@ -118,12 +119,11 @@ public class TeacherProfileFragment extends Fragment {
         }
 
         Log.d(TAG, "Loading profile for email: " + currentEmail + ", teacherId: " + teacherId);
-        Log.d(TAG, "API URL: " + Constants.GET_TEACHER_PROFILE);
+        Log.d(TAG, "API URL: " + UrlManager.GET_TEACHER_PROFILE);
 
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put("email", currentEmail);
-            requestBody.put("teacher_id", teacherId);
             Log.d(TAG, "Request body: " + requestBody.toString());
         } catch (JSONException e) {
             Log.e(TAG, "Error preparing request body", e);
@@ -133,7 +133,7 @@ public class TeacherProfileFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                Constants.GET_TEACHER_PROFILE,
+                UrlManager.GET_TEACHER_PROFILE,
                 requestBody,
                 response -> {
                     Log.d(TAG, "Response received: " + response.toString());
@@ -280,7 +280,7 @@ public class TeacherProfileFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                Constants.UPDATE_TEACHER_PROFILE,
+                UrlManager.UPDATE_TEACHER_PROFILE,
                 requestBody,
                 response -> {
                     Log.d(TAG, "Update response: " + response.toString());
@@ -390,7 +390,7 @@ public class TeacherProfileFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                Constants.CHANGE_TEACHER_PASSWORD,
+                UrlManager.CHANGE_TEACHER_PASSWORD,
                 requestBody,
                 response -> {
                     Log.d(TAG, "Password change response: " + response.toString());

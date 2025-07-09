@@ -36,6 +36,7 @@ public class SearchTasksFragment extends Fragment {
 
     // Add teacher ID support
     private static final String ARG_TEACHER_ID = "teacher_id";
+
     // Getter method to access teacher ID if needed by other methods
     @Getter
     private int teacherId;
@@ -47,7 +48,6 @@ public class SearchTasksFragment extends Fragment {
     private TextView tvResultCount;
     private LinearLayout layoutEmptyState;
     private ProgressBar progressBar;
-
     private TaskAdapter taskAdapter;
     private final List<Task> taskList = new ArrayList<>();
 

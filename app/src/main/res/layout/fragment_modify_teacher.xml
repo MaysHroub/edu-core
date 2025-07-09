@@ -140,6 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:backgroundTint="@color/error"
             android:text="@string/delete"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

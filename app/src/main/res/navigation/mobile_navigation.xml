@@ -111,7 +111,7 @@
 
     <fragment
         android:id="@+id/nav_registrar_profile"
-        android:name="com.bzu.educore.activity.registrar.RegistrarProfileFragment"
+        android:name="com.bzu.educore.activity.registrar.ui.profile.RegistrarProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_registrar_profile" />
 

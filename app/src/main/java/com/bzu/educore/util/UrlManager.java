@@ -3,46 +3,29 @@ package com.bzu.educore.util;
 public class UrlManager {
     private static final String BASE_URL = "http://10.0.2.2/edu-core/";
 
-    private static final String TEACHERS = "teachers/",
-            STUDENTS = "students/",
-            SUBJECTS = "subjects/",
-            CLASSROOMS = "classrooms/",
-            GRADES = "grades/";
-  
-    public static final String URL_GET_TEACHER_COUNT = BASE_URL + TEACHERS + "get_teacher_count.php";
-    public static final String URL_GET_TEACHER_PER_SUBJECT = BASE_URL + TEACHERS + "get_teachers_per_subject.php";
-    public static final String URL_GENERATE_TCHR_ID = BASE_URL + TEACHERS + "generate_teacher_id.php";
-    public static final String URL_ADD_NEW_TEACHER = BASE_URL + TEACHERS + "add_new_teacher.php";
-    public static final String URL_GET_ALL_TEACHERS = BASE_URL + TEACHERS + "get_all_teachers.php";
-    public static final String URL_UPDATE_TEACHER = BASE_URL + TEACHERS + "update_teacher.php";
-    public static final String URL_DELETE_TEACHER = BASE_URL + TEACHERS + "delete_teacher.php";
-
-
-    public static final String URL_GET_STUDENT_COUNT = BASE_URL + STUDENTS + "get_student_count.php";
-    public static final String URL_GET_STUDENT_PER_GRADE = BASE_URL + STUDENTS + "get_students_per_grade.php";
-    public static final String URL_GENERATE_STD_ID = BASE_URL + STUDENTS + "generate_student_id.php";
-    public static final String URL_ADD_NEW_STUDENT = BASE_URL + STUDENTS + "add_new_student.php";
-    public static final String URL_GET_ALL_STUDENTS = BASE_URL + STUDENTS + "get_all_students.php";
-    public static final String URL_UPDATE_STUDENT = BASE_URL + STUDENTS + "update_student.php";
-    public static final String URL_DELETE_STUDENT = BASE_URL + STUDENTS + "delete_student.php";
-
-
-    public static final String URL_GET_SUBJECT_COUNT = BASE_URL + SUBJECTS + "get_subject_count.php";
-    public static final String URL_GET_ALL_SUBJECTS = BASE_URL + SUBJECTS + "get_all_subjects.php";
-    public static final String URL_UPDATE_SUBJECT = BASE_URL + SUBJECTS + "update_subject.php";
-    public static final String URL_DELETE_SUBJECT = BASE_URL + SUBJECTS + "delete_subject.php";
-    public static final String URL_ADD_NEW_SUBJECT = BASE_URL + SUBJECTS + "add_new_subject.php";
-
-
-
-    public static final String URL_GET_CLASSROOM_COUNT = BASE_URL + CLASSROOMS + "get_classroom_count.php";
-    public static final String URL_GET_ALL_CLASSROOMS = BASE_URL + CLASSROOMS + "get_all_classrooms.php";
-    public static final String URL_UPDATE_CLASSROOM = BASE_URL + CLASSROOMS + "update_classroom.php";
-
-
-    public static final String URL_GET_ALL_GRADES = BASE_URL + GRADES + "get_all_grades.php";
-
-    // ---- Teacher URLS -----
+    public static final String URL_GET_TEACHER_COUNT = BASE_URL + "get_teacher_count.php";
+    public static final String URL_GET_TEACHER_PER_SUBJECT = BASE_URL + "get_teachers_per_subject.php";
+    public static final String URL_GENERATE_TCHR_ID = BASE_URL + "generate_teacher_id.php";
+    public static final String URL_ADD_NEW_TEACHER = BASE_URL + "add_new_teacher.php";
+    public static final String URL_GET_ALL_TEACHERS = BASE_URL + "get_all_teachers.php";
+    public static final String URL_UPDATE_TEACHER = BASE_URL + "update_teacher.php";
+    public static final String URL_DELETE_TEACHER = BASE_URL + "delete_teacher.php";
+    public static final String URL_GET_STUDENT_COUNT = BASE_URL + "get_student_count.php";
+    public static final String URL_GET_STUDENT_PER_GRADE = BASE_URL + "get_students_per_grade.php";
+    public static final String URL_GENERATE_STD_ID = BASE_URL + "generate_student_id.php";
+    public static final String URL_ADD_NEW_STUDENT = BASE_URL + "add_new_student.php";
+    public static final String URL_GET_ALL_STUDENTS = BASE_URL + "get_all_students.php";
+    public static final String URL_UPDATE_STUDENT = BASE_URL + "update_student.php";
+    public static final String URL_DELETE_STUDENT = BASE_URL + "delete_student.php";
+    public static final String URL_GET_SUBJECT_COUNT = BASE_URL + "get_subject_count.php";
+    public static final String URL_GET_ALL_SUBJECTS = BASE_URL + "get_all_subjects.php";
+    public static final String URL_UPDATE_SUBJECT = BASE_URL + "update_subject.php";
+    public static final String URL_DELETE_SUBJECT = BASE_URL + "delete_subject.php";
+    public static final String URL_ADD_NEW_SUBJECT = BASE_URL + "add_new_subject.php";
+    public static final String URL_GET_CLASSROOM_COUNT = BASE_URL + "get_classroom_count.php";
+    public static final String URL_GET_ALL_CLASSROOMS = BASE_URL + "get_all_classrooms.php";
+    public static final String URL_UPDATE_CLASSROOM = BASE_URL + "update_classroom.php";
+    public static final String URL_GET_ALL_GRADES = BASE_URL + "get_all_grades.php";
     public static final String URL_GET_ASSIGNMENT_STUDENTS = BASE_URL + "get_assignment_students.php";
     public static final String URL_GET_CLASS_STUDENTS = BASE_URL + "get_class_students.php";
     public static final String URL_GET_EXAM_STUDENTS = BASE_URL + "get_exam_students.php";
@@ -74,6 +57,9 @@ public class UrlManager {
 
     // Registrar Profile URLs
     public static final String URL_GET_REGISTRAR_DATA = BASE_URL + "get_registrar_data.php";
+    public static final String GET_TEACHER_PROFILE = BASE_URL + "get_teacher_profile.php";
+    public static final String UPDATE_TEACHER_PROFILE = BASE_URL + "update_teacher_profile.php";
+    public static final String CHANGE_TEACHER_PASSWORD = BASE_URL + "change_teacher_password.php";
 
     // Authentication URLs
     public static final String LOGIN_URL = BASE_URL + "login.php";

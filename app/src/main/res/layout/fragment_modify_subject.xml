@@ -97,6 +97,7 @@
         android:layout_weight="1"
         android:text="@string/delete"
         android:visibility="gone"
+        android:backgroundTint="@color/error"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

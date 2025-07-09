@@ -1,7 +1,7 @@
 <?php
 
 define('HOST', 'localhost');                // XAMPP runs locally
-define('DB_NAME', 'school_system_db');      // the database name
+define('DB_NAME', 'educore_management_system');      // the database name
 define('USERNAME', 'root');                 // this is the default XAMPP MySQL user
 define('PASSWORD', '');                     // XAMPP default has no password
 

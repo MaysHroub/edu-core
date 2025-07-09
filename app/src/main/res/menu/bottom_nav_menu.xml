@@ -11,9 +11,9 @@
         android:title="Profile"
         android:icon="@drawable/profile" />
 
-    <item
-        android:id="@+id/nav_notifications"
-        android:title="Notifications"
-        android:icon="@drawable/notification" />
+<!--    <item-->
+<!--        android:id="@+id/nav_notifications"-->
+<!--        android:title="Notifications"-->
+<!--        android:icon="@drawable/notification" />-->
 
 </menu>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.bzu.educore.R;
 import com.bzu.educore.model.school.Classroom;
 import com.bzu.educore.activity.registrar.ui.student_management.StudentManagementViewModel;
 import com.bzu.educore.databinding.FragmentViewAllClassroomsBinding;
@@ -43,7 +44,7 @@ public class ViewAllClassroomsFragment extends Fragment {
         studentManagementViewModel.getClassrooms().observe(getViewLifecycleOwner(), classrooms -> {
             ArrayAdapter<Classroom> adapter = new ArrayAdapter<>(
                     requireContext(),
-                    android.R.layout.simple_spinner_item,
+                    R.layout.list_item_class,
                     classrooms
             );
             binding.lstClassrooms.setAdapter(adapter);
