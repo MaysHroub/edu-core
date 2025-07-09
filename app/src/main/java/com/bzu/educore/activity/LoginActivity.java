@@ -38,9 +38,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         prefsManager = new SharedPreferencesManager(this);
-        
+
         // Check if user is already logged in
         if (prefsManager.isLoggedIn()) {
             String userType = prefsManager.getUserType();
@@ -51,11 +51,11 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
         }
-        
+
         setContentView(R.layout.activity_login);
         initializeViews();
         setupLoginButton();
-        
+
         // Log the login URL for debugging
         Log.d(TAG, "Login URL: " + UrlManager.URL_LOGIN);
     }
@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
     private void handleError(VolleyError error) {
         setLoading(false);
         String errorMessage = "Connection failed. ";
-        
+
         if (error.networkResponse != null) {
             int statusCode = error.networkResponse.statusCode;
             String responseData = new String(error.networkResponse.data);
@@ -147,27 +147,33 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(TAG, "Error: " + error.toString());
             errorMessage += "Please check your internet connection.";
         }
-        
+
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
     }
 
     private void handleLoginResponse(JSONObject response) {
         setLoading(false);
         Log.d(TAG, "Response: " + response.toString());
-        
+
         try {
             boolean success = response.getBoolean("success");
             String message = response.getString("message");
-            
+
             if (success) {
                 String userType = response.getString("user_type");
                 String email = emailInput.getText().toString().trim();
-                
+
                 // Save user data using SharedPreferencesManager
                 prefsManager.saveUserEmail(email);
                 prefsManager.saveUserType(userType);
                 prefsManager.setLoggedIn(true);
-                
+
+                // Save user ID based on user type
+                if (response.has("user_id")) {
+                    int userId = response.getInt("user_id");
+                    prefsManager.saveUserId(userId);
+                }
+
                 Log.d(TAG, "Saved user type: " + userType);
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                 navigateToDashboard(userType);
@@ -184,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateToDashboard(String userType) {
         Intent intent;
         Log.d(TAG, "Navigating to dashboard for user type: " + userType);
-        
+
         switch (userType.toLowerCase()) {
             case "teacher":
                 intent = new Intent(this, TeacherMainActivity.class);
@@ -200,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Unknown user type", Toast.LENGTH_SHORT).show();
                 return;
         }
-        
+
         // Clear any existing tasks and start fresh
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
